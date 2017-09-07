@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -28,14 +28,10 @@ module Whois
       class WhoisNicDz < Base
 
         property_supported :status do
-          if content_for_scanner =~ /ETAT:\.+(.+?)\n/
-            case $1.downcase
-              when "actif" then :registered
-              else
-                Whois.bug!(ParserError, "Unknown status `#{$1}'.")
-            end
-          else
+          if available?
             :available
+          else
+            :registered
           end
         end
 

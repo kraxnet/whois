@@ -1,3 +1,68 @@
+Domain ID:CNIC-DO403461
+Domain Name:HOTEL.GB.COM
+Created On:2006-04-23T06:26:11.0Z
+Last Updated On:2014-02-12T09:45:17.0Z
+Expiration Date:2016-04-23T23:59:59.0Z
+Status:serverTransferProhibited
+Registrant ID:H1049605
+Registrant Name:Robert Ragge, Hotel Reservation Service Robert Ragge GmbH
+Registrant Street1:Blaubach 32
+Registrant City:Koeln
+Registrant State/Province:NRW
+Registrant Postal Code:50676
+Registrant Country:DE
+Registrant Phone:+49.2212077222
+Registrant FAX:+49.2212077394
+Registrant Email:domains@hrs.de
+Admin ID:H393781
+Admin Name:Robert Ragge
+Admin Organization:Hotel Reservation Service Robert Ragge GmbH
+Admin Street1:Blaubach 32
+Admin City:Koeln
+Admin State/Province:NRW
+Admin Postal Code:50676
+Admin Country:DE
+Admin Phone:+49.2212077222
+Admin FAX:+49.2212077394
+Admin Email:domains@hrs.de
+Tech ID:H1103064
+Tech Name:Uwe Watzek, Wind Internethaus GMBH
+Tech Street1:Am Krebsgraben 15
+Tech Street2:Haus 2
+Tech City:Villingen-Schwenningen
+Tech State/Province:Baden-Wuerttemberg
+Tech Postal Code:78048
+Tech Country:DE
+Tech Phone:+49.77214070740
+Tech FAX:+49.77214070741
+Tech Email:info@windinternethaus.de
+Billing ID:H1103064
+Billing Name:Uwe Watzek, Wind Internethaus GMBH
+Billing Street1:Am Krebsgraben 15
+Billing Street2:Haus 2
+Billing City:Villingen-Schwenningen
+Billing State/Province:Baden-Wuerttemberg
+Billing Postal Code:78048
+Billing Country:DE
+Billing Phone:+49.77214070740
+Billing FAX:+49.77214070741
+Billing Email:info@windinternethaus.de
+Sponsoring Registrar ID:H386560
+Sponsoring Registrar Organization:Wind Internethaus GMBH
+Sponsoring Registrar Street1:Am Krebsgraben 15
+Sponsoring Registrar Street2:Haus 2
+Sponsoring Registrar City:Villingen-Schwenningen
+Sponsoring Registrar State/Province:Baden-Wuerttemberg
+Sponsoring Registrar Postal Code:78048
+Sponsoring Registrar Country:DE
+Sponsoring Registrar Phone:+49.77214070740
+Sponsoring Registrar FAX:+49.77214070741
+Sponsoring Registrar Website:www.windinternethaus.de
+Name Server:NS1.HRS.DE
+Name Server:NS2.HRS.DE
+Name Server:NS2.SURFBRETT.DE
+DNSSEC:Unsigned
+
 This whois service is provided by CentralNic Ltd and only contains
 information pertaining to Internet domain names we have registered for
 our customers. By using this service you are agreeing (1) not to use any
@@ -7,70 +72,4 @@ any way, (3) not to use any high-volume, automated, electronic processes
 to obtain data from this service. Abuse of this service is monitored and
 actions in contravention of these terms will result in being permanently
 blacklisted. All data is (c) CentralNic Ltd https://www.centralnic.com/
-
-Domain ID:CNIC-DO403461
-Domain Name:HOTEL.GB.COM
-Created On:23-Apr-2006 06:26:11 UTC
-Last Updated On:09-Aug-2011 00:17:05 UTC
-Expiration Date:23-Apr-2012 23:59:59 UTC
-Status:OK
-Registrant ID:INX-9925147com
-Registrant Name:boris schleinkofer
-Registrant Organization:p.s. consulting ag
-Registrant Street1:hacklthalerstrasse 21c
-Registrant City:kirchdorf
-Registrant State/Province:bayern
-Registrant Postal Code:83527
-Registrant Country:DE
-Registrant Phone:+49.8072370230
-Registrant FAX:+49.80723702399
-Registrant Email:schleinkofer@ps-consulting-ag.com
-Admin ID:INX-9925147com
-Admin Name:boris schleinkofer
-Admin Organization:p.s. consulting ag
-Admin Street1:hacklthalerstrasse 21c
-Admin City:kirchdorf
-Admin State/Province:bayern
-Admin Postal Code:83527
-Admin Country:DE
-Admin Phone:+49.8072370230
-Admin FAX:+49.80723702399
-Admin Email:schleinkofer@ps-consulting-ag.com
-Tech ID:INX-9925147com
-Tech Name:boris schleinkofer
-Tech Organization:p.s. consulting ag
-Tech Street1:hacklthalerstrasse 21c
-Tech City:kirchdorf
-Tech State/Province:bayern
-Tech Postal Code:83527
-Tech Country:DE
-Tech Phone:+49.8072370230
-Tech FAX:+49.80723702399
-Tech Email:schleinkofer@ps-consulting-ag.com
-Billing ID:INX-9925147com
-Billing Name:boris schleinkofer
-Billing Organization:p.s. consulting ag
-Billing Street1:hacklthalerstrasse 21c
-Billing City:kirchdorf
-Billing State/Province:bayern
-Billing Postal Code:83527
-Billing Country:DE
-Billing Phone:+49.8072370230
-Billing FAX:+49.80723702399
-Billing Email:schleinkofer@ps-consulting-ag.com
-Sponsoring Registrar ID:7145-IX
-Sponsoring Registrar Organization:InternetX GmbH
-Sponsoring Registrar Street1:Maximilianstr. 6
-Sponsoring Registrar City:Regensburg
-Sponsoring Registrar Postal Code:93047
-Sponsoring Registrar Country:DE
-Sponsoring Registrar Phone:+49-941-595590
-Sponsoring Registrar FAX:+49-941-59579054
-Sponsoring Registrar Website:http://www.internetx.de/
-Name Server:D.NS14.NET
-Name Server:C.NS14.NET
-Name Server:B.NS14.NET
-Name Server:A.NS14.NET
-DNSSEC:Unsigned
-
 

@@ -1,79 +1,65 @@
-Legal Stuff:
 
-The information in DreamHost's whois database is to be used for
-informational purposes only, and to obtain information on a
-domain name registration. DreamHost does not guarantee its
-accuracy.
 
-You are not authorized to query or access DreamHost's whois
-database using high-volume, automated means without written
-permission from DreamHost.
+Domain Name: DREAMHOST.COM
+Registry Domain ID: NA
+Registrar WHOIS Server: whois.dreamhost.com
+Registrar URL: www.dreamhost.com
+Updated Date: 2013-12-14 16:53:27Z
+Creation Date: 1997-09-22 21:00:00Z
+Registrar Registration Expiration Date: 2015-09-22 04:00:00Z
+Registrar: DREAMHOST
+Registrar IANA ID: 431
+Registrar Abuse Contact Email: domain-abuse@dreamhost.com
+Registrar Abuse Contact Phone: +1.2132719359
+Domain Status: clientTransferProhibited
+Registry Registrant ID: 
+Registrant Name: PRIVATE REGISTRANT
+Registrant Organization: A HAPPY DREAMHOST CUSTOMER
+Registrant Street: 417 ASSOCIATED RD #324
+Registrant Street: C/O DREAMHOST.COM
+Registrant City: BREA
+Registrant State/Province: CA
+Registrant Postal Code: 92821
+Registrant Country: US
+Registrant Phone: +1.7147064182
+Registrant Phone Ext: 
+Registrant Fax: 
+Registrant Fax Ext:
+Registrant Email: YW3GAZMC77BTMTF@PROXY.DREAMHOST.COM
+Registry Admin ID: 
+Admin Name: PRIVATE REGISTRANT
+Admin Organization: A HAPPY DREAMHOST CUSTOMER
+Admin Street: 417 ASSOCIATED RD #324
+Admin Street: C/O DREAMHOST.COM
+Admin City: BREA
+Admin State/Province: CA
+Admin Postal Code: 92821
+Admin Country: US
+Admin Phone: +1.7147064182
+Admin Phone Ext: 
+Admin Fax: 
+Admin Fax Ext:
+Admin Email: YW3GAZMC77BTMTF@PROXY.DREAMHOST.COM
+Registry Tech ID: 
+Tech Name: PRIVATE REGISTRANT
+Tech Organization: A HAPPY DREAMHOST CUSTOMER
+Tech Street: 417 ASSOCIATED RD #324
+Tech Street: C/O DREAMHOST.COM
+Tech City: BREA
+Tech State/Province: CA
+Tech Postal Code: 92821
+Tech Country: US
+Tech Phone: +1.7147064182
+Tech Phone Ext: 
+Tech Fax: 
+Tech Fax Ext: 
+Tech Email: YW3GAZMC77BTMTF@PROXY.DREAMHOST.COM
+Name Server: NS1.DREAMHOST.COM
+Name Server: NS2.DREAMHOST.COM
+Name Server: NS3.DREAMHOST.COM
+DNSSEC: unSigned
+URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
+Last update of WHOIS database: 2013-12-14 16:53:27Z
+DreamHost whois server terms of service: http://whois.dreamhost.com/
 
-You are not authorized to query or access DreamHost's whois
-database in order to facilitate illegal activities, or to
-facilitate the use of unsolicited bulk email, telephone, or
-facsimile communications.
-
-You are not authorized to collect, repackage, or redistribute the
-information in DreamHost's whois database.
-
-DreamHost may, at its sole discretion, restrict your access to
-the whois database at any time, with or without notice. DreamHost
-may modify these Terms of Service at any time, with or without
-notice.
-
-+++++++++++++++++++++++++++++++++++++++++++
-
-   Domain Name: dreamhost.com
-
-   Registrant Contact:
-      DreamHost Web Hosting         internic@dreamhost.com
-      New Dream Network, LLC.
-      PMB #257
-      417 Associated Rd.
-      Brea, CA 92821
-      US
-      +1.7147064182
-
-   Administrative Contact:
-      DreamHost Web Hosting         internic@dreamhost.com
-      New Dream Network, LLC.
-      PMB #257
-      417 Associated Rd.
-      Brea, CA 92821
-      US
-      +1.7147064182
-
-   Technical Contact:
-      DreamHost Web Hosting         internic@dreamhost.com
-      New Dream Network, LLC.
-      PMB #257
-      417 Associated Rd.
-      Brea, CA 92821
-      US
-      +1.7147064182
-
-   Billing Contact:
-      DreamHost Web Hosting         internic@dreamhost.com
-      New Dream Network, LLC.
-      PMB #257
-      417 Associated Rd.
-      Brea, CA 92821
-      US
-      +1.7147064182
-
-   Record created on 1997-09-22 21:00:00.
-   Record expires on 2013-09-21 21:00:00.
-
-   Domain servers in listed order:
-
-      ns1.dreamhost.com
-      ns2.dreamhost.com
-      ns3.dreamhost.com
-DreamHost whois server terms of service: http://whois.dreamhost.com/terms.html
-
-Get a 14-day free trial of unlimited everything from DreamHost Web Hosting.
-Paid web hosting includes A FREE domain registration!
-http://www.dreamhost.com/
-Use promotional code "WHOIS" for an additional $50 off any plan!
-
+DreamHost is a global Web hosting and cloud services provider with over 375,000 customers and 1.2 million blogs, websites and apps hosted. The company offers a wide spectrum of Web hosting and cloud services including Shared Hosting, Virtual Private Servers (VPS), Dedicated Server Hosting, Domain Name Registration, the cloud storage service, DreamObjects, and the cloud computing service DreamCompute. Please visit http://DreamHost.com for more information.

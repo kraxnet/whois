@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -17,8 +17,16 @@ module Whois
       # Base parser for CoCCA servers.
       #
       # @abstract
-      #
       class BaseCocca < Base
+
+        class_attribute :status_mapping
+
+        self.status_mapping = {
+          "active" => :registered,
+          "delegated" => :registered,
+          "not registered" => :available,
+        }
+
 
         property_supported :domain do
           content_for_scanner =~ /Query:\s+(.+?)\n/
@@ -30,13 +38,8 @@ module Whois
 
         property_supported :status do
           if content_for_scanner =~ /Status:\s+(.+?)\n/
-            case $1.downcase
-            when "active"         then :registered
-            when "delegated"      then :registered
-            when "not registered" then :available
-            else
-              Whois.bug!(ParserError, "Unknown status `#{$1}'.")
-            end
+            status = $1.downcase
+            self.class.status_mapping[status] || Whois.bug!(ParserError, "Unknown status `#{status}'.")
           else
             Whois.bug!(ParserError, "Unable to parse status.")
           end
@@ -71,17 +74,20 @@ module Whois
 
 
         property_supported :registrar do
-          Record::Registrar.new(
-            :name => content_for_scanner.slice(/Registrar Name: (.+)\n/, 1),
-            :url  => content_for_scanner.slice(/Registration URL: (.+)\n/, 1)
-          )
+          if content_for_scanner =~ /Registrar Name: (.+)\n/
+            Record::Registrar.new(
+                name:         $1,
+                organization: nil,
+                url:          content_for_scanner.slice(/Registration URL: (.+)\n/, 1)
+            )
+          end
         end
 
 
         property_supported :nameservers do
           if content_for_scanner =~ /Name Servers:\n((.+\n)+)\n/
             $1.split("\n").map do |name|
-              Record::Nameserver.new(name.strip)
+              Record::Nameserver.new(:name => name.strip)
             end
           end
         end

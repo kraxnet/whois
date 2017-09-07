@@ -15,125 +15,125 @@ require 'whois/record/parser/whois.smallregistry.net.rb'
 
 describe Whois::Record::Parser::WhoisSmallregistryNet, "status_registered.expected" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "whois.smallregistry.net/status_registered.txt")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
   describe "#disclaimer" do
     it do
-      @parser.disclaimer.should == "Welcome to the SMALLREGISTRY WHOIS Server. Datas are available in order to supply you with information purpose only, PROMOPIXEL is not responsible for its accuracy. Copy of whole or part of the data without permission from PROMOPIXEL is strictly forbidden. The sole owner of a domain is the entity described in the relevant \"registrant:\" record. Domain or subdomain ownership disputes should be settled by contacting SMALLREGISTRY registry: https://www.smallregistry.net, or PROMOPIXEL: http://www.promopixel.com\nBienvenue sur le serveur WHOIS de SMALLREGISTRY. Les données fournies sont disponibles à titre informatif uniquement, PROMOPIXEL ne garantit pas leurs exactitudes. La copie de tout ou partie de la base de données est interdite sans l'autorisation expresse de PROMOPIXEL. Le seul propriétaire d'un domaine ou d'un sous-domaine est l'entité décrite dans l’enregistrement \"registrant:\" correspondant. Un différent sur la propriété d'un nom de domaine ou de sous-domaine peut être réglé en contactant le registre SMALLREGISTRY: https://www.smallregistry.net, ou PROMOPIXEL: http://www.promopixel.com"
+      expect(subject.disclaimer).to eq("Welcome to the SMALLREGISTRY WHOIS Server. Datas are available in order to supply you with information purpose only, PROMOPIXEL is not responsible for its accuracy. Copy of whole or part of the data without permission from PROMOPIXEL is strictly forbidden. The sole owner of a domain is the entity described in the relevant \"registrant:\" record. Domain or subdomain ownership disputes should be settled by contacting SMALLREGISTRY registry: https://www.smallregistry.net, or PROMOPIXEL: http://www.promopixel.com\nBienvenue sur le serveur WHOIS de SMALLREGISTRY. Les données fournies sont disponibles à titre informatif uniquement, PROMOPIXEL ne garantit pas leurs exactitudes. La copie de tout ou partie de la base de données est interdite sans l'autorisation expresse de PROMOPIXEL. Le seul propriétaire d'un domaine ou d'un sous-domaine est l'entité décrite dans l’enregistrement \"registrant:\" correspondant. Un différent sur la propriété d'un nom de domaine ou de sous-domaine peut être réglé en contactant le registre SMALLREGISTRY: https://www.smallregistry.net, ou PROMOPIXEL: http://www.promopixel.com")
     end
   end
   describe "#domain" do
     it do
-      @parser.domain.should == "dr-foo-bar-baz.chirurgiens-dentistes.fr"
+      expect(subject.domain).to eq("dr-foo-bar-baz.chirurgiens-dentistes.fr")
     end
   end
   describe "#domain_id" do
     it do
-      lambda { @parser.domain_id }.should raise_error(Whois::PropertyNotSupported)
+      expect { subject.domain_id }.to raise_error(Whois::AttributeNotSupported)
     end
   end
   describe "#status" do
     it do
-      @parser.status.should == :registered
+      expect(subject.status).to eq(:registered)
     end
   end
   describe "#available?" do
     it do
-      @parser.available?.should == false
+      expect(subject.available?).to eq(false)
     end
   end
   describe "#registered?" do
     it do
-      @parser.registered?.should == true
+      expect(subject.registered?).to eq(true)
     end
   end
   describe "#created_on" do
     it do
-      @parser.created_on.should be_a(Time)
-      @parser.created_on.should == Time.parse("2011-01-13 15:45:18 +01:00")
+      expect(subject.created_on).to be_a(Time)
+      expect(subject.created_on).to eq(Time.parse("2011-01-13 15:45:18 +01:00"))
     end
   end
   describe "#expires_on" do
     it do
-      @parser.expires_on.should be_a(Time)
-      @parser.expires_on.should == Time.parse("2013-01-13 15:45:18 +01:00")
+      expect(subject.expires_on).to be_a(Time)
+      expect(subject.expires_on).to eq(Time.parse("2013-01-13 15:45:18 +01:00"))
     end
   end
   describe "#updated_on" do
     it do
-      @parser.updated_on.should be_a(Time)
-      @parser.updated_on.should == Time.parse("2012-01-13 16:00:09 +01:00")
+      expect(subject.updated_on).to be_a(Time)
+      expect(subject.updated_on).to eq(Time.parse("2012-01-13 16:00:09 +01:00"))
     end
   end
   describe "#registrar" do
     it do
-      @parser.registrar.should be_a(Whois::Record::Registrar)
-      @parser.registrar.id.should           == nil
-      @parser.registrar.name.should         == "GOOGLE"
-      @parser.registrar.organization.should == "GOOGLE"
-      @parser.registrar.url.should          == "http://www.google.com"
+      expect(subject.registrar).to be_a(Whois::Record::Registrar)
+      expect(subject.registrar.id).to eq(nil)
+      expect(subject.registrar.name).to eq("GOOGLE")
+      expect(subject.registrar.organization).to eq("GOOGLE")
+      expect(subject.registrar.url).to eq("http://www.google.com")
     end
   end
   describe "#registrant_contacts" do
     it do
-      @parser.registrant_contacts.should be_a(Array)
-      @parser.registrant_contacts.should have(1).item
-      @parser.registrant_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.registrant_contacts[0].type.should          == Whois::Record::Contact::TYPE_REGISTRANT
-      @parser.registrant_contacts[0].id.should            == "FBB1-SMALL"
-      @parser.registrant_contacts[0].name.should          == "FOO BAR BAZ"
-      @parser.registrant_contacts[0].organization.should  == "FOO BAR BAZ INC"
-      @parser.registrant_contacts[0].address.should       == "116 RUE DE LA PAIX\n75001 PARIS\nFRANCE"
-      @parser.registrant_contacts[0].phone.should         == "+33.123456651"
-      @parser.registrant_contacts[0].fax.should           == "+33.123456660"
-      @parser.registrant_contacts[0].updated_on.should    == Time.parse("2011-01-13 15:45:18 +01:00")
+      expect(subject.registrant_contacts).to be_a(Array)
+      expect(subject.registrant_contacts.size).to eq(1)
+      expect(subject.registrant_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.registrant_contacts[0].type).to eq(Whois::Record::Contact::TYPE_REGISTRANT)
+      expect(subject.registrant_contacts[0].id).to eq("FBB1-SMALL")
+      expect(subject.registrant_contacts[0].name).to eq("FOO BAR BAZ")
+      expect(subject.registrant_contacts[0].organization).to eq("FOO BAR BAZ INC")
+      expect(subject.registrant_contacts[0].address).to eq("116 RUE DE LA PAIX\n75001 PARIS\nFRANCE")
+      expect(subject.registrant_contacts[0].phone).to eq("+33.123456651")
+      expect(subject.registrant_contacts[0].fax).to eq("+33.123456660")
+      expect(subject.registrant_contacts[0].updated_on).to eq(Time.parse("2011-01-13 15:45:18 +01:00"))
     end
   end
   describe "#admin_contacts" do
     it do
-      @parser.admin_contacts.should be_a(Array)
-      @parser.admin_contacts.should have(1).item
-      @parser.admin_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.admin_contacts[0].type.should          == Whois::Record::Contact::TYPE_ADMIN
-      @parser.admin_contacts[0].id.should            == "QR1-SMALL"
-      @parser.admin_contacts[0].name.should          == nil
-      @parser.admin_contacts[0].organization.should  == "QWE RTY"
-      @parser.admin_contacts[0].address.should       == "13 RUE DE LA PAIX\n75003 PARIS\nFRANCE"
-      @parser.admin_contacts[0].phone.should         == "+33.144887967"
-      @parser.admin_contacts[0].updated_on.should    == Time.parse("2010-08-02 14:48:21 +02:00")
+      expect(subject.admin_contacts).to be_a(Array)
+      expect(subject.admin_contacts.size).to eq(1)
+      expect(subject.admin_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.admin_contacts[0].type).to eq(Whois::Record::Contact::TYPE_ADMINISTRATIVE)
+      expect(subject.admin_contacts[0].id).to eq("QR1-SMALL")
+      expect(subject.admin_contacts[0].name).to eq(nil)
+      expect(subject.admin_contacts[0].organization).to eq("QWE RTY")
+      expect(subject.admin_contacts[0].address).to eq("13 RUE DE LA PAIX\n75003 PARIS\nFRANCE")
+      expect(subject.admin_contacts[0].phone).to eq("+33.144887967")
+      expect(subject.admin_contacts[0].updated_on).to eq(Time.parse("2010-08-02 14:48:21 +02:00"))
     end
   end
   describe "#technical_contacts" do
     it do
-      @parser.technical_contacts.should be_a(Array)
-      @parser.technical_contacts.should have(1).item
-      @parser.technical_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.technical_contacts[0].type.should          == Whois::Record::Contact::TYPE_TECHNICAL
-      @parser.technical_contacts[0].id.should            == "GOOG-SMALL"
-      @parser.technical_contacts[0].name.should          == nil
-      @parser.technical_contacts[0].organization.should  == "GOOGLE DNS MASTER"
-      @parser.technical_contacts[0].address.should       == "GOOGLE\n22, RUE DE LA PAIX\n75008 PARIS\nFRANCE"
-      @parser.technical_contacts[0].phone.should         == "+33.821845353"
-      @parser.technical_contacts[0].fax.should           == "+33.821845354"
-      @parser.technical_contacts[0].updated_on.should    == Time.parse("2011-05-18 09:35:37 +02:00")
+      expect(subject.technical_contacts).to be_a(Array)
+      expect(subject.technical_contacts.size).to eq(1)
+      expect(subject.technical_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.technical_contacts[0].type).to eq(Whois::Record::Contact::TYPE_TECHNICAL)
+      expect(subject.technical_contacts[0].id).to eq("GOOG-SMALL")
+      expect(subject.technical_contacts[0].name).to eq(nil)
+      expect(subject.technical_contacts[0].organization).to eq("GOOGLE DNS MASTER")
+      expect(subject.technical_contacts[0].address).to eq("GOOGLE\n22, RUE DE LA PAIX\n75008 PARIS\nFRANCE")
+      expect(subject.technical_contacts[0].phone).to eq("+33.821845353")
+      expect(subject.technical_contacts[0].fax).to eq("+33.821845354")
+      expect(subject.technical_contacts[0].updated_on).to eq(Time.parse("2011-05-18 09:35:37 +02:00"))
     end
   end
   describe "#nameservers" do
     it do
-      @parser.nameservers.should be_a(Array)
-      @parser.nameservers.should have(4).items
-      @parser.nameservers[0].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[0].name.should == "ns1.google.com"
-      @parser.nameservers[1].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[1].name.should == "ns2.google.com"
-      @parser.nameservers[2].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[2].name.should == "ns3.google.com"
-      @parser.nameservers[3].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[3].name.should == "ns4.google.com"
+      expect(subject.nameservers).to be_a(Array)
+      expect(subject.nameservers.size).to eq(4)
+      expect(subject.nameservers[0]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[0].name).to eq("ns1.google.com")
+      expect(subject.nameservers[1]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[1].name).to eq("ns2.google.com")
+      expect(subject.nameservers[2]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[2].name).to eq("ns3.google.com")
+      expect(subject.nameservers[3]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[3].name).to eq("ns4.google.com")
     end
   end
 end

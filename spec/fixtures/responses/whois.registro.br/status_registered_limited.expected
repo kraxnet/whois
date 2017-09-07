@@ -1,5 +1,0 @@
-#available?
-  should: %s == false
-
-#registered?
-  should: %s == true

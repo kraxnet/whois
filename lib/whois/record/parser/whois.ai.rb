@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -14,16 +14,14 @@ module Whois
   class Record
     class Parser
 
-      #
-      # = whois.ai parser
-      #
       # Parser for the whois.ai server.
       #
-      # NOTE: This parser is just a stub and provides only a few basic methods
-      # to check for domain availability and get domain status.
-      # Please consider to contribute implementing missing methods.
-      # See WhoisNicIt parser for an explanation of all available methods
-      # and examples.
+      # @note This parser is just a stub and provides only a few basic methods
+      #   to check for domain availability and get domain status.
+      #   Please consider to contribute implementing missing methods.
+      #
+      # @see Whois::Record::Parser::Example
+      #   The Example parser for the list of all available methods.
       #
       class WhoisAi < Base
 
@@ -54,7 +52,7 @@ module Whois
         property_supported :nameservers do
           if content_for_scanner =~ /Nameservers\n((.+\n)+)\n/
             $1.split("\n").select { |e| e =~ /Server Hostname/ }.map do |line|
-              Record::Nameserver.new(line.split(":").last.strip)
+              Record::Nameserver.new(:name => line.split(":").last.strip)
             end
           end
         end

@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -14,13 +14,13 @@ module Whois
   class Record
     class Parser
 
-      #
-      # = whois.nic.cz parser
-      #
+
       # Parser for the whois.nic.cz server.
       #
       class WhoisNicCz < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisNicCz
 
         property_supported :disclaimer do
           node "field:disclaimer"
@@ -31,8 +31,6 @@ module Whois
         end
 
         property_not_supported :domain_id
-        property_not_supported :referral_whois
-        property_not_supported :referral_url
 
         property_supported :status do
           Array.wrap(node("status")).map do |line|
@@ -118,7 +116,7 @@ module Whois
 
         property_supported :admin_contacts do
           Array.wrap(node("admin-c")).collect do |handle|
-            build_contact(handle, Whois::Record::Contact::TYPE_ADMIN)
+            build_contact(handle, Whois::Record::Contact::TYPE_ADMINISTRATIVE)
           end
         end
 
@@ -134,24 +132,30 @@ module Whois
           node("nsset-#{node('nsset')}") do |str|
             str['nserver'].flatten.map do |line|
               if line =~ /(.+) \((.+)\)/
-                Record::Nameserver.new($1, *$2.split(", "))
+                name = $1
+                ipv4, ipv6 = $2.split(', ')
+                Record::Nameserver.new(:name => name, :ipv4 => ipv4, :ipv6 => ipv6)
               else
-                Record::Nameserver.new(line.strip)
+                Record::Nameserver.new(:name => line.strip)
               end
             end
           end
         end
 
-        # Initializes a new {Scanners::WhoisNicCz} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisNicCz.new(content_for_scanner).parse
+        def response_throttled?
+          !!node("response:throttled")
         end
 
-      private
+        # # Initializes a new {Scanners::WhoisNicCz} instance
+        # # passing the {#content_for_scanner}
+        # # and calls +parse+ on it.
+        # #
+        # # @return [Hash]
+        # def parse
+        #   Scanners::WhoisNicCz.new().parse(content_for_scanner)
+        # end
+
+        private
 
         def build_contact(element, type)
           node("contact-#{element}") do |str|
@@ -170,7 +174,7 @@ module Whois
               # :state        => address[3],
               # :country_code => address[4],
               :created_on   => str["created"] ? Time.parse(str["created"]) : nil,
-              :updated_on   => str["Last Update"] ? Time.parse(str["Last Update"]) : nil
+              :updated_on   => str["changed"] ? Time.parse(str["changed"]) : nil
             )
           end
         end

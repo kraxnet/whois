@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -31,7 +31,7 @@ module Whois
         # @raise  [Whois::WebInterfaceError] For every request.
         #
         def request(string)
-          raise WebInterfaceError, options[:web]
+          raise WebInterfaceError, options[:url]
         end
 
       end

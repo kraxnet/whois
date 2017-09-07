@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -19,12 +19,20 @@ module Whois
       # @note This parser is just a stub and provides only a few basic methods
       #   to check for domain availability and get domain status.
       #   Please consider to contribute implementing missing methods.
-      # 
+      #
       # @see Whois::Record::Parser::Example
       #   The Example parser for the list of all available methods.
       #
-      # @since  2.1.0
       class WhoisTcinetRu < Base
+
+        property_supported :domain do
+          if content_for_scanner =~ /domain:\s+(.+?)\n/
+            $1.downcase
+          end
+        end
+
+        property_not_supported :domain_id
+
 
         property_supported :status do
           if content_for_scanner =~ /state:\s+(.+?)\n/
@@ -60,22 +68,28 @@ module Whois
 
         property_supported :registrar do
           if content_for_scanner =~ /registrar:\s+(.*)\n/
-            Record::Registrar.new(:id => $1)
+            Record::Registrar.new(
+                :id           => $1
+            )
           end
         end
 
 
         property_supported :admin_contacts do
-          content_for_scanner.scan(/e-mail:\s+(.+)\n/).flatten.map do |email|
+          url   = content_for_scanner[/admin-contact:\s+(.+)\n/, 1]
+          email = content_for_scanner[/e-mail:\s+(.+)\n/, 1]
+          contact = if url or email
             Record::Contact.new(
-              :type         => Record::Contact::TYPE_ADMIN,
+              :type         => Record::Contact::TYPE_ADMINISTRATIVE,
+              :url          => url,
+              :email        => email,
               :name         => content_for_scanner[/person:\s+(.+)\n/, 1],
               :organization => content_for_scanner[/org:\s+(.+)\n/, 1],
               :phone        => content_for_scanner[/phone:\s+(.+)\n/, 1],
-              :fax          => content_for_scanner[/fax-no:\s+(.+)\n/, 1],
-              :email        => email
+              :fax          => content_for_scanner[/fax-no:\s+(.+)\n/, 1]
             )
           end
+          Array.wrap(contact)
         end
 
         property_not_supported :registrant_contacts
@@ -91,7 +105,7 @@ module Whois
         property_supported :nameservers do
           content_for_scanner.scan(/nserver:\s+(.+)\n/).flatten.map do |line|
             name, ipv4 = line.split(/\s+/)
-            Record::Nameserver.new(name.chomp("."), ipv4)
+            Record::Nameserver.new(:name => name.chomp("."), :ipv4 => ipv4)
           end
         end
 

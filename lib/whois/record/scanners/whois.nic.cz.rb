@@ -3,8 +3,9 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
+
 
 require 'whois/record/scanners/base'
 
@@ -25,6 +26,7 @@ module Whois
             :skip_empty_comment,
             :skip_secondardy_available,
             :scan_sections,
+            :scan_response_throttled,
         ]
 
         tokenizer :scan_disclaimer do
@@ -64,6 +66,13 @@ module Whois
           @input.skip(/% No entries found.\n/)
         end
 
+        tokenizer :scan_response_throttled do
+          if @input.match?(/Your connection limit exceeded\. Please slow down and try again later/)
+            @ast["response:throttled"] = true
+            @input.skip(/^.+\n/)
+          end
+        end
+
         tokenizer :scan_sections do
           if @input.match?(/^(domain|contact|nsset|keyset):\s+(.+?)\n/)
             section = @input[1]
@@ -85,7 +94,7 @@ module Whois
               break if @input.skip(/^\n/)
             end
             if section=="domain"
-              @ast.merge!(@content) 
+              @ast.merge!(@content)
             else
               @ast["#{section}-#{handle}"]=@content
             end

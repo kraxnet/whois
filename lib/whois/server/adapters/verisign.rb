@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -16,14 +16,6 @@ module Whois
       #
       # Provides ability to query Verisign WHOIS interfaces.
       #
-      # The following WHOIS servers are currently known
-      # to require the Verisign adapter:
-      #
-      # - whois.nic.tv
-      # - whois.crsnic.net
-      # - jobswhois.verisign-grs.com
-      # - whois.nic.cc
-      #
       class Verisign < Base
 
         # Executes a WHOIS query to the Verisign WHOIS interface,
@@ -34,26 +26,26 @@ module Whois
         # @return [void]
         #
         def request(string)
-          response = query_the_socket("=#{string}", host, DEFAULT_WHOIS_PORT)
+          response = query_the_socket("=#{string}", host)
           buffer_append response, host
 
-          if endpoint = extract_referral(response)
-            response = query_the_socket(string, endpoint, DEFAULT_WHOIS_PORT)
-            buffer_append response, endpoint
+          if options[:referral] != false && referral = extract_referral(response)
+            response = query_the_socket(string, referral)
+            buffer_append(response, referral)
           end
         end
 
 
         private
 
-          def extract_referral(response)
-            if response =~ /Domain Name:/
-              endpoint = response.scan(/Whois Server: (.+?)$/).flatten.last
-              endpoint.strip! if endpoint != nil
-              endpoint = nil  if endpoint == "not defined"
-              endpoint
-            end
+        def extract_referral(response)
+          if response =~ /Domain Name:/
+            server = response.scan(/Whois Server: (.+?)$/).flatten.last
+            server.strip! if server != nil
+            server = nil  if server == "not defined"
+            server
           end
+        end
 
       end
 

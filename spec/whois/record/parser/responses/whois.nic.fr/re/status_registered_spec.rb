@@ -15,111 +15,111 @@ require 'whois/record/parser/whois.nic.fr.rb'
 
 describe Whois::Record::Parser::WhoisNicFr, "status_registered.expected" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "whois.nic.fr/re/status_registered.txt")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
   describe "#status" do
     it do
-      @parser.status.should == :registered
+      expect(subject.status).to eq(:registered)
     end
   end
   describe "#available?" do
     it do
-      @parser.available?.should == false
+      expect(subject.available?).to eq(false)
     end
   end
   describe "#registered?" do
     it do
-      @parser.registered?.should == true
+      expect(subject.registered?).to eq(true)
     end
   end
   describe "#created_on" do
     it do
-      @parser.created_on.should be_a(Time)
-      @parser.created_on.should == Time.parse("1995-01-01")
+      expect(subject.created_on).to be_a(Time)
+      expect(subject.created_on).to eq(Time.parse("1995-01-01"))
     end
   end
   describe "#updated_on" do
     it do
-      @parser.updated_on.should be_a(Time)
-      @parser.updated_on.should == Time.parse("2009-03-12")
+      expect(subject.updated_on).to be_a(Time)
+      expect(subject.updated_on).to eq(Time.parse("2011-04-26"))
     end
   end
   describe "#expires_on" do
     it do
-      lambda { @parser.expires_on }.should raise_error(Whois::PropertyNotSupported)
+      expect { subject.expires_on }.to raise_error(Whois::AttributeNotSupported)
     end
   end
   describe "#registrant_contacts" do
     it do
-      @parser.registrant_contacts.should be_a(Array)
-      @parser.registrant_contacts.should have(1).items
-      @parser.registrant_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.registrant_contacts[0].type.should          == Whois::Record::Contact::TYPE_REGISTRANT
-      @parser.registrant_contacts[0].id.should            == "A1967-FRNIC"
-      @parser.registrant_contacts[0].name.should          == nil
-      @parser.registrant_contacts[0].organization.should  == "AFNIC"
-      @parser.registrant_contacts[0].address.should       == "immeuble international\n2, rue Stephenson\nMontigny-Le-Bretonneux\n78181 Saint Quentin en Yvelines"
-      @parser.registrant_contacts[0].city.should          == nil
-      @parser.registrant_contacts[0].zip.should           == nil
-      @parser.registrant_contacts[0].state.should         == nil
-      @parser.registrant_contacts[0].country.should       == nil
-      @parser.registrant_contacts[0].country_code.should  == "FR"
-      @parser.registrant_contacts[0].phone.should         == nil
-      @parser.registrant_contacts[0].fax.should           == nil
-      @parser.registrant_contacts[0].email.should         == nil
-      @parser.registrant_contacts[0].updated_on.should    == Time.parse("2009-12-02 00:00:00 UTC")
+      expect(subject.registrant_contacts).to be_a(Array)
+      expect(subject.registrant_contacts.size).to eq(1)
+      expect(subject.registrant_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.registrant_contacts[0].type).to eq(Whois::Record::Contact::TYPE_REGISTRANT)
+      expect(subject.registrant_contacts[0].id).to eq("A1967-FRNIC")
+      expect(subject.registrant_contacts[0].name).to eq(nil)
+      expect(subject.registrant_contacts[0].organization).to eq("AFNIC")
+      expect(subject.registrant_contacts[0].address).to eq("immeuble international\n2, rue Stephenson\nMontigny-Le-Bretonneux\n78181 Saint Quentin en Yvelines")
+      expect(subject.registrant_contacts[0].city).to eq(nil)
+      expect(subject.registrant_contacts[0].zip).to eq(nil)
+      expect(subject.registrant_contacts[0].state).to eq(nil)
+      expect(subject.registrant_contacts[0].country).to eq(nil)
+      expect(subject.registrant_contacts[0].country_code).to eq("FR")
+      expect(subject.registrant_contacts[0].phone).to eq(nil)
+      expect(subject.registrant_contacts[0].fax).to eq(nil)
+      expect(subject.registrant_contacts[0].email).to eq(nil)
+      expect(subject.registrant_contacts[0].updated_on).to eq(Time.parse("2009-12-02 00:00:00 UTC"))
     end
   end
   describe "#admin_contacts" do
     it do
-      @parser.admin_contacts.should be_a(Array)
-      @parser.admin_contacts.should have(1).items
-      @parser.admin_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.admin_contacts[0].type.should         == Whois::Record::Contact::TYPE_ADMIN
-      @parser.admin_contacts[0].id.should            == "NFC1-FRNIC"
-      @parser.admin_contacts[0].name.should          == "NIC France Contact"
-      @parser.admin_contacts[0].organization.should  == "AFNIC"
-      @parser.admin_contacts[0].address.should       == "immeuble international\n2, rue Stephenson\nMontigny le Bretonneux\n78181 Saint Quentin en Yvelines Cedex"
-      @parser.admin_contacts[0].city.should          == nil
-      @parser.admin_contacts[0].zip.should           == nil
-      @parser.admin_contacts[0].state.should         == nil
-      @parser.admin_contacts[0].country.should       == nil
-      @parser.admin_contacts[0].country_code.should  == "FR"
-      @parser.admin_contacts[0].phone.should         == "+33 1 39 30 83 00"
-      @parser.admin_contacts[0].fax.should           == nil
-      @parser.admin_contacts[0].email.should         == "hostmaster@nic.fr"
-      @parser.admin_contacts[0].updated_on.should    == Time.parse("2005-08-23 00:00:00 UTC")
+      expect(subject.admin_contacts).to be_a(Array)
+      expect(subject.admin_contacts.size).to eq(1)
+      expect(subject.admin_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.admin_contacts[0].type).to eq(Whois::Record::Contact::TYPE_ADMINISTRATIVE)
+      expect(subject.admin_contacts[0].id).to eq("NFC1-FRNIC")
+      expect(subject.admin_contacts[0].name).to eq("NIC France Contact")
+      expect(subject.admin_contacts[0].organization).to eq("AFNIC")
+      expect(subject.admin_contacts[0].address).to eq("immeuble international\n2, rue Stephenson\nMontigny le Bretonneux\n78181 Saint Quentin en Yvelines Cedex")
+      expect(subject.admin_contacts[0].city).to eq(nil)
+      expect(subject.admin_contacts[0].zip).to eq(nil)
+      expect(subject.admin_contacts[0].state).to eq(nil)
+      expect(subject.admin_contacts[0].country).to eq(nil)
+      expect(subject.admin_contacts[0].country_code).to eq("FR")
+      expect(subject.admin_contacts[0].phone).to eq("+33 1 39 30 83 00")
+      expect(subject.admin_contacts[0].fax).to eq(nil)
+      expect(subject.admin_contacts[0].email).to eq("hostmaster@nic.fr")
+      expect(subject.admin_contacts[0].updated_on).to eq(Time.parse("2005-08-23 00:00:00 UTC"))
     end
   end
   describe "#technical_contacts" do
     it do
-      @parser.technical_contacts.should be_a(Array)
-      @parser.technical_contacts.should have(1).items
-      @parser.technical_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.technical_contacts[0].type.should          == Whois::Record::Contact::TYPE_TECHNICAL
-      @parser.technical_contacts[0].id.should            == "NFC1-FRNIC"
-      @parser.technical_contacts[0].name.should          == "NIC France Contact"
-      @parser.technical_contacts[0].organization.should  == "AFNIC"
-      @parser.technical_contacts[0].address.should       == "immeuble international\n2, rue Stephenson\nMontigny le Bretonneux\n78181 Saint Quentin en Yvelines Cedex"
-      @parser.technical_contacts[0].city.should          == nil
-      @parser.technical_contacts[0].zip.should           == nil
-      @parser.technical_contacts[0].state.should         == nil
-      @parser.technical_contacts[0].country.should       == nil
-      @parser.technical_contacts[0].country_code.should  == "FR"
-      @parser.technical_contacts[0].phone.should         == "+33 1 39 30 83 00"
-      @parser.technical_contacts[0].fax.should           == nil
-      @parser.technical_contacts[0].email.should         == "hostmaster@nic.fr"
-      @parser.technical_contacts[0].updated_on.should    == Time.parse("2005-08-23 00:00:00 UTC")
+      expect(subject.technical_contacts).to be_a(Array)
+      expect(subject.technical_contacts.size).to eq(1)
+      expect(subject.technical_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.technical_contacts[0].type).to eq(Whois::Record::Contact::TYPE_TECHNICAL)
+      expect(subject.technical_contacts[0].id).to eq("NFC1-FRNIC")
+      expect(subject.technical_contacts[0].name).to eq("NIC France Contact")
+      expect(subject.technical_contacts[0].organization).to eq("AFNIC")
+      expect(subject.technical_contacts[0].address).to eq("immeuble international\n2, rue Stephenson\nMontigny le Bretonneux\n78181 Saint Quentin en Yvelines Cedex")
+      expect(subject.technical_contacts[0].city).to eq(nil)
+      expect(subject.technical_contacts[0].zip).to eq(nil)
+      expect(subject.technical_contacts[0].state).to eq(nil)
+      expect(subject.technical_contacts[0].country).to eq(nil)
+      expect(subject.technical_contacts[0].country_code).to eq("FR")
+      expect(subject.technical_contacts[0].phone).to eq("+33 1 39 30 83 00")
+      expect(subject.technical_contacts[0].fax).to eq(nil)
+      expect(subject.technical_contacts[0].email).to eq("hostmaster@nic.fr")
+      expect(subject.technical_contacts[0].updated_on).to eq(Time.parse("2005-08-23 00:00:00 UTC"))
     end
   end
   describe "#nameservers" do
     it do
-      @parser.nameservers.should be_a(Array)
-      @parser.nameservers.should have(3).items
+      expect(subject.nameservers).to be_a(Array)
+      expect(subject.nameservers.size).to eq(3)
     end
   end
 end

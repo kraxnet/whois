@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -16,13 +16,15 @@ module Whois
     class Parser
 
       # Parser for the whois.cira.ca server.
-      # 
+      #
       # @see Whois::Record::Parser::Example
       #   The Example parser for the list of all available methods.
       #
-      # @since 2.5.0
       class WhoisCiraCa < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisCiraCa
+
 
         property_supported :disclaimer do
            node("field:disclaimer")
@@ -36,11 +38,6 @@ module Whois
         property_not_supported :domain_id
 
 
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
-
-
         property_supported :status do
           if content_for_scanner =~ /Domain status:\s+(.+?)\n/
             case node("Domain status", &:downcase)
@@ -51,6 +48,8 @@ module Whois
             when "auto-renew grace"
               :registered
             when "to be released"
+              :registered
+            when "pending delete"
               :registered
             when "available"
               :available
@@ -89,9 +88,9 @@ module Whois
         property_supported :registrar do
           node("Registrar") do |hash|
             Record::Registrar.new(
-              :id           => hash["Number"],
-              :name         => hash["Name"],
-              :organization => hash["Name"]
+              id:           hash["Number"],
+              name:         hash["Name"],
+              organization: hash["Name"]
             )
           end
         end
@@ -102,7 +101,7 @@ module Whois
         end
 
         property_supported :admin_contacts do
-          build_contact("Administrative contact", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("Administrative contact", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -134,19 +133,22 @@ module Whois
         end
 
 
-        # Attempts to detect and returns the
-        # schema version.
+        # Attempts to detect and returns the version.
         #
         # TODO: This is very empiric.
         #       Use the available status in combination with the creation date label.
-        def schema
-          @schema ||= if content_for_scanner =~ /^% \(c\) (.+?) Canadian Internet Registration Authority/
-            case $1
-            when "2007" then "1"
-            when "2010" then "2"
+        #
+        # NEWPROPERTY
+        def version
+          cached_properties_fetch :version do
+            version = if content_for_scanner =~ /^% \(c\) (.+?) Canadian Internet Registration Authority/
+              case $1
+              when "2007" then "1"
+              when "2010" then "2"
+              end
             end
+            version || Whois.bug!(ParserError, "Unable to detect version.")
           end
-          @schema || Whois.bug!(ParserError, "Unable to detect schema version.")
         end
 
         # NEWPROPERTY
@@ -164,17 +166,7 @@ module Whois
         end
 
 
-        # Initializes a new {Scanners::WhoisCiraCa} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisCiraCa.new(content_for_scanner).parse
-        end
-
-
-      private
+        private
 
         def build_contact(element, type)
           node(element) do |hash|

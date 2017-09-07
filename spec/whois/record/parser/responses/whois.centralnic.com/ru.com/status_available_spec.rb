@@ -15,94 +15,84 @@ require 'whois/record/parser/whois.centralnic.com.rb'
 
 describe Whois::Record::Parser::WhoisCentralnicCom, "status_available.expected" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "whois.centralnic.com/ru.com/status_available.txt")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
   describe "#disclaimer" do
     it do
-      @parser.disclaimer.should == nil
+      expect(subject.disclaimer).to eq(nil)
     end
   end
   describe "#domain" do
     it do
-      @parser.domain.should == nil
+      expect(subject.domain).to eq(nil)
     end
   end
   describe "#domain_id" do
     it do
-      @parser.domain_id.should == nil
-    end
-  end
-  describe "#referral_whois" do
-    it do
-      lambda { @parser.referral_whois }.should raise_error(Whois::PropertyNotSupported)
-    end
-  end
-  describe "#referral_url" do
-    it do
-      lambda { @parser.referral_url }.should raise_error(Whois::PropertyNotSupported)
+      expect(subject.domain_id).to eq(nil)
     end
   end
   describe "#status" do
     it do
-      @parser.status.should == []
+      expect(subject.status).to eq([])
     end
   end
   describe "#available?" do
     it do
-      @parser.available?.should == true
+      expect(subject.available?).to eq(true)
     end
   end
   describe "#registered?" do
     it do
-      @parser.registered?.should == false
+      expect(subject.registered?).to eq(false)
     end
   end
   describe "#created_on" do
     it do
-      @parser.created_on.should == nil
+      expect(subject.created_on).to eq(nil)
     end
   end
   describe "#updated_on" do
     it do
-      @parser.updated_on.should == nil
+      expect(subject.updated_on).to eq(nil)
     end
   end
   describe "#expires_on" do
     it do
-      @parser.expires_on.should == nil
+      expect(subject.expires_on).to eq(nil)
     end
   end
   describe "#registrar" do
     it do
-      @parser.registrar.should == nil
+      expect(subject.registrar).to eq(nil)
     end
   end
   describe "#registrant_contacts" do
     it do
-      @parser.registrant_contacts.should be_a(Array)
-      @parser.registrant_contacts.should == []
+      expect(subject.registrant_contacts).to be_a(Array)
+      expect(subject.registrant_contacts).to eq([])
     end
   end
   describe "#admin_contacts" do
     it do
-      @parser.admin_contacts.should be_a(Array)
-      @parser.admin_contacts.should == []
+      expect(subject.admin_contacts).to be_a(Array)
+      expect(subject.admin_contacts).to eq([])
     end
   end
   describe "#technical_contacts" do
     it do
-      @parser.technical_contacts.should be_a(Array)
-      @parser.technical_contacts.should == []
+      expect(subject.technical_contacts).to be_a(Array)
+      expect(subject.technical_contacts).to eq([])
     end
   end
   describe "#nameservers" do
     it do
-      @parser.nameservers.should be_a(Array)
-      @parser.nameservers.should == []
+      expect(subject.nameservers).to be_a(Array)
+      expect(subject.nameservers).to eq([])
     end
   end
 end

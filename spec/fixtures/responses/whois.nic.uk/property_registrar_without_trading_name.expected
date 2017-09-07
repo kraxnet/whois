@@ -1,6 +1,0 @@
-#registrar
-  should: %s CLASS(registrar)
-  should: %s.id           == "NETNAMES"
-  should: %s.name         == "NetNames Limited"
-  should: %s.name         == "NetNames Limited"
-  should: %s.url          == "http://www.netnames.co.uk"

@@ -1,3 +1,61 @@
+Domain ID:CNIC-DO1423750
+Domain Name:HOTEL.GB.NET
+Created On:2013-08-25T12:36:24.0Z
+Last Updated On:2013-08-30T12:42:09.0Z
+Expiration Date:2014-08-25T23:59:59.0Z
+Status:clientTransferProhibited
+Status:serverTransferProhibited
+Registrant ID:R1149-GANDI-PRYP
+Registrant Name:Heinz Pierre Roeser
+Registrant Organization:Roevertrieb
+Registrant Street1:Friedensstr. 77
+Registrant City:Grevenbroich
+Registrant Postal Code:41517
+Registrant Country:DE
+Registrant Phone:+49.218145077
+Registrant Email:roevertrieb@aol.com
+Admin ID:R1149-GANDI-PRYP
+Admin Name:Heinz Pierre Roeser
+Admin Organization:Roevertrieb
+Admin Street1:Friedensstr. 77
+Admin City:Grevenbroich
+Admin Postal Code:41517
+Admin Country:DE
+Admin Phone:+49.218145077
+Admin Email:roevertrieb@aol.com
+Tech ID:R1149-GANDI-PRYP
+Tech Name:Heinz Pierre Roeser
+Tech Organization:Roevertrieb
+Tech Street1:Friedensstr. 77
+Tech City:Grevenbroich
+Tech Postal Code:41517
+Tech Country:DE
+Tech Phone:+49.218145077
+Tech Email:roevertrieb@aol.com
+Billing ID:R1149-GANDI-PRYP
+Billing Name:Heinz Pierre Roeser
+Billing Organization:Roevertrieb
+Billing Street1:Friedensstr. 77
+Billing City:Grevenbroich
+Billing Postal Code:41517
+Billing Country:DE
+Billing Phone:+49.218145077
+Billing Email:roevertrieb@aol.com
+Sponsoring Registrar ID:H1167922
+Sponsoring Registrar IANA ID:81
+Sponsoring Registrar Organization:Gandi SAS
+Sponsoring Registrar Street1:63-65 bd. Massena
+Sponsoring Registrar City:Paris
+Sponsoring Registrar Postal Code:75013
+Sponsoring Registrar Country:FR
+Sponsoring Registrar Phone:+33 1 7039 3740
+Sponsoring Registrar FAX:+33 1 4373 1851
+Sponsoring Registrar Website:http://www.gandi.net/
+Name Server:B.DNS.GANDI.NET
+Name Server:C.DNS.GANDI.NET
+Name Server:A.DNS.GANDI.NET
+DNSSEC:Unsigned
+
 This whois service is provided by CentralNic Ltd and only contains
 information pertaining to Internet domain names we have registered for
 our customers. By using this service you are agreeing (1) not to use any
@@ -7,71 +65,4 @@ any way, (3) not to use any high-volume, automated, electronic processes
 to obtain data from this service. Abuse of this service is monitored and
 actions in contravention of these terms will result in being permanently
 blacklisted. All data is (c) CentralNic Ltd https://www.centralnic.com/
-
-Domain ID:CNIC-DO605873
-Domain Name:HOTEL.GB.NET
-Created On:04-Dec-2008 05:56:57 UTC
-Last Updated On:04-Dec-2011 12:00:12 UTC
-Expiration Date:04-Dec-2011 23:59:59 UTC
-Status:PENDING DELETE
-Status:PENDING DELETE RESTORABLE
-Registrant ID:INX-9925147net
-Registrant Name:boris schleinkofer
-Registrant Organization:p.s. consulting ag
-Registrant Street1:hacklthalerstrasse 21c
-Registrant City:kirchdorf
-Registrant State/Province:bayern
-Registrant Postal Code:83527
-Registrant Country:DE
-Registrant Phone:+49.8072370230
-Registrant FAX:+49.80723702399
-Registrant Email:schleinkofer@ps-consulting-ag.com
-Admin ID:INX-9925147net
-Admin Name:boris schleinkofer
-Admin Organization:p.s. consulting ag
-Admin Street1:hacklthalerstrasse 21c
-Admin City:kirchdorf
-Admin State/Province:bayern
-Admin Postal Code:83527
-Admin Country:DE
-Admin Phone:+49.8072370230
-Admin FAX:+49.80723702399
-Admin Email:schleinkofer@ps-consulting-ag.com
-Tech ID:INX-9925147net
-Tech Name:boris schleinkofer
-Tech Organization:p.s. consulting ag
-Tech Street1:hacklthalerstrasse 21c
-Tech City:kirchdorf
-Tech State/Province:bayern
-Tech Postal Code:83527
-Tech Country:DE
-Tech Phone:+49.8072370230
-Tech FAX:+49.80723702399
-Tech Email:schleinkofer@ps-consulting-ag.com
-Billing ID:INX-9925147net
-Billing Name:boris schleinkofer
-Billing Organization:p.s. consulting ag
-Billing Street1:hacklthalerstrasse 21c
-Billing City:kirchdorf
-Billing State/Province:bayern
-Billing Postal Code:83527
-Billing Country:DE
-Billing Phone:+49.8072370230
-Billing FAX:+49.80723702399
-Billing Email:schleinkofer@ps-consulting-ag.com
-Sponsoring Registrar ID:7145-IX
-Sponsoring Registrar Organization:InternetX GmbH
-Sponsoring Registrar Street1:Maximilianstr. 6
-Sponsoring Registrar City:Regensburg
-Sponsoring Registrar Postal Code:93047
-Sponsoring Registrar Country:DE
-Sponsoring Registrar Phone:+49-941-595590
-Sponsoring Registrar FAX:+49-941-59579054
-Sponsoring Registrar Website:http://www.internetx.de/
-Name Server:D.NS14.NET
-Name Server:A.NS14.NET
-Name Server:C.NS14.NET
-Name Server:B.NS14.NET
-DNSSEC:Unsigned
-
 

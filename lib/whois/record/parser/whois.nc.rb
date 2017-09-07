@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -16,13 +16,15 @@ module Whois
     class Parser
 
       # Parser for the whois.nc server.
-      # 
+      #
       # @see Whois::Record::Parser::Example
       #   The Example parser for the list of all available methods.
       #
-      # @since 2.4.0
       class WhoisNc < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisNc
+
 
         property_not_supported :disclaimer
 
@@ -32,11 +34,6 @@ module Whois
         end
 
         property_not_supported :domain_id
-
-
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
 
 
         property_supported :status do
@@ -81,18 +78,20 @@ module Whois
               index += 1
             end
 
-            zip, city = address[-2].match(/(\d+) (.+)/)[1, 2]
+            lines = address.dup
+            country = lines[-1] =~ /(\d+)/ ? nil : lines.pop
+            zip, city = lines.pop.match(/(\d+) (.+)/)[1, 2]
 
             Record::Contact.new(
               :type         => Whois::Record::Contact::TYPE_REGISTRANT,
               :id           => nil,
               :name         => node("Registrant name"),
               :organization => nil,
-              :address      => address[0..-3].join("\n"),
+              :address      => lines.join("\n"),
               :city         => city,
               :zip          => zip,
               :state        => nil,
-              :country      => address[-1],
+              :country      => country,
               :phone        => nil,
               :fax          => nil,
               :email        => nil
@@ -107,7 +106,7 @@ module Whois
 
         property_supported :nameservers do
           nameservers = []
-          index   = 1
+          index = 1
           while line = node("Domain server #{index}")
             nameservers << line
             index += 1
@@ -116,16 +115,6 @@ module Whois
           nameservers.map do |name|
             Record::Nameserver.new(:name => name)
           end
-        end
-
-
-        # Initializes a new {Scanners::WhoisNc} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisNc.new(content_for_scanner).parse
         end
 
       end

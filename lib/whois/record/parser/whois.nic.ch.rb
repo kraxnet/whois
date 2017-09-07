@@ -3,12 +3,11 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
 require 'whois/record/parser/base'
-
 
 module Whois
   class Record
@@ -50,6 +49,36 @@ module Whois
 
         property_not_supported :expires_on
 
+        # Registrant is given in the following format:
+        #
+        #   Holder of domain name:
+        #   Name
+        #   Address line 1
+        #   Address line 2
+        #   Address line n
+        #   Contractual Language: language
+        #
+        property_supported :registrant_contacts do
+          if content_for_scanner =~ /Holder of domain name:\n(.+?)\n(.+?)\nContractual Language:.*\n\n/m
+            Record::Contact.new({ :name => $1, :address => $2, :type => Whois::Record::Contact::TYPE_REGISTRANT })
+          end
+        end
+
+        # Technical contact is given in the following format:
+        #
+        #   Technical contact:
+        #   Name
+        #   Address line 1
+        #   Address line 2
+        #   Address line n
+        #
+        property_supported :technical_contacts do
+          if content_for_scanner =~ /Technical contact:\n(.+?)\n(.+?)\n\n/m
+            Record::Contact.new({ :name => $1, :address => $2, :type => Whois::Record::Contact::TYPE_TECHNICAL })
+          end
+        end
+
+        property_not_supported :admin_contacts
 
         # Nameservers are listed in the following formats:
         #
@@ -64,12 +93,12 @@ module Whois
               if line =~ /(.+)\t\[(.+)\]/
                 name, ip = $1, $2
                 order << name unless order.include?(name)
-                list[name] ||= Record::Nameserver.new(name)
+                list[name] ||= Record::Nameserver.new(:name => name)
                 list[name].ipv4 = ip if Whois::Server.valid_ipv4?(ip)
                 list[name].ipv6 = ip if Whois::Server.valid_ipv6?(ip)
               else
                 order << line unless order.include?(line)
-                list[line] ||= Record::Nameserver.new(line)
+                list[line] ||= Record::Nameserver.new(:name => line)
               end
             end
             order.map { |name| list[name] }
@@ -77,7 +106,6 @@ module Whois
         end
 
       end
-
     end
   end
 end

@@ -25,12 +25,12 @@ namespace :spec do
 require 'spec_helper'
 require 'whois/record/parser/%{khost}.rb'
 
-describe %{klass}, "%{descr}" do
+describe %{described_class}, "%{descr}" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "%{fixture}")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
 %{contexts}
@@ -46,11 +46,15 @@ end
   RUBY
 
   TPL_MATCH = <<-RUBY.chomp!
-      @parser.%{subject}.%{should} %{match}
+      expect(subject.%{attribute}).to %{match}
+  RUBY
+
+  TPL_MATCH_SIZE = <<-RUBY.chomp!
+      expect(subject.%{attribute}.size).to eq(%{size})
   RUBY
 
   TPL_MATCH_RAISE = <<-RUBY.chomp!
-      lambda { @parser.%{subject} }.%{should} %{match}
+      expect { subject.%{attribute} }.to %{match}
   RUBY
 
   def relativize(path)
@@ -63,11 +67,11 @@ end
   task :generate_parsers do
     Dir["#{SOURCE_DIR}/**/*.expected"].each do |source_path|
 
-      # Generate the filename and klass name from the test file.
+      # Generate the filename and described_class name from the test file.
       parts = (source_path.split("/") - SOURCE_PARTS)
       khost = parts.first
       kfile = parts.last
-      klass = Whois::Record::Parser.parser_klass(khost)
+      described_class = Whois::Record::Parser.parser_klass(khost)
 
       target_path = File.join(TARGET_DIR, *parts).gsub(".expected", "_spec.rb")
 
@@ -76,28 +80,28 @@ end
       #
       #   {
       #     "domain" => [
-      #       ["%s", "should", "== \"google.biz\""]
+      #       ["%s", "== \"google.biz\""]
       #     ],
       #     "created_on" => [
-      #       ["%s", "should", "be_a(Time)"],
-      #       ["%s", "should", "== Time.parse(\"2002-03-27 00:01:00 UTC\")"]
+      #       ["%s", "be_a(Time)"],
+      #       ["%s", "== Time.parse(\"2002-03-27 00:01:00 UTC\")"]
       #     ]
       #   }
       #
       tests = {}
       match = nil
-      lines = File.open(source_path)
+      lines = File.open(source_path, "r:UTF-8")
       lines.each do |line|
         line.chomp!
         case line
         when ""
           # skip empty line
-        when /^\s*\/\//
+        when /^\s*$/, /^\s*\/\//
           # skip comment line
         when /^#([^\s]+)/
           tests[match = $1] = []
-        when /^\s+(.+?): (.+?) (.+)/
-          tests[match] << _parse_assertion($2, $1, $3)
+        when /^\s+(.+?) (.+)/
+          tests[match] << _parse_assertion($1, $2)
         else
           raise "Invalid Line `#{line}' in `#{source_path}'"
         end
@@ -106,20 +110,23 @@ end
       # Generate the RSpec content and
       # write one file for every test.
       contexts = tests.map do |attr, specs|
-        matches = specs.map do |method, should, condition|
-          subject = method % attr
-          if condition.index("raise_")
-            TPL_MATCH_RAISE % { :subject => subject, :should => should, :match => condition }
+        matches = specs.map do |method, condition|
+          attribute = method % attr
+          case condition
+          when /raise_error/
+            TPL_MATCH_RAISE % { attribute: attribute, match: condition }
+          when /^%SIZE\{(\d+)\}$/
+            TPL_MATCH_SIZE % { attribute: attribute, size: $1 }
           else
-            TPL_MATCH % { :subject => subject, :should => should, :match => condition }
+            TPL_MATCH % { attribute: attribute, match: condition }
           end
         end.join("\n")
-        TPL_CONTEXT % { :descr => attr, :examples => matches }
+        TPL_CONTEXT % { descr: attr, examples: matches }
       end.join("\n")
 
       describe = <<-RUBY
 #{TPL_DESCRIBE % {
-  :klass    => klass,
+  :described_class    => described_class,
   :khost    => khost,
   :descr    => kfile,
   :sfile    => relativize(source_path),
@@ -137,46 +144,55 @@ end
   end
 
 
-  def _parse_assertion(method, should, condition)
+  def _parse_assertion(method, condition)
     m = method
-    s = should
-    c = condition
+    c = condition.strip
 
-    case condition
+    case
 
-    # should: %s CLASS(time)
-    # ->
-    # should: %s be_a(time)
-    when /^CLASS\((.+)\)$/
+    # %s %CLASS{time} -> %s be_a(time)
+    when c =~ /^%CLASS\{(.+)\}$/
       c = "be_a(#{_build_condition_typeof($1)})"
 
-    # should: %s SIZE(3)
-    # ->
-    # should: %s have(3).items
-    when /^SIZE\((.+)\)$/
-      c = "have(#{$1}).items"
+    # %s %TIME{...} -> %s Time.parse(...)
+    when c =~ /^%TIME\{(.+)\}$/
+      c = "eq(Time.parse(\"#{$1}\"))"
+
+    # %s %ERROR{...} -> %s raise_error(...)
+    when c =~ /^%ERROR\{(.+)\}$/
+      c = "raise_error(Whois::#{$1})"
+
+    # %s =~ "foo"
+    when c =~ /^%MATCH\{(.+)\}$/
+      c = "match(/#{$1}/)"
+
+    # %s == "foo"
+    when c =~ /^== (.+)$/
+      c = "eq(#{$1})"
+
     end
 
-    [m, s, c]
+    [m, c]
   end
 
-  def _build_condition_typeof(klass)
-    case klass
-    when "array" then "Array"
-    when "time" then "Time"
-    when "contact" then "Whois::Record::Contact"
-    when "registrar" then "Whois::Record::Registrar"
+  def _build_condition_typeof(described_class)
+    case described_class
+    when "array"      then "Array"
+    when "time"       then "Time"
+    when "contact"    then "Whois::Record::Contact"
+    when "registrar"  then "Whois::Record::Registrar"
     when "nameserver" then "Whois::Record::Nameserver"
     else
-      raise "Unknown class `#{klass}'"
+      raise "Unknown class `#{described_class}'"
     end
   end
 
-  def _build_condition_typecast(klass, value)
-    case klass
-    when "time"     then %Q{Time.parse("#{value}")}
+  def _build_condition_typecast(described_class, value)
+    case described_class
+    when "time"
+      %Q{Time.parse("#{value}")}
     else
-      raise "Unknown class `#{klass}'"
+      raise "Unknown class `#{described_class}'"
     end
   end
 

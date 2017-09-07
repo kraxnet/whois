@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -14,16 +14,14 @@ module Whois
   class Record
     class Parser
 
-      #
-      # = whois.domain-registry.nl parser
-      #
       # Parser for the whois.domain-registry.nl server.
       #
-      # NOTE: This parser is just a stub and provides only a few basic methods
-      # to check for domain availability and get domain status.
-      # Please consider to contribute implementing missing methods.
-      # See WhoisNicIt parser for an explanation of all available methods
-      # and examples.
+      # @note This parser is just a stub and provides only a few basic methods
+      #   to check for domain availability and get domain status.
+      #   Please consider to contribute implementing missing methods.
+      #
+      # @see Whois::Record::Parser::Example
+      #   The Example parser for the list of all available methods.
       #
       class WhoisDomainRegistryNl < Base
 
@@ -38,12 +36,17 @@ module Whois
         # - in quarantine: this .nl domain name's registration has been cancelled. Following cancellation, a domain name is placed in quarantine for forty days.
         #
         # @see https://www.sidn.nl/en/whois/
+        # @see https://www.sidn.nl/en/about-nl/whois/looking-up-a-domain-name/
         #
         property_supported :status do
-          if content_for_scanner =~ /Status:\s+(.*?)\n/
+          if content_for_scanner =~ /Status:\s+(.+?)\n/
             case $1.downcase
-            when "active"         then :registered
-            when "in quarantine"  then :redemption
+            when "active"
+              :registered
+            when "in quarantine"
+              :redemption
+            when "inactive"
+              :inactive
             else
               Whois.bug!(ParserError, "Unknown status `#{$1}'.")
             end
@@ -57,7 +60,7 @@ module Whois
         end
 
         property_supported :registered? do
-          [:registered, :redemption].include?(status)
+          status != :available
         end
 
 
@@ -80,7 +83,7 @@ module Whois
           if content_for_scanner =~ /Domain nameservers:\n((.+\n)+)\n/
             $1.split("\n").map do |line|
               name, ipv4 = line.strip.split(/\s+/)
-              Record::Nameserver.new(name, ipv4)
+              Record::Nameserver.new(:name => name, :ipv4 => ipv4)
             end
           end
         end

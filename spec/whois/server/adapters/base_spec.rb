@@ -1,158 +1,154 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Whois::Server::Adapters::Base do
 
-  let(:definition)  { [:tld, ".test", "whois.test", { :foo => "bar" }] }
+  let(:definition)  { [:tld, ".test", "whois.test", { foo: "bar" }] }
 
 
   describe "#initialize" do
     it "requires type, allocation, and host parameters" do
-      lambda { klass.new(:tld) }.should raise_error(ArgumentError)
-      lambda { klass.new(:tld, ".test") }.should raise_error(ArgumentError)
-      lambda { klass.new(:tld, ".test", "whois.test") }.should_not raise_error
+      expect { described_class.new(:tld) }.to raise_error(ArgumentError)
+      expect { described_class.new(:tld, ".test") }.to raise_error(ArgumentError)
+      expect { described_class.new(:tld, ".test", "whois.test") }.to_not raise_error
     end
 
     it "accepts an options parameter" do
-      lambda { klass.new(:tld, ".test", "whois.test", { :foo => "bar" }) }.should_not raise_error
+      expect { described_class.new(:tld, ".test", "whois.test", { foo: "bar" }) }.to_not raise_error
     end
 
     it "sets instance variables from arguments" do
-      a = klass.new(:tld, ".test", "whois.test", { :foo => "bar" })
-      a.type.should == :tld
-      a.allocation.should == ".test"
-      a.host.should == "whois.test"
-      a.options.should == { :foo => "bar" }
+      instance = described_class.new(:tld, ".test", "whois.test", { foo: "bar" })
+      expect(instance.type).to eq(:tld)
+      expect(instance.allocation).to eq(".test")
+      expect(instance.host).to eq("whois.test")
+      expect(instance.options).to eq({ foo: "bar" })
     end
 
     it "defaults options to an empty hash" do
-      a = klass.new(:tld, ".test", "whois.test")
-      a.options.should == Hash.new
+      instance = described_class.new(:tld, ".test", "whois.test")
+      expect(instance.options).to eq({})
     end
   end
 
   describe "#==" do
     it "returns true when other is the same instance" do
-      one = two = klass.new(*definition)
+      one = two = described_class.new(*definition)
 
-      (one == two).should be_true
-      (one.eql? two).should be_true
+      expect(one == two).to be_truthy
+      expect(one.eql?(two)).to be_truthy
     end
 
     it "returns true when other has same class and has the same attributes" do
-      one, two = klass.new(*definition), klass.new(*definition)
+      one, two = described_class.new(*definition), described_class.new(*definition)
 
-      (one == two).should be_true
-      (one.eql? two).should be_true
+      expect(one == two).to be_truthy
+      expect(one.eql?(two)).to be_truthy
     end
 
     it "returns true when other has descendant class and has the same attributes" do
-      subklass = Class.new(klass)
-      one, two = klass.new(*definition), subklass.new(*definition)
+      subklass = Class.new(described_class)
+      one, two = described_class.new(*definition), subklass.new(*definition)
 
-      (one == two).should be_true
-      (one.eql? two).should be_true
+      expect(one == two).to be_truthy
+      expect(one.eql?(two)).to be_truthy
     end
 
     it "returns false when other has different class and has the same attributes" do
-      one, two = klass.new(*definition), Struct.new(:type, :allocation, :host, :options).new(*definition)
+      one, two = described_class.new(*definition), Struct.new(:type, :allocation, :host, :options).new(*definition)
 
-      (one == two).should be_false
-      (one.eql? two).should be_false
+      expect(one == two).to be_falsey
+      expect(one.eql?(two)).to be_falsey
     end
 
     it "returns false when other has different attributes" do
-      one, two = klass.new(:tld, ".test", "whois.test"), klass.new(:tld, ".cool", "whois.test")
+      one, two = described_class.new(:tld, ".test", "whois.test"), described_class.new(:tld, ".cool", "whois.test")
 
-      (one == two).should be_false
-      (one.eql? two).should be_false
+      expect(one == two).to be_falsey
+      expect(one.eql?(two)).to be_falsey
     end
 
     it "returns false when other has different options" do
-      one, two = klass.new(:tld, ".test", "whois.test"), klass.new(:tld, ".test", "whois.test", { :foo => "bar" })
+      one, two = described_class.new(:tld, ".test", "whois.test"), described_class.new(:tld, ".test", "whois.test", { foo: "bar" })
 
-      (one == two).should be_false
-      (one.eql? two).should be_false
+      expect(one == two).to be_falsey
+      expect(one.eql?(two)).to be_falsey
     end
   end
 
 
   describe "#configure" do
     it "merges settings with current options" do
-      a = klass.new(:tld, ".test", "whois.test", { :hello => "world" })
-      a.configure(:foo => "bar")
-      a.options.should == { :hello => "world", :foo => "bar" }
+      a = described_class.new(:tld, ".test", "whois.test", { :hello => "world" })
+      a.configure(foo: "bar")
+      expect(a.options).to eq({ :hello => "world", foo: "bar" })
     end
 
     it "gives higher priority to settings argument" do
-      a = klass.new(:tld, ".test", "whois.test", { :foo => "bar" })
-      a.options.should == { :foo => "bar" }
+      a = described_class.new(:tld, ".test", "whois.test", { foo: "bar" })
+      expect(a.options).to eq({ foo: "bar" })
       a.configure(:foo => "baz")
-      a.options.should == { :foo => "baz" }
+      expect(a.options).to eq({ :foo => "baz" })
+    end
+
+    it "overrides @host if :host option exists" do
+      a = described_class.new(:tld, ".test", "whois.test", { :hello => "world" })
+      a.configure(foo: "bar", :host => "whois.example.com")
+      expect(a.options).to eq({ :hello => "world", foo: "bar", :host => "whois.example.com" })
+      expect(a.host).to eq("whois.example.com")
     end
   end
 
 
-  describe "#query" do
+  describe "#lookup" do
     it "raises NotImplementedError" do
-      lambda { klass.new(*definition).query("example.test") }.should raise_error(NotImplementedError)
+      expect {
+        described_class.new(*definition).lookup("example.test")
+      }.to raise_error(NotImplementedError)
     end
   end
 
   describe "#request" do
     it "is an abstract method" do
-      lambda { klass.new(*definition).request("example.test") }.should raise_error(NotImplementedError)
+      expect {
+        described_class.new(*definition).request("example.test")
+      }.to raise_error(NotImplementedError)
     end
   end
 
   describe "#query_the_socket" do
-    [ Errno::ECONNRESET, Errno::EHOSTUNREACH, Errno::ECONNREFUSED, SocketError ].each do |error|
-      it "re-raises #{error} as Whois::ConnectionError" do
-        klass.any_instance.expects(:ask_the_socket).raises(error)
-        expect {
-          klass.new(*definition).send(:query_the_socket, "example.com", "whois.test")
-        }.to raise_error(Whois::ConnectionError, "#{error}: #{error.new.message}")
-      end
-    end
-
     context "without :bind_host or :bind_port options" do
-      before(:each) do
-        @base = klass.new(:tld, ".test", "whois.test", {})
-      end
+      let(:server) { described_class.new(:tld, ".test", "whois.test", {}) }
 
       it "does not bind the WHOIS query" do
-        @base \
-            .expects(:ask_the_socket) \
-            .with("example.test", "whois.test", 43)
+        described_class.
+            query_handler.expects(:call).
+            with("example.test", "whois.test", 43)
 
-        @base.send(:query_the_socket, "example.test", "whois.test", 43)
+        server.send(:query_the_socket, "example.test", "whois.test", 43)
       end
     end
 
     context "with :bind_host and :bind_port options" do
-      before(:each) do
-        @base = klass.new(:tld, ".test", "whois.test", { :bind_host => "192.168.1.1", :bind_port => 3000 })
-      end
+      let(:server) { described_class.new(:tld, ".test", "whois.test", { :bind_host => "192.168.1.1", :bind_port => 3000 }) }
 
       it "binds the WHOIS query to given host and port" do
-        @base \
-            .expects(:ask_the_socket) \
-            .with("example.test", "whois.test", 43, "192.168.1.1", 3000)
+        described_class.
+            query_handler.expects(:call).
+            with("example.test", "whois.test", 43, "192.168.1.1", 3000)
 
-        @base.send(:query_the_socket, "example.test", "whois.test", 43)
+        server.send(:query_the_socket, "example.test", "whois.test", 43)
       end
     end
 
     context "with :bind_port and without :bind_host options" do
-      before(:each) do
-        @base = klass.new(:tld, ".test", "whois.test", { :bind_port => 3000 })
-      end
+      let(:server) { described_class.new(:tld, ".test", "whois.test", { :bind_port => 3000 }) }
 
       it "binds the WHOIS query to given port and defaults host" do
-        @base \
-            .expects(:ask_the_socket) \
-            .with("example.test", "whois.test", 43, klass::DEFAULT_BIND_HOST, 3000)
+        described_class.
+            query_handler.expects(:call).
+            with("example.test", "whois.test", 43, described_class::DEFAULT_BIND_HOST, 3000)
 
-        @base.send(:query_the_socket, "example.test", "whois.test", 43)
+        server.send(:query_the_socket, "example.test", "whois.test", 43)
       end
     end
   end

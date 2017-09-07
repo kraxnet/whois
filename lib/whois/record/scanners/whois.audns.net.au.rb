@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -15,8 +15,6 @@ module Whois
     module Scanners
 
       # Scanner for the whois.audns.net.au record.
-      #
-      # @since 2.5.0
       class WhoisAudnsNetAu < Base
 
         self.tokenizers += [

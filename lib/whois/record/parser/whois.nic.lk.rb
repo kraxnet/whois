@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -15,11 +15,10 @@ module Whois
     class Parser
 
       # Parser for the whois.nic.lk server.
-      # 
+      #
       # @see Whois::Record::Parser::Example
       #   The Example parser for the list of all available methods.
       #
-      # @since 2.4.0
       class WhoisNicLk < Base
 
         property_not_supported :disclaimer
@@ -32,12 +31,6 @@ module Whois
         end
 
         property_not_supported :domain_id
-
-
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
-
 
 
         property_supported :status do
@@ -59,13 +52,13 @@ module Whois
 
         property_supported :created_on do
           if content_for_scanner =~ /Created on\.+:(.+)\n/
-            Time.parse($1)
+            Time.parse($1) unless $1 == "null"
           end
         end
 
         property_supported :updated_on do
           if content_for_scanner =~ /Record last updated on\.+:(.+)\n/
-            Time.parse($1)
+            Time.parse($1) unless $1 == "null"
           end
         end
 
@@ -104,7 +97,7 @@ module Whois
         property_not_supported :technical_contacts
 
         property_supported :nameservers do
-         if content_for_scanner =~ /Domain Servers in listed order:\n((?:.+\n)+)/
+          if content_for_scanner =~ /Domain Servers in listed order:\n((?:.+\n)+)/
             $1.split("\n").map do |name|
               Record::Nameserver.new(:name => name.strip.chomp("."))
             end

@@ -15,24 +15,24 @@ require 'whois/record/parser/whois.nic.fr.rb'
 
 describe Whois::Record::Parser::WhoisNicFr, "property_nameservers_multiple_ipv4.expected" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "whois.nic.fr/fr/property_nameservers_multiple_ipv4.txt")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
   describe "#nameservers" do
     it do
-      @parser.nameservers.should be_a(Array)
-      @parser.nameservers.should have(2).items
-      @parser.nameservers[0].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[0].name.should == "ns1.boursedirect.fr"
-      @parser.nameservers[0].ipv4.should == "212.157.203.190"
-      @parser.nameservers[0].ipv6.should == nil
-      @parser.nameservers[1].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[1].name.should == "ns2.boursedirect.fr"
-      @parser.nameservers[1].ipv4.should == "212.157.203.189"
-      @parser.nameservers[1].ipv6.should == nil
+      expect(subject.nameservers).to be_a(Array)
+      expect(subject.nameservers.size).to eq(2)
+      expect(subject.nameservers[0]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[0].name).to eq("ns1.boursedirect.fr")
+      expect(subject.nameservers[0].ipv4).to eq("212.157.203.190")
+      expect(subject.nameservers[0].ipv6).to eq(nil)
+      expect(subject.nameservers[1]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[1].name).to eq("ns2.boursedirect.fr")
+      expect(subject.nameservers[1].ipv4).to eq("212.157.203.189")
+      expect(subject.nameservers[1].ipv6).to eq(nil)
     end
   end
 end

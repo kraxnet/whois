@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -16,13 +16,15 @@ module Whois
     class Parser
 
       # Parser for the whois.dns.hr server.
-      # 
+      #
       # @see Whois::Record::Parser::Example
       #   The Example parser for the list of all available methods.
       #
-      # @since 2.4.0
       class WhoisDnsHr < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisDnsHr
+
 
         property_not_supported :disclaimer
 
@@ -32,11 +34,6 @@ module Whois
         end
 
         property_not_supported :domain_id
-
-
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
 
 
         property_supported :status do
@@ -70,7 +67,7 @@ module Whois
 
         property_supported :registrant_contacts do
           node("descr") do |array|
-            fuffa, zip, city = array[2].match(/([\d\s]+) (.+)/).to_a
+            _, zip, city = array[2].match(/([\d\s]+) (.+)/).to_a
             Record::Contact.new(
               :type         => Whois::Record::Contact::TYPE_REGISTRANT,
               :id           => nil,
@@ -94,16 +91,6 @@ module Whois
 
 
         property_not_supported :nameservers
-
-
-        # Initializes a new {Scanners::WhoisDnsHr} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisDnsHr.new(content_for_scanner).parse
-        end
 
       end
 

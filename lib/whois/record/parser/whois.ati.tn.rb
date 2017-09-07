@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -16,13 +16,15 @@ module Whois
     class Parser
 
       # Parser for the whois.ati.tn server.
-      # 
+      #
       # @see Whois::Record::Parser::Example
       #   The Example parser for the list of all available methods.
       #
-      # @since RELEASE
       class WhoisAtiTn < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisAtiTn
+
 
         property_supported :disclaimer do
           node("field:disclaimer")
@@ -34,11 +36,6 @@ module Whois
         end
 
         property_not_supported :domain_id
-
-
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
 
 
         property_supported :status do
@@ -68,21 +65,20 @@ module Whois
 
 
         property_supported :registrar do
-          node("Registrar") do |str|
+          node("Registrar") do |value|
             Record::Registrar.new(
               :id           => nil,
-              :name         => node("Registrar")
+              :name         => value
             )
           end
         end
-
 
         property_supported :registrant_contacts do
           build_contact("Owner", Whois::Record::Contact::TYPE_REGISTRANT)
         end
 
         property_supported :admin_contacts do
-          build_contact("Admin.", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("Admin.", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -98,30 +94,19 @@ module Whois
         end
 
 
-        # Initializes a new {Scanners::WhoisAtiTn} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisAtiTn.new(content_for_scanner).parse
-        end
-
-
       private
 
         def build_contact(element, type)
           node("#{element} Name") do
             Record::Contact.new(
-              :type         => type,
-              :id           => nil,
-              :name         => node("#{element} Name"),
-              :address      => node("#{element} Address"),
-              :phone        => node("#{element} Tel"),
-              :fax          => node("#{element} Fax"),
-              :email        => node("#{element} Email"),
-              :created_on   => node("#{element} Created") { |value| Time.parse(value) },
-              :updated_on   => node("#{element} Updated") { |value| Time.parse(value) }
+              type:         type,
+              name:         node("#{element} Name"),
+              address:      node("#{element} Address"),
+              phone:        node("#{element} Tel"),
+              fax:          node("#{element} Fax"),
+              email:        node("#{element} Email"),
+              created_on:   node("#{element} Created") { |value| Time.parse(value) },
+              updated_on:   node("#{element} Updated") { |value| Time.parse(value) if value != "None" }
             )
           end
         end

@@ -1,12 +1,5 @@
 module RSpecSupportSpecHelpers
 
-  # Gets the currently described class.
-  # Conversely to +subject+, it returns the class
-  # instead of an instance.
-  def klass
-    described_class
-  end
-
   def fixture(*names)
     File.join(SPEC_ROOT, "fixtures", *names)
   end
@@ -24,16 +17,12 @@ module RSpecSupportSpecHelpers
 
   def definitions_setup
     @_definitions = Whois::Server.definitions
-    Whois::Server.send :class_variable_set, :@@definitions, { :tld => [], :ipv4 =>[], :ipv6 => [] }
+    Whois::Server.send :class_variable_set, :@@definitions,
+      { :tld => [], :ipv4 => [], :ipv6 => [], :asn16 => [], :asn32 => [] }
   end
 
   def definitions_teardown
     Whois::Server.send :class_variable_set, :@@definitions, @_definitions
-  end
-
-
-  def nameserver(*params)
-    Whois::Record::Nameserver.new(*params)
   end
 
 end

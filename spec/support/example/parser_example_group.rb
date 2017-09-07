@@ -4,22 +4,6 @@ module ParserExampleGroup
     Whois::Record::Part.new(File.read(fixture("responses", @host.to_s, @suffix.to_s, @schema.to_s, path)), @host)
   end
 
-  def _part
-    Whois::Record::Part
-  end
-
-  def _registrar
-    Whois::Record::Registrar
-  end
-
-  def _contact
-    Whois::Record::Contact
-  end
-
-  def _nameserver
-    Whois::Record::Nameserver
-  end
-
 end
 
 RSpec::Matchers.define :cache_property do |property|
@@ -29,11 +13,11 @@ RSpec::Matchers.define :cache_property do |property|
       @cached_properties
     end
 
-    cache.key?(property).should be_false
+    expect(cache.key?(property)).to be_falsey
     value = instance.send(property)
 
-    cache.key?(property).should be_true
-    cache[property].should == value
+    expect(cache.key?(property)).to be_truthy
+    expect(cache[property]).to eq(value)
 
     true
   end
@@ -51,7 +35,5 @@ RSpec::configure do |c|
     /#{parts.join('\/')}/
   end
 
-  c.include ParserExampleGroup, :example_group => {
-    :file_path => c.escaped_path(%w( spec whois record parser ))
-  }
+  c.include ParserExampleGroup, file_path: c.escaped_path(%w( spec whois record parser ))
 end

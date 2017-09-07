@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -15,10 +15,23 @@ module Whois
     class Parser
 
       # Parser for the whois.nic.asia server.
+      #
+      # @see Whois::Record::Parser::Example
+      #   The Example parser for the list of all available methods.
+      #
       class WhoisNicAsia < BaseAfilias
 
+        self.scanner = Scanners::BaseAfilias, {
+            pattern_reserved: /^Reserved by DotAsia\n/,
+        }
+
+
         property_supported :status do
-          Array.wrap(node("Domain Status"))
+          if reserved?
+            :reserved
+          else
+            Array.wrap(node("Domain Status"))
+          end
         end
 
 
@@ -42,7 +55,7 @@ module Whois
 
 
         property_supported :admin_contacts do
-          build_contact("Administrative", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("Administrative", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -52,8 +65,14 @@ module Whois
 
         property_supported :nameservers do
           Array.wrap(node("Nameservers")).reject(&:empty?).map do |name|
-            Nameserver.new(name.downcase)
+            Record::Nameserver.new(:name => name.downcase)
           end
+        end
+
+
+        # NEWPROPERTY
+        def reserved?
+          !!node("status:reserved")
         end
 
 

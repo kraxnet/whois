@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -15,9 +15,11 @@ module Whois
   class Record
     class Parser
 
-      # Parser for the whois.centralnic.net server.
+      # Parser for the whois.centralnic.com server.
       class WhoisCentralnicCom < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisCentralnicCom
 
 
         property_supported :disclaimer do
@@ -34,13 +36,12 @@ module Whois
         end
 
 
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
-
-
         property_supported :status do
-          Array.wrap(node("Status"))
+          # OK, RENEW PERIOD, ...
+          Array.wrap(
+            node("Status") ||
+            node("Domain Status")
+          )
         end
 
         property_supported :available? do
@@ -53,15 +54,18 @@ module Whois
 
 
         property_supported :created_on do
-          node("Created On") { |str| Time.parse(str) }
+          node("Created On")  { |str| Time.parse(str) } ||
+          node("Creation Date") { |str| Time.parse(str) }
         end
 
         property_supported :updated_on do
-          node("Last Updated On") { |str| Time.parse(str) }
+          node("Last Updated On") { |str| Time.parse(str) } ||
+          node("Updated Date") { |str| Time.parse(str) }
         end
 
         property_supported :expires_on do
-          node("Expiration Date") { |str| Time.parse(str) }
+          node("Expiration Date") { |str| Time.parse(str) } ||
+          node("Registry Expiry Date") { |str| Time.parse(str) }
         end
 
 
@@ -73,16 +77,23 @@ module Whois
                 :organization => node("Sponsoring Registrar Organization"),
                 :url          => node("Sponsoring Registrar Website")
             )
+          end ||
+          node("Sponsoring Registrar IANA ID") do
+            Record::Registrar.new(
+                :id           => node("Sponsoring Registrar IANA ID"),
+                :name         => node("Sponsoring Registrar"),
+                :organization => nil,
+                :url          => nil
+            )
           end
         end
-
 
         property_supported :registrant_contacts do
           build_contact("Registrant", Whois::Record::Contact::TYPE_REGISTRANT)
         end
 
         property_supported :admin_contacts do
-          build_contact("Admin", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("Admin", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -92,20 +103,8 @@ module Whois
 
         property_supported :nameservers do
           Array.wrap(node("Name Server")).map do |name|
-            Record::Nameserver.new(
-                :name => name.downcase
-            )
+            Record::Nameserver.new(:name => name.downcase.chomp("."))
           end
-        end
-
-
-        # Initializes a new {Scanners::WhoisCentralnicCom} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisCentralnicCom.new(content_for_scanner).parse
         end
 
 
@@ -113,7 +112,7 @@ module Whois
 
         def build_contact(element, type)
           node("#{element} ID") do
-            address = (1..3).
+            address = [nil, 1, 2, 3].
                 map { |i| node("#{element} Street#{i}") }.
                 delete_if { |i| i.nil? || i.empty? }.
                 join("\n")
@@ -130,7 +129,7 @@ module Whois
                 :state        => node("#{element} State/Province"),
                 :country_code => node("#{element} Country"),
                 :phone        => node("#{element} Phone"),
-                :fax          => node("#{element} FAX"),
+                :fax          => node("#{element} FAX") || node("#{element} Fax"),
                 :email        => node("#{element} Email")
             )
           end

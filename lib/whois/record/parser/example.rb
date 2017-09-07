@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -47,15 +47,6 @@ module Whois
         # Returns a String with the domain ID if available,
         # <tt>nil</tt> otherwise.
         property_supported :domain_id do
-          nil
-        end
-
-
-        property_supported :referral_whois do
-          nil
-        end
-
-        property_supported :referral_url do
           nil
         end
 

@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -14,7 +14,9 @@ module Whois
       class Arpa < Base
 
         def request(string)
-          Server.guess(inaddr_to_ip(string)).query(string)
+          record = Server.guess(inaddr_to_ip(string)).lookup(string)
+          part   = record.parts.first
+          buffer_append part.body, part.host
         end
 
 

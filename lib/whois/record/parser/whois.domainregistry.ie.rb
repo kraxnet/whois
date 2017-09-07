@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -16,12 +16,15 @@ module Whois
     class Parser
 
       # Parser for the whois.domainregistry.ie server.
-      # 
+      #
       # @see Whois::Record::Parser::Example
       #   The Example parser for the list of all available methods.
       #
       class WhoisDomainregistryIe < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisDomainregistryIe
+
 
         property_supported :disclaimer do
           node("field:disclaimer")
@@ -35,14 +38,9 @@ module Whois
         property_not_supported :domain_id
 
 
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
-
-
         property_supported :status do
-          case node("status", &:downcase)
-          when "active"
+          case node("ren-status", &:downcase)
+          when /^active/
             :registered
           when nil
             if node("status:pending")
@@ -64,7 +62,9 @@ module Whois
         end
 
 
-        property_not_supported :created_on
+        property_supported :created_on do
+          node("registration") { |value| Time.parse(value) }
+        end
 
         property_not_supported :updated_on
 
@@ -87,7 +87,7 @@ module Whois
         end
 
         property_supported :admin_contacts do
-          build_contact("admin-c", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("admin-c", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -103,27 +103,17 @@ module Whois
         end
 
 
-        # Initializes a new {Scanners::WhoisDomainregistryIe} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisDomainregistryIe.new(content_for_scanner).parse
-        end
-
-
       private
 
         def build_contact(element, type)
           Array.wrap(node(element)).map do |id|
-            contact = node("field:#{id}")
+            next unless (contact = node("field:#{id}"))
             Record::Contact.new(
               :type         => type,
               :id           => id,
               :name         => contact["person"]
             )
-          end
+          end.compact
         end
 
       end

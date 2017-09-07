@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -35,17 +35,29 @@ module Whois
     # @attr [String] phone
     # @attr [String] fax
     # @attr [String] email
+    # @attr [String] url - e. g. to the contact form
     # @attr [Time] created_on
     # @attr [Time] updated_on
     #
     class Contact < SuperStruct.new(:id, :type, :name, :organization,
                                     :address, :city, :zip, :state, :country, :country_code,
-                                    :phone, :fax, :email,
+                                    :phone, :fax, :email, :url,
                                     :created_on, :updated_on)
 
-      TYPE_REGISTRANT = 1
-      TYPE_ADMIN = 2
-      TYPE_TECHNICAL = 3
+      TYPE_REGISTRANT     = 1
+      TYPE_ADMINISTRATIVE = 2
+      TYPE_TECHNICAL      = 3
+
+
+      def self.const_missing(name)
+        case name
+        when :TYPE_ADMIN
+          Whois.deprecate("Whois::Record::Contact::TYPE_ADMIN is now Whois::Record::Contact::TYPE_ADMINISTRATIVE")
+          self.const_set(name, TYPE_ADMINISTRATIVE)
+        else
+          super
+        end
+      end
 
     end
 

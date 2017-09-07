@@ -1,0 +1,94 @@
+%  (c) 2006-2017 CZ.NIC, z.s.p.o.
+% 
+% Intended use of supplied data and information
+% 
+% Data contained in the domain name register, as well as information
+% supplied through public information services of CZ.NIC association,
+% are appointed only for purposes connected with Internet network
+% administration and operation, or for the purpose of legal or other
+% similar proceedings, in process as regards a matter connected
+% particularly with holding and using a concrete domain name.
+% 
+% Full text available at:
+% http://www.nic.cz/page/306/intended-use-of-supplied-data-and-information/
+% 
+% See also a search service at http://www.nic.cz/whois/
+% 
+% 
+% Whoisd Server Version: 3.10.2
+% Timestamp: Thu Sep 07 12:49:39 2017
+
+domain:       nic.cz
+registrant:   CZ-NIC
+admin-c:      FEELA
+admin-c:      MAPET
+nsset:        CZ.NIC
+keyset:       CZNIC
+registrar:    REG-CZNIC
+status:       Sponsoring registrar change forbidden
+registered:   30.10.1997 01:00:00
+changed:      22.11.2016 15:07:40
+expire:       15.03.2027
+
+contact:      CZ-NIC
+org:          CZ.NIC, z.s.p.o.
+name:         CZ.NIC, z.s.p.o.
+address:      Milesovska 1136/5
+address:      Praha 3
+address:      130 00
+address:      CZ
+phone:        +420.222745111
+fax-no:       +420.222745112
+e-mail:       admin@nic.cz
+registrar:    REG-CZNIC
+created:      17.10.2008 12:08:21
+changed:      09.01.2015 11:09:33
+
+contact:      FEELA
+name:         Ondřej Filip
+address:      Jeseniova 2852/16
+address:      Praha 3
+address:      13000
+address:      CZ
+registrar:    REG-MOJEID
+created:      04.01.2005 13:35:00
+changed:      17.07.2017 15:35:48
+
+contact:      MAPET
+name:         Martin Peterka
+registrar:    REG-MOJEID
+created:      06.03.2002 18:11:00
+changed:      16.02.2017 19:42:41
+
+nsset:        CZ.NIC
+nserver:      d.ns.nic.cz (193.29.206.1, 2001:678:1::1)
+nserver:      a.ns.nic.cz (194.0.12.1, 2001:678:f::1)
+nserver:      b.ns.nic.cz (194.0.13.1, 2001:678:10::1)
+tech-c:       JTALIR
+tech-c:       JAROMIR-TALIR
+registrar:    REG-CZNIC
+created:      09.06.2008 14:30:16
+changed:      20.09.2013 11:18:20
+
+contact:      JTALIR
+name:         Jaromír Talíř
+registrar:    REG-MOJEID
+created:      26.10.2010 10:53:34
+changed:      15.11.2016 15:04:44
+
+contact:      JAROMIR-TALIR
+name:         Jaromír Talíř
+address:      Americká 23
+address:      Praha 2
+address:      120 00
+address:      CZ
+registrar:    REG-MOJEID
+created:      01.12.2011 17:35:04
+
+keyset:       CZNIC
+dnskey:       257 3 13 LM4zvjUgZi2XZKsYooDE0HFYGfWp242fKB+O8sLsuox8S6MJTowY8lBDjZD7JKbmaNot3+1H8zU9TrDzWmmHwQ==
+tech-c:       JTALIR
+registrar:    REG-CZNIC
+created:      20.05.2016 16:13:26
+
+

@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -34,7 +34,7 @@ module Whois
         end
 
         property_supported :available? do
-          content_for_scanner.strip == 'Domain Not Found'
+          content_for_scanner.strip == 'The domain has not been registered.'
         end
 
         property_supported :registered? do

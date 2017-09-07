@@ -15,25 +15,25 @@ require 'whois/record/parser/whois.nic.fr.rb'
 
 describe Whois::Record::Parser::WhoisNicFr, "property_status_active.expected" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "whois.nic.fr/fr/property_status_active.txt")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
   describe "#status" do
     it do
-      @parser.status.should == :registered
+      expect(subject.status).to eq(:registered)
     end
   end
   describe "#available?" do
     it do
-      @parser.available?.should == false
+      expect(subject.available?).to eq(false)
     end
   end
   describe "#registered?" do
     it do
-      @parser.registered?.should == true
+      expect(subject.registered?).to eq(true)
     end
   end
 end

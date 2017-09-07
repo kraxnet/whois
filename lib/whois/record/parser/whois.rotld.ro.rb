@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -14,25 +14,24 @@ module Whois
   class Record
     class Parser
 
-      #
-      # = whois.rotld.ro parser
-      #
       # Parser for the whois.rotld.ro server.
       #
-      # NOTE: This parser is just a stub and provides only a few basic methods
-      # to check for domain availability and get domain status.
-      # Please consider to contribute implementing missing methods.
-      # See WhoisNicIt parser for an explanation of all available methods
-      # and examples.
+      # @note This parser is just a stub and provides only a few basic methods
+      #   to check for domain availability and get domain status.
+      #   Please consider to contribute implementing missing methods.
+      #
+      # @see Whois::Record::Parser::Example
+      #   The Example parser for the list of all available methods.
       #
       class WhoisRotldRo < Base
 
         property_supported :status do
           if content_for_scanner =~ /Domain Status:\s(.+?)\n/
             case $1.downcase
-              when "ok" then :registered
-              else
-                Whois.bug!(ParserError, "Unknown status `#{$1}'.")
+            when "ok", "updateprohibited"
+              :registered
+            else
+              Whois.bug!(ParserError, "Unknown status `#{$1}'.")
             end
           else
             :available
@@ -40,7 +39,7 @@ module Whois
         end
 
         property_supported :available? do
-          !!(content_for_scanner =~ /No entries found/)
+          !!(content_for_scanner =~ /^% No entries found/)
         end
 
         property_supported :registered? do
@@ -56,8 +55,8 @@ module Whois
 
 
         property_supported :nameservers do
-          content_for_scanner.scan(/Name Server:\s+(.+)\n/).flatten.map do |name|
-            Record::Nameserver.new(name)
+          content_for_scanner.scan(/Nameserver:\s+(.+)\n/).flatten.map do |name|
+            Record::Nameserver.new(name: name)
           end
         end
 

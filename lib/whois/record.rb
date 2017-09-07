@@ -3,17 +3,19 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
-require 'whois/record/parser'
-require 'whois/record/parser/base'
+require 'whois/record/part'
 
 
 module Whois
 
   class Record
+
+    autoload :Parser, 'whois/record/parser'
+
 
     # @return [Whois::Server] The server that originated this record.
     attr_reader :server
@@ -39,13 +41,15 @@ module Whois
     # for {Parser::PROPERTIES} and {Parser::METHODS}.
     #
     # @return [Boolean]
+    #
     def respond_to?(symbol, include_private = false)
-      super || Parser::PROPERTIES.include?(symbol) || Parser::METHODS.include?(symbol)
+      respond_to_parser_method?(symbol) || super
     end
 
     # Returns a String representation of this record.
     #
     # @return [String] The record content.
+    #
     def to_s
       content.to_s
     end
@@ -53,6 +57,7 @@ module Whois
     # Returns a human-readable representation of this record.
     #
     # @return [String] The result of {#inspect} on content.
+    #
     def inspect
       content.inspect
     end
@@ -62,6 +67,7 @@ module Whois
     #
     # @param  [Whois::Record] other The record to compare.
     # @return [Boolean]
+    #
     def ==(other)
       if equal?(other)
         true
@@ -78,7 +84,7 @@ module Whois
     # Invokes {#match} on record {#content}
     # and returns the match as <tt>MatchData</tt> or <tt>nil</tt>.
     #
-    # @param  [Regexp, String] match
+    # @param  [Regexp, String] pattern The regex pattern to match.
     # @return [MatchData] If pattern matches #content
     # @return [nil] If pattern doesn't match #content
     #
@@ -91,7 +97,7 @@ module Whois
     # Invokes {#match} and returns <tt>true</tt> if <tt>pattern</tt>
     # matches {#content}, <tt>false</tt> otherwise.
     #
-    # @param  [Regexp, String] match
+    # @param  [Regexp, String] pattern The regex pattern to match.
     # @return [Boolean]
     #
     # @see #match
@@ -104,12 +110,12 @@ module Whois
     # and separates each response with a newline character.
     #
     # @example Record with one part
-    #   record = Whois::Record.new([Whois::Record::Part.new("First record.")])
+    #   record = Whois::Record.new([Whois::Record::Part.new(:body => "First record.")])
     #   record.content
     #   # => "First record."
     #
     # @example Record with multiple parts
-    #   record = Whois::Record.new([Whois::Record::Part.new("First record."), Whois::Record::Part.new("Second record.")])
+    #   record = Whois::Record.new([Whois::Record::Part.new(:body => "First record."), Whois::Record::Part.new(:body => "Second record.")])
     #   record.content
     #   # => "First record.\nSecond record."
     #
@@ -122,39 +128,41 @@ module Whois
     # Lazy-loads and returns the parser proxy for current record.
     #
     # @return [Whois::Record::Parser]
+    #
     def parser
       @parser ||= Parser.new(self)
     end
 
-    # Returns <tt>true</tt> if the <tt>property</tt> passed as symbol
-    # is supported by any available parser for this record.
+    # Checks if the <tt>property</tt> passed as symbol
+    # is supported in any of the parsers.
     #
     # @param  [Symbol] property The name of the property to check.
     # @return [Boolean]
     #
-    # @see Whois::Record::Parser#property_supported?
+    # @see Whois::Record::Parser#property_any_supported?
     #
-    def property_supported?(property)
-      parser.property_supported?(property)
+    def property_any_supported?(property)
+      parser.property_any_supported?(property)
     end
 
 
-    # @group Properties
+    # @!group Properties
 
     # Returns a Hash containing all supported properties for this record
     # along with corresponding values.
     #
     # @return [{ Symbol => Object }]
+    #
     def properties
       hash = {}
       Parser::PROPERTIES.each { |property| hash[property] = send(property) }
       hash
     end
 
-    # @endgroup
+    # @!endgroup
 
 
-    # @group Methods
+    # @!group Methods
 
     # Shortcut for <tt>#registrant_contacts.first</tt>.
     #
@@ -166,7 +174,7 @@ module Whois
     # @see Whois::Record#registrant_contacts
     #
     def registrant_contact
-      if property_supported?(:registrant_contacts)
+      if property_any_supported?(:registrant_contacts)
         parser.registrant_contacts.first
       end
     end
@@ -181,7 +189,7 @@ module Whois
     # @see Whois::Record#admin_contacts
     #
     def admin_contact
-      if property_supported?(:admin_contacts)
+      if property_any_supported?(:admin_contacts)
         parser.admin_contacts.first
       end
     end
@@ -196,7 +204,7 @@ module Whois
     # @see Whois::Record#technical_contacts
     #
     def technical_contact
-      if property_supported?(:technical_contacts)
+      if property_any_supported?(:technical_contacts)
         parser.technical_contacts.first
       end
     end
@@ -211,10 +219,10 @@ module Whois
       parser.contacts
     end
 
-    # @endgroup
+    # @!endgroup
 
 
-    # @group Response
+    # @!group Response
 
     # Checks whether this {Whois::Record} is different than +other+.
     #
@@ -250,8 +258,7 @@ module Whois
         raise(ArgumentError, "Can't compare `#{self.class}' with `#{other.class}'")
       end
 
-      equal?(other) ||
-      parser.unchanged?(other.parser)
+      equal?(other) || parser.unchanged?(other.parser)
     end
 
 
@@ -285,57 +292,62 @@ module Whois
       parser.response_unavailable?
     end
 
-    # @endgroup
+    # @!endgroup
 
 
     private
 
-      # @api internal
-      def self.define_property_method(method)
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1
-          def #{method}(*args, &block)
-            if property_supported?(:#{method})
-              parser.#{method}(*args, &block)
-            end
+    # @api private
+    def self.define_property_method(method)
+      class_eval <<-RUBY, __FILE__, __LINE__ + 1
+        def #{method}(*args, &block)
+          if property_any_supported?(:#{method})
+            parser.#{method}(*args, &block)
           end
-        RUBY
-      end
-
-      # @api internal
-      def self.define_method_method(method)
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1
-          def #{method}(*args, &block)
-            if parser.respond_to?(:#{method})
-              parser.#{method}(*args, &block)
-            end
-          end
-        RUBY
-      end
-
-      # @api internal
-      def self.define_question_method(method)
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1
-          def #{method}?
-            !#{method}.nil?
-          end
-        RUBY
-      end
-
-      # Delegates all method calls to the internal parser.
-      def method_missing(method, *args, &block)
-        if Parser::PROPERTIES.include?(method)
-          self.class.define_property_method(method)
-          send(method, *args, &block)
-        elsif Parser::METHODS.include?(method)
-          self.class.define_method_method(method)
-          send(method, *args, &block)
-        elsif method.to_s =~ /([a-z_]+)\?/ and (Parser::PROPERTIES + Parser::METHODS).include?($1.to_sym)
-          self.class.define_question_method($1)
-          send(method)
-        else
-          super
         end
+      RUBY
+    end
+
+    # @api private
+    def self.define_method_method(method)
+      class_eval <<-RUBY, __FILE__, __LINE__ + 1
+        def #{method}(*args, &block)
+          if parser.respond_to?(:#{method})
+            parser.#{method}(*args, &block)
+          end
+        end
+      RUBY
+    end
+
+    # @api private
+    def self.define_question_method(method)
+      class_eval <<-RUBY, __FILE__, __LINE__ + 1
+        def #{method}?
+          !#{method}.nil?
+        end
+      RUBY
+    end
+
+    def respond_to_parser_method?(symbol)
+      name = symbol.to_s =~ /\?$/ ? symbol.to_s[0..-2] : symbol
+      Parser::PROPERTIES.include?(name.to_sym) || Parser::METHODS.include?(name.to_sym)
+    end
+
+    # Delegates all method calls to the internal parser.
+    def method_missing(method, *args, &block)
+      if Parser::PROPERTIES.include?(method)
+        self.class.define_property_method(method)
+        send(method, *args, &block)
+      elsif Parser::METHODS.include?(method)
+        self.class.define_method_method(method)
+        send(method, *args, &block)
+      elsif method.to_s =~ /([a-z_]+)\?/ and (Parser::PROPERTIES + Parser::METHODS).include?($1.to_sym)
+        self.class.define_question_method($1)
+        send(method)
+      else
+        super
       end
+    end
 
   end
 

@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -16,13 +16,15 @@ module Whois
     class Parser
 
       # Parser for the whois.rnids.rs server.
-      # 
+      #
       # @see Whois::Record::Parser::Example
       #   The Example parser for the list of all available methods.
       #
-      # @since 2.4.0
       class WhoisRnidsRs < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisRnidsRs
+
 
         property_not_supported :disclaimer
 
@@ -34,17 +36,18 @@ module Whois
         property_not_supported :domain_id
 
 
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
-
-
         property_supported :status do
           case node("Domain status", &:downcase)
           when nil
             :available
-          when "active"
+          when 'active'
             :registered
+          when 'locked'
+            :registered
+          when 'in transfer'
+            :registered
+          when 'expired'
+            :expired
           else
             Whois.bug!(ParserError, "Unknown status `#{node("Domain status")}'.")
           end
@@ -87,7 +90,7 @@ module Whois
         end
 
         property_supported :admin_contacts do
-          build_contact("Administrative contact", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("Administrative contact", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -101,16 +104,6 @@ module Whois
             name.chomp!(".")
             Nameserver.new(:name => name, :ipv4 => ipv4)
           end
-        end
-
-
-        # Initializes a new {Scanners::WhoisRnidsRs} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisRnidsRs.new(content_for_scanner).parse
         end
 
 

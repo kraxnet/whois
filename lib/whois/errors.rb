@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -18,7 +18,7 @@ module Whois
   end
 
 
-  # @group Server
+  # @!group Server
 
   # Generic class for server errors.
   class ServerError < Error
@@ -47,16 +47,16 @@ module Whois
   class ServerNotSupported < ServerError
   end
 
-  # Raised when unknown AS number of IP network. (\x06)
+  # Raised when unknown AS number or IP network. (\x06)
   #
   # Definition is recognized.
   class AllocationUnknown < ServerError
   end
 
-  # @endgroup
+  # @!endgroup
 
 
-  # @group Interface
+  # @!group Interface
 
   # Generic class for interfaces not supported.
   class InterfaceNotSupported < ServerError
@@ -85,10 +85,10 @@ module Whois
 
   end
 
-  # @endgroup
+  # @!endgroup
 
 
-  # @group Parser
+  # @!group Parser
 
   # Generic class for parser errors.
   class ParserError < Error
@@ -100,25 +100,18 @@ module Whois
   class ParserNotFound < ParserError
   end
 
-  # Raised when the property method has not been overwritten (implemented)
-  # in a child parser class.
-  class PropertyNotImplemented < ParserError
+  # Raised when you are trying to access an attribute that has not been implemented.
+  class AttributeNotImplemented < ParserError
   end
 
-  # Raised when you are trying to access a property that is not supported
-  # for the current WHOIS record.
-  class PropertyNotSupported < ParserError
+  # Raised when you are trying to access an attribute that is not supported.
+  class AttributeNotSupported < ParserError
   end
 
-  # Raised when you are trying to access a property that is not supported
-  # by any of the parsers available for current WHOIS record.
-  class PropertyNotAvailable < ParserError
-  end
-
-  # @endgroup
+  # @!endgroup
 
 
-  # @group Response
+  # @!group Response
 
   # Generic class for response errors.
   class ResponseError < Error
@@ -132,11 +125,10 @@ module Whois
 
   # Raised when attempting to access a property when the response is unavailable.
   #
-  # @since 2.0.3
   # @see Whois::Record::Parser::Base#response_unavailable?
   class ResponseIsUnavailable < ResponseError
   end
 
-  # @endgroup
+  # @!endgroup
 
 end

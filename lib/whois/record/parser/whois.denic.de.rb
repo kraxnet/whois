@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -21,7 +21,10 @@ module Whois
       # @author Aaron Mueller <mail@aaron-mueller.de>
       #
       class WhoisDenicDe < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisDenicDe
+
 
         property_supported :disclaimer do
           node("Disclaimer")
@@ -36,32 +39,29 @@ module Whois
 
 
         property_supported :status do
-          if node("Status")
-            case node("Status")
-              when "connect"    then :registered
-              when "free"       then :available
-              when "invalid"    then :invalid
-              # NEWSTATUS (inactive)
-              # The domain is registered, but there is not DNS entry for it.
-              when "failed"     then :registered
-              else
-                Whois.bug!(ParserError, "Unknown status `#{node("Status")}'.")
-            end
+          case node("Status")
+          when "connect"
+            :registered
+          when "free"
+            :available
+          when "invalid"
+            :invalid
+          # NEWSTATUS inactive
+          # The domain is registered, but there is not DNS entry for it.
+          when "failed"
+            :registered
           else
-            if version < "2.0"
-              if invalid?
-                :invalid
-              else
-                :available
-              end
+            if response_error?
+              # NEWSTATUS invalid
+              :invalid
             else
-              Whois.bug!(ParserError, "Unable to parse status.")
+              Whois.bug!(ParserError, "Unknown status `#{node("Status")}'.")
             end
           end
         end
 
         property_supported :available? do
-          !invalid? && (!!node("status:available") || node("Status") == "free")
+          !invalid? && node("Status") == "free"
         end
 
         property_supported :registered? do
@@ -72,7 +72,7 @@ module Whois
         property_not_supported :created_on
 
         property_supported :updated_on do
-          node("Changed") { |raw| Time.parse(raw) }
+          node("Changed") { |value| Time.parse(value) }
         end
 
         property_not_supported :expires_on
@@ -94,10 +94,8 @@ module Whois
         end
 
         property_supported :admin_contacts do
-          build_contact("Admin-C", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("Admin-C", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
-
-        # FIXME: check against different schema
 
         property_supported :technical_contacts do
           build_contact("Tech-C", Whois::Record::Contact::TYPE_TECHNICAL)
@@ -113,7 +111,7 @@ module Whois
           node("Nserver") do |values|
             values.map do |line|
               name, ipv4 = line.split(/\s+/)
-              Record::Nameserver.new(name.chomp("."), ipv4)
+              Record::Nameserver.new(name: name, ipv4: ipv4)
             end
           end
         end
@@ -130,8 +128,11 @@ module Whois
           !!node("response:throttled")
         end
 
+        def response_error?
+          !!node("response:error")
+        end
 
-        # NEWPROPERTY
+
         def version
           cached_properties_fetch :version do
             if content_for_scanner =~ /^% Version: (.+)$/
@@ -140,25 +141,16 @@ module Whois
           end
         end
 
-        # NEWPROPERTY
+        # NEWPROPERTY invalid?
         def invalid?
           cached_properties_fetch :invalid? do
-            !!node("status:invalid") || node("Status") == "invalid"
+            node("Status") == "invalid" ||
+            response_error?
           end
         end
 
 
-        # Initializes a new {Scanners::WhoisDenicDe} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisDenicDe.new(content_for_scanner).parse
-        end
-
-
-      private
+        private
 
         def build_contact(element, type)
           node(element) do |raw|

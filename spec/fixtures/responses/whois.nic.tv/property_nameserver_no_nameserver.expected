@@ -1,3 +1,0 @@
-#nameservers
-  should: %s CLASS(array)
-  should: %s == []

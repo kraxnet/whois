@@ -15,83 +15,93 @@ require 'whois/record/parser/whois.tcinet.ru.rb'
 
 describe Whois::Record::Parser::WhoisTcinetRu, "status_registered.expected" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "whois.tcinet.ru/su/status_registered.txt")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
+  describe "#domain" do
+    it do
+      expect(subject.domain).to eq("google.su")
+    end
+  end
+  describe "#domain_id" do
+    it do
+      expect { subject.domain_id }.to raise_error(Whois::AttributeNotSupported)
+    end
+  end
   describe "#status" do
     it do
-      @parser.status.should == ["REGISTERED", "DELEGATED", "UNVERIFIED"]
+      expect(subject.status).to eq(["REGISTERED", "DELEGATED", "UNVERIFIED"])
     end
   end
   describe "#available?" do
     it do
-      @parser.available?.should == false
+      expect(subject.available?).to eq(false)
     end
   end
   describe "#registered?" do
     it do
-      @parser.registered?.should == true
+      expect(subject.registered?).to eq(true)
     end
   end
   describe "#created_on" do
     it do
-      @parser.created_on.should be_a(Time)
-      @parser.created_on.should == Time.parse("2005-10-16")
+      expect(subject.created_on).to be_a(Time)
+      expect(subject.created_on).to eq(Time.parse("2005-10-16"))
     end
   end
   describe "#updated_on" do
     it do
-      lambda { @parser.updated_on }.should raise_error(Whois::PropertyNotSupported)
+      expect { subject.updated_on }.to raise_error(Whois::AttributeNotSupported)
     end
   end
   describe "#expires_on" do
     it do
-      @parser.expires_on.should be_a(Time)
-      @parser.expires_on.should ==Time.parse("2010-10-16")
+      expect(subject.expires_on).to be_a(Time)
+      expect(subject.expires_on).to eq(Time.parse("2010-10-16"))
     end
   end
   describe "#registrar" do
     it do
-      @parser.registrar.should be_a(Whois::Record::Registrar)
-      @parser.registrar.id.should           == "RUCENTER-REG-FID"
-      @parser.registrar.name.should         == nil
-      @parser.registrar.organization.should == nil
+      expect(subject.registrar).to be_a(Whois::Record::Registrar)
+      expect(subject.registrar.id).to eq("RUCENTER-REG-FID")
+      expect(subject.registrar.name).to eq(nil)
+      expect(subject.registrar.organization).to eq(nil)
     end
   end
   describe "#registrant_contacts" do
     it do
-      lambda { @parser.registrant_contacts }.should raise_error(Whois::PropertyNotSupported)
+      expect { subject.registrant_contacts }.to raise_error(Whois::AttributeNotSupported)
     end
   end
   describe "#admin_contacts" do
     it do
-      @parser.admin_contacts.should be_a(Array)
-      @parser.admin_contacts.should have(1).items
-      @parser.admin_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.admin_contacts[0].type.should         == Whois::Record::Contact::TYPE_ADMIN
-      @parser.admin_contacts[0].id.should           == nil
-      @parser.admin_contacts[0].name.should         == "Private Person"
-      @parser.admin_contacts[0].phone.should        == "+7 495 9681807"
-      @parser.admin_contacts[0].fax.should          == "+7 495 9681807"
-      @parser.admin_contacts[0].email.should        == "cis@cis.su"
+      expect(subject.admin_contacts).to be_a(Array)
+      expect(subject.admin_contacts.size).to eq(1)
+      expect(subject.admin_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.admin_contacts[0].type).to eq(Whois::Record::Contact::TYPE_ADMINISTRATIVE)
+      expect(subject.admin_contacts[0].id).to eq(nil)
+      expect(subject.admin_contacts[0].name).to eq("Private Person")
+      expect(subject.admin_contacts[0].phone).to eq("+7 495 9681807")
+      expect(subject.admin_contacts[0].fax).to eq("+7 495 9681807")
+      expect(subject.admin_contacts[0].email).to eq("cis@cis.su")
     end
   end
   describe "#technical_contacts" do
     it do
-      lambda { @parser.technical_contacts }.should raise_error(Whois::PropertyNotSupported)
+      expect { subject.technical_contacts }.to raise_error(Whois::AttributeNotSupported)
     end
   end
   describe "#nameservers" do
     it do
-      @parser.nameservers.should be_a(Array)
-      @parser.nameservers.should have(2).items
-      @parser.nameservers[0].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[0].name.should == "ns1073.hostgator.com"
-      @parser.nameservers[1].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[1].name.should == "ns1074.hostgator.com"
+      expect(subject.nameservers).to be_a(Array)
+      expect(subject.nameservers.size).to eq(2)
+      expect(subject.nameservers[0]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[0].name).to eq("ns1073.hostgator.com")
+      expect(subject.nameservers[1]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[1].name).to eq("ns1074.hostgator.com")
     end
   end
 end

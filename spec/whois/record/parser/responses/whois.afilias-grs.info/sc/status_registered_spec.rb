@@ -15,143 +15,137 @@ require 'whois/record/parser/whois.afilias-grs.info.rb'
 
 describe Whois::Record::Parser::WhoisAfiliasGrsInfo, "status_registered.expected" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "whois.afilias-grs.info/sc/status_registered.txt")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
   describe "#disclaimer" do
     it do
-      @parser.disclaimer.should == "Access to CCTLD WHOIS information is provided to assist persons in determining the contents of a domain name registration record in the Afilias registry database. The data in this record is provided by Afilias Limited for informational purposes only, and Afilias does not guarantee its accuracy.  This service is intended only for query-based access. You agree that you will use this data only for lawful purposes and that, under no circumstances will you use this data to: (a) allow, enable, or otherwise support the transmission by e-mail, telephone, or facsimile of mass unsolicited, commercial advertising or solicitations to entities other than the data recipient's own existing customers; or (b) enable high volume, automated, electronic processes that send queries or data to the systems of Registry Operator, a Registrar, or Afilias except as reasonably necessary to register domain names or modify existing registrations. All rights reserved. Afilias reserves the right to modify these terms at any time. By submitting this query, you agree to abide by this policy."
+      expect(subject.disclaimer).to eq("Access to CCTLD WHOIS information is provided to assist persons in determining the contents of a domain name registration record in the Afilias registry database. The data in this record is provided by Afilias Limited for informational purposes only, and Afilias does not guarantee its accuracy.  This service is intended only for query-based access. You agree that you will use this data only for lawful purposes and that, under no circumstances will you use this data to: (a) allow, enable, or otherwise support the transmission by e-mail, telephone, or facsimile of mass unsolicited, commercial advertising or solicitations to entities other than the data recipient's own existing customers; or (b) enable high volume, automated, electronic processes that send queries or data to the systems of Registry Operator, a Registrar, or Afilias except as reasonably necessary to register domain names or modify existing registrations. All rights reserved. Afilias reserves the right to modify these terms at any time. By submitting this query, you agree to abide by this policy.")
     end
   end
   describe "#domain" do
     it do
-      @parser.domain.should == "google.sc"
+      expect(subject.domain).to eq("google.sc")
     end
   end
   describe "#domain_id" do
     it do
-      @parser.domain_id.should == "D47234-LRCC"
-    end
-  end
-  describe "#referral_whois" do
-    it do
-      lambda { @parser.referral_whois }.should raise_error(Whois::PropertyNotSupported)
-    end
-  end
-  describe "#referral_url" do
-    it do
-      lambda { @parser.referral_url }.should raise_error(Whois::PropertyNotSupported)
+      expect(subject.domain_id).to eq("D47234-LRCC")
     end
   end
   describe "#status" do
     it do
-      @parser.status.should == ["CLIENT DELETE PROHIBITED", "CLIENT TRANSFER PROHIBITED", "CLIENT UPDATE PROHIBITED"]
+      expect(subject.status).to eq(["CLIENT DELETE PROHIBITED", "CLIENT TRANSFER PROHIBITED", "CLIENT UPDATE PROHIBITED", "RENEWPERIOD"])
     end
   end
   describe "#available?" do
     it do
-      @parser.available?.should == false
+      expect(subject.available?).to eq(false)
     end
   end
   describe "#registered?" do
     it do
-      @parser.registered?.should == true
+      expect(subject.registered?).to eq(true)
     end
   end
   describe "#created_on" do
     it do
-      @parser.created_on.should be_a(Time)
-      @parser.created_on.should == Time.parse("2004-02-03 19:19:12 UTC")
+      expect(subject.created_on).to be_a(Time)
+      expect(subject.created_on).to eq(Time.parse("2004-02-03 19:19:12 UTC"))
     end
   end
   describe "#updated_on" do
     it do
-      @parser.updated_on.should be_a(Time)
-      @parser.updated_on.should == Time.parse("2009-01-09 21:53:27 UTC")
+      expect(subject.updated_on).to be_a(Time)
+      expect(subject.updated_on).to eq(Time.parse("2014-01-02 10:20:29 UTC"))
     end
   end
   describe "#expires_on" do
     it do
-      @parser.expires_on.should be_a(Time)
-      @parser.expires_on.should == Time.parse("2010-02-03 19:19:12 UTC")
+      expect(subject.expires_on).to be_a(Time)
+      expect(subject.expires_on).to eq(Time.parse("2015-02-03 19:19:12 UTC"))
     end
   end
   describe "#registrar" do
     it do
-      @parser.registrar.should be_a(Whois::Record::Registrar)
-      @parser.registrar.id.should           == "R22-LRCC"
-      @parser.registrar.name.should         == "MarkMonitor, Inc."
-      @parser.registrar.organization.should == "MarkMonitor, Inc."
+      expect(subject.registrar).to be_a(Whois::Record::Registrar)
+      expect(subject.registrar.id).to eq("R22-LRCC")
+      expect(subject.registrar.name).to eq("MarkMonitor, Inc.")
+      expect(subject.registrar.organization).to eq(nil)
+      expect(subject.registrar.url).to eq(nil)
     end
   end
   describe "#registrant_contacts" do
     it do
-      @parser.registrant_contacts.should be_a(Array)
-      @parser.registrant_contacts.should have(1).items
-      @parser.registrant_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.registrant_contacts[0].type.should         == Whois::Record::Contact::TYPE_REGISTRANT
-      @parser.registrant_contacts[0].id.should           == "AGRS-129819"
-      @parser.registrant_contacts[0].name.should         == "DNS Admin"
-      @parser.registrant_contacts[0].organization.should == "Google Inc."
-      @parser.registrant_contacts[0].address.should      == "1600 Amphitheatre Parkway"
-      @parser.registrant_contacts[0].city.should         == "Mountain View"
-      @parser.registrant_contacts[0].zip.should          == "94043"
-      @parser.registrant_contacts[0].state.should        == "CA"
-      @parser.registrant_contacts[0].country_code.should == "US"
-      @parser.registrant_contacts[0].phone.should        == "+1.6502530000"
-      @parser.registrant_contacts[0].fax.should          == "+1.6506188571"
-      @parser.registrant_contacts[0].email.should        == "dns-admin@google.com"
+      expect(subject.registrant_contacts).to be_a(Array)
+      expect(subject.registrant_contacts.size).to eq(1)
+      expect(subject.registrant_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.registrant_contacts[0].type).to eq(Whois::Record::Contact::TYPE_REGISTRANT)
+      expect(subject.registrant_contacts[0].id).to eq("AGRS-129819")
+      expect(subject.registrant_contacts[0].name).to eq("DNS Admin")
+      expect(subject.registrant_contacts[0].organization).to eq("Google Inc.")
+      expect(subject.registrant_contacts[0].address).to eq("1600 Amphitheatre Parkway")
+      expect(subject.registrant_contacts[0].city).to eq("Mountain View")
+      expect(subject.registrant_contacts[0].zip).to eq("94043")
+      expect(subject.registrant_contacts[0].state).to eq("CA")
+      expect(subject.registrant_contacts[0].country_code).to eq("US")
+      expect(subject.registrant_contacts[0].phone).to eq("+1.6502530000")
+      expect(subject.registrant_contacts[0].fax).to eq("+1.6506188571")
+      expect(subject.registrant_contacts[0].email).to eq("dns-admin@google.com")
     end
   end
   describe "#admin_contacts" do
     it do
-      @parser.admin_contacts.should be_a(Array)
-      @parser.admin_contacts.should have(1).items
-      @parser.admin_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.admin_contacts[0].type.should         == Whois::Record::Contact::TYPE_ADMIN
-      @parser.admin_contacts[0].id.should           == "AGRS-129293"
-      @parser.admin_contacts[0].name.should         == "CCOPS"
-      @parser.admin_contacts[0].organization.should == "MarkMonitor"
-      @parser.admin_contacts[0].address.should      == "PMB 155\n10400 Overland Rd."
-      @parser.admin_contacts[0].city.should         == "Boise"
-      @parser.admin_contacts[0].zip.should          == "83709-1433"
-      @parser.admin_contacts[0].state.should        == "ID"
-      @parser.admin_contacts[0].country_code.should == "US"
-      @parser.admin_contacts[0].phone.should        == "+1.20838957"
-      @parser.admin_contacts[0].fax.should          == "+1.20838957"
-      @parser.admin_contacts[0].email.should        == "ccops@markmonitor.com"
+      expect(subject.admin_contacts).to be_a(Array)
+      expect(subject.admin_contacts.size).to eq(1)
+      expect(subject.admin_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.admin_contacts[0].type).to eq(Whois::Record::Contact::TYPE_ADMINISTRATIVE)
+      expect(subject.admin_contacts[0].id).to eq("AGRS-129293")
+      expect(subject.admin_contacts[0].name).to eq("CCOPS")
+      expect(subject.admin_contacts[0].organization).to eq("MarkMonitor")
+      expect(subject.admin_contacts[0].address).to eq("PMB 155\n10400 Overland Rd.")
+      expect(subject.admin_contacts[0].city).to eq("Boise")
+      expect(subject.admin_contacts[0].zip).to eq("83709-1433")
+      expect(subject.admin_contacts[0].state).to eq("ID")
+      expect(subject.admin_contacts[0].country_code).to eq("US")
+      expect(subject.admin_contacts[0].phone).to eq("+1.20838957")
+      expect(subject.admin_contacts[0].fax).to eq("+1.20838957")
+      expect(subject.admin_contacts[0].email).to eq("ccops@markmonitor.com")
     end
   end
   describe "#technical_contacts" do
     it do
-      @parser.technical_contacts.should be_a(Array)
-      @parser.technical_contacts.should have(1).items
-      @parser.technical_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.technical_contacts[0].type.should         == Whois::Record::Contact::TYPE_TECHNICAL
-      @parser.technical_contacts[0].id.should           == "AGRS-129293"
-      @parser.technical_contacts[0].name.should         == "CCOPS"
-      @parser.technical_contacts[0].organization.should == "MarkMonitor"
-      @parser.technical_contacts[0].address.should      == "PMB 155\n10400 Overland Rd."
-      @parser.technical_contacts[0].city.should         == "Boise"
-      @parser.technical_contacts[0].zip.should          == "83709-1433"
-      @parser.technical_contacts[0].state.should        == "ID"
-      @parser.technical_contacts[0].country_code.should == "US"
-      @parser.technical_contacts[0].phone.should        == "+1.20838957"
-      @parser.technical_contacts[0].fax.should          == "+1.20838957"
-      @parser.technical_contacts[0].email.should        == "ccops@markmonitor.com"
+      expect(subject.technical_contacts).to be_a(Array)
+      expect(subject.technical_contacts.size).to eq(1)
+      expect(subject.technical_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.technical_contacts[0].type).to eq(Whois::Record::Contact::TYPE_TECHNICAL)
+      expect(subject.technical_contacts[0].id).to eq("mmr-33293")
+      expect(subject.technical_contacts[0].name).to eq("Domain Admin")
+      expect(subject.technical_contacts[0].organization).to eq("MarkMonitor")
+      expect(subject.technical_contacts[0].address).to eq("391 N. Ancestor Place\nSuite 150")
+      expect(subject.technical_contacts[0].city).to eq("Boise")
+      expect(subject.technical_contacts[0].zip).to eq("83704")
+      expect(subject.technical_contacts[0].state).to eq("CA")
+      expect(subject.technical_contacts[0].country).to eq(nil)
+      expect(subject.technical_contacts[0].country_code).to eq("US")
+      expect(subject.technical_contacts[0].phone).to eq("+1.2083895740")
+      expect(subject.technical_contacts[0].fax).to eq("+1.2083895771")
+      expect(subject.technical_contacts[0].email).to eq("ccops@markmonitor.com")
+      expect(subject.technical_contacts[0].created_on).to eq(nil)
+      expect(subject.technical_contacts[0].updated_on).to eq(nil)
     end
   end
   describe "#nameservers" do
     it do
-      @parser.nameservers.should be_a(Array)
-      @parser.nameservers.should have(2).items
-      @parser.nameservers[0].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[0].name.should == "ns1.google.com"
-      @parser.nameservers[1].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[1].name.should == "ns2.google.com"
+      expect(subject.nameservers).to be_a(Array)
+      expect(subject.nameservers.size).to eq(2)
+      expect(subject.nameservers[0]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[0].name).to eq("ns1.google.com")
+      expect(subject.nameservers[1]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[1].name).to eq("ns2.google.com")
     end
   end
 end

@@ -1,68 +1,76 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Whois::Server::Adapters::Verisign do
 
-  before(:each) do
-    @definition = [:tld, ".test", "whois.test", {}]
-    @server = klass.new(*@definition)
-  end
+  let(:definition) { [:tld, ".test", "whois.test", {}] }
+  let(:server) { described_class.new(*definition) }
 
 
-  describe "#query" do
+  describe "#lookup" do
     context "without referral" do
       it "returns the WHOIS record" do
-        response = "No match for DOMAIN.TEST."
+        response = "No match for example.test."
         expected = response
-        @server.expects(:ask_the_socket).with("=domain.test", "whois.test", 43).returns(response)
+        server.query_handler.expects(:call).with("=example.test", "whois.test", 43).returns(response)
 
-        record = @server.query("domain.test")
-        record.to_s.should  == expected
-        record.parts.should have(1).part
-        record.parts.should == [Whois::Record::Part.new(response, "whois.test")]
+        record = server.lookup("example.test")
+        expect(record.to_s).to eq(expected)
+        expect(record.parts.size).to eq(1)
+        expect(record.parts).to eq([Whois::Record::Part.new(:body => response, :host => "whois.test")])
       end
     end
 
     context "with referral" do
       it "follows all referrals" do
         referral = File.read(fixture("referrals/crsnic.com.txt"))
-        response = "Match for DOMAIN.TEST."
+        response = "Match for example.test."
         expected = referral + "\n" + response
-        @server.expects(:ask_the_socket).with("=domain.test", "whois.test", 43).returns(referral)
-        @server.expects(:ask_the_socket).with("domain.test", "whois.markmonitor.com", 43).returns(response)
+        server.query_handler.expects(:call).with("=example.test", "whois.test", 43).returns(referral)
+        server.query_handler.expects(:call).with("example.test", "whois.markmonitor.com", 43).returns(response)
 
-        record = @server.query("domain.test")
-        record.to_s.should  == expected
-        record.parts.should have(2).parts
-        record.parts.should == [Whois::Record::Part.new(referral, "whois.test"), Whois::Record::Part.new(response, "whois.markmonitor.com")]
+        record = server.lookup("example.test")
+        expect(record.to_s).to eq(expected)
+        expect(record.parts.size).to eq(2)
+        expect(record.parts).to eq([Whois::Record::Part.new(:body => referral, :host => "whois.test"), Whois::Record::Part.new(:body => response, :host => "whois.markmonitor.com")])
       end
 
-      it "extracts the closest referral when multiple referrals" do
+      it "extracts the closest referral if multiple referrals" do
         referral = File.read(fixture("referrals/crsnic.com_referral_multiple.txt"))
-        @server.expects(:ask_the_socket).with("=domain.test", "whois.test", 43).returns(referral)
-        @server.expects(:ask_the_socket).with("domain.test", "whois.markmonitor.com", 43).returns("")
+        server.query_handler.expects(:call).with("=example.test", "whois.test", 43).returns(referral)
+        server.query_handler.expects(:call).with("example.test", "whois.markmonitor.com", 43).returns("")
 
-        record = @server.query("domain.test")
-        record.parts.should have(2).parts
+        record = server.lookup("example.test")
+        expect(record.parts.size).to eq(2)
       end
 
-      it "ignores referral when is not defined" do
+      it "ignores referral if is not defined" do
         referral = File.read(fixture("referrals/crsnic.com_referral_not_defined.txt"))
-        @server.expects(:ask_the_socket).with("=domain.test", "whois.test", 43).returns(referral)
-        @server.expects(:ask_the_socket).never
+        server.query_handler.expects(:call).with("=example.test", "whois.test", 43).returns(referral)
+        server.query_handler.expects(:call).never
 
-        record = @server.query("domain.test")
-        record.parts.should have(1).part
+        record = server.lookup("example.test")
+        expect(record.parts.size).to eq(1)
+      end
+
+      it "ignores referral if options[:referral] is false" do
+        referral = File.read(fixture("referrals/crsnic.com.txt"))
+        server.options[:referral] = false
+        server.query_handler.expects(:call).with("=example.test", "whois.test", 43).returns(referral)
+        server.query_handler.expects(:call).never
+
+        record = server.lookup("example.test")
+        expect(record.parts.size).to eq(1)
       end
 
       # (see #103)
       # This is the case of vrsn-20100925-dnssecmonitor86.net
-      it "gracefully ignores referral when is missing" do
+      it "ignores referral (gracefully) if missing" do
         referral = File.read(fixture("referrals/crsnic.com_referral_missing.txt"))
-        @server.expects(:ask_the_socket).with("=domain.test", "whois.test", 43).returns(referral)
-        @server.expects(:ask_the_socket).never
+        server.query_handler.expects(:call).with("=example.test", "whois.test", 43).returns(referral)
+        server.query_handler.expects(:call).never
 
-        record = @server.query("domain.test")
-        record.parts.should have(1).part
+        record = server.lookup("example.test")
+        expect(record.parts.size).to eq(1)
       end
     end
   end

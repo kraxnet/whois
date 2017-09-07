@@ -1,0 +1,8 @@
+#status
+  %s == [:server_delete_prohibited, :server_registrant_change_prohibited, :server_blocked]
+
+#available?
+  %s == false
+
+#registered?
+  %s == true

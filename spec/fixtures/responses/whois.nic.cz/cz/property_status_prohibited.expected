@@ -1,0 +1,8 @@
+#status
+  %s == [:server_delete_prohibited, :server_renew_prohibited, :server_update_prohibited, :server_in_zone_manual, :server_blocked]
+
+#available?
+  %s == false
+
+#registered?
+  %s == true

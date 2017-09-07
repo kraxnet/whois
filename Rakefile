@@ -4,36 +4,34 @@ $:.unshift(File.dirname(__FILE__) + '/lib')
 require 'whois'
 
 
-# Common package properties
-PKG_NAME    = Whois::GEM
-PKG_VERSION = Whois::VERSION
-
-
 # Run test by default.
 task :default => :spec
 task :test => :spec
 
 spec = Gem::Specification.new do |s|
-  s.name              = PKG_NAME
-  s.version           = PKG_VERSION
+  s.name              = "whois"
+  s.version           = Whois::VERSION
   s.summary           = "An intelligent pure Ruby WHOIS client and parser."
   s.description       = "Whois is an intelligent WHOIS client and parser written in pure Ruby. It can query registry data for IPv4, IPv6 and top level domains, parse and convert responses into easy-to-use Ruby objects."
 
-  s.required_ruby_version = ">= 1.8.7"
+  s.required_ruby_version = ">= 1.9.2"
 
   s.authors           = ["Simone Carletti"]
   s.email             = ["weppos@weppos.net"]
-  s.homepage          = "http://www.ruby-whois.org"
+  s.homepage          = "http://whoisrb.org/"
+  s.license           = "MIT"
   s.rubyforge_project = "whois"
 
-  s.files             = %w( Rakefile LICENSE .gemtest .yardopts ) +
+  s.files             = %w( LICENSE.txt .yardopts ) +
                         Dir.glob("*.{md,gemspec}") +
-                        Dir.glob("{bin,lib,spec}/**/*")
-  s.executables       = %w( ruby-whois )
+                        Dir.glob("{bin,data,lib}/**/*")
+  s.executables       = %w( whoisrb )
   s.require_paths     = %w( lib )
 
-  s.add_development_dependency "rake",  "~> 0.9"
-  s.add_development_dependency "rspec", "~> 2.10.0"
+  s.add_dependency "activesupport", ">= 3"
+
+  s.add_development_dependency "rake"
+  s.add_development_dependency "rspec", "~> 3.0"
   s.add_development_dependency "mocha"
   s.add_development_dependency "yard"
 
@@ -47,10 +45,6 @@ spec = Gem::Specification.new do |s|
 
   Does your project or organization use this gem? Add it to the apps wiki.
   https://github.com/weppos/whois/wiki/apps
-
-  Are you looking for a quick and convenient way to perform WHOIS queries?
-  Check out RoboWhois WHOIS API.
-  http://www.robowhois.com/
 
 ********************************************************************************
 EOS
@@ -94,37 +88,7 @@ RSpec::Core::RakeTask.new do |t|
 end
 
 
-namespace :multitest do
-  RUBIES = %w( ruby-1.8.7 ruby-1.9.2 jruby ree )
-
-  desc "Run tests for all rubies"
-  task :all => :ensure_rvm do
-    sh "rvm #{RUBIES.join(",")} rake test"
-  end
-
-  task :ensure_rvm do
-    File.exist?(File.expand_path("~/.rvm/scripts/rvm")) || abort("RVM is not available")
-  end
-
-  RUBIES.each do |ruby|
-    desc "Run tests against Ruby #{ruby}"
-    task ruby => "test:ensure_rvm" do
-      sh "rvm #{ruby} rake test"
-    end
-  end
-
-  task :bundleize do
-    sh "rvm #{RUBIES.join(",")} gem install bundler"
-  end
-
-  task :setup do
-    sh "rvm #{RUBIES.join(",")} exec bundle install"
-  end
-end
-
-
 require 'yard'
-require 'yard/rake/yardoc_task'
 
 YARD::Rake::YardocTask.new(:yardoc) do |y|
   y.options = ["--output-dir", "yardoc"]

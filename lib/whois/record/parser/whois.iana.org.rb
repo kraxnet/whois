@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -17,7 +17,10 @@ module Whois
 
       # Parser for the whois.iana.org server.
       class WhoisIanaOrg < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::Iana
+
 
         property_supported :status do
           if available?
@@ -43,7 +46,7 @@ module Whois
         end
 
         property_supported :admin_contacts do
-          build_contact("administrative", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("administrative", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -65,19 +68,10 @@ module Whois
         property_supported :nameservers do
           node("nameservers") do |raw|
             (raw["nserver"] || "").split("\n").map do |line|
-              Record::Nameserver.new(*line.downcase.split(/\s+/))
+              name, ipv4 = line.downcase.split(/\s+/)
+              Record::Nameserver.new(:name => name, :ipv4 => ipv4)
             end
           end
-        end
-
-
-        # Initializes a new {Scanners::Iana} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::Iana.new(content_for_scanner).parse
         end
 
 

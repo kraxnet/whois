@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -17,7 +17,9 @@ module Whois
 
       # Parser for the whois.nic.it server.
       class WhoisNicIt < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisNicIt
 
 
         property_supported :disclaimer do
@@ -32,14 +34,9 @@ module Whois
         property_not_supported :domain_id
 
 
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
-
-
         property_supported :status do
           case s = node("Status").to_s.downcase
-          when /^ok/, "active", /\bclient/
+          when /^ok/, /\bclient/
             :registered
           when "grace-period", "no-provider"
             :registered
@@ -55,6 +52,8 @@ module Whois
           when /^pendingdelete/
             :redemption
           when "unassignable"
+            :unavailable
+          when "reserved"
             :reserved
           when "available"
             :available
@@ -70,13 +69,13 @@ module Whois
         end
 
         property_supported :registered? do
-          status != :reserved &&
-          !available?
+          !available? &&
+          !unavailable?
         end
 
         # NEWPROPERTY
-        def reserved?
-          status == :reserved
+        def unavailable?
+          status == :unavailable
         end
 
 
@@ -96,9 +95,10 @@ module Whois
         property_supported :registrar do
           node("Registrar") do |str|
             Record::Registrar.new(
-              :id           => str["Name"],
-              :name         => str["Name"],
-              :organization => str["Organization"]
+                id:           str["Name"],
+                name:         str["Name"],
+                organization: str["Organization"],
+                url:          str["Web"]
             )
           end
         end
@@ -108,7 +108,7 @@ module Whois
         end
 
         property_supported :admin_contacts do
-          build_contact("Admin Contact", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("Admin Contact", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -118,7 +118,7 @@ module Whois
 
         property_supported :nameservers do
           Array.wrap(node("Nameservers")).map do |name|
-            Record::Nameserver.new(name)
+            Record::Nameserver.new(:name => name)
           end
         end
 
@@ -129,15 +129,6 @@ module Whois
         # @return [Boolean]
         def response_unavailable?
           !!node("response:unavailable")
-        end
-
-        # Initializes a new {Scanners::WhoisNicIt} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisNicIt.new(content_for_scanner).parse
         end
 
 

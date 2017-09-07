@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -14,25 +14,24 @@ module Whois
   class Record
     class Parser
 
-      #
-      # = whois.register.bg parser
-      #
       # Parser for the whois.register.bg server.
       #
-      # NOTE: This parser is just a stub and provides only a few basic methods
-      # to check for domain availability and get domain status.
-      # Please consider to contribute implementing missing methods.
-      # See WhoisNicIt parser for an explanation of all available methods
-      # and examples.
+      # @note This parser is just a stub and provides only a few basic methods
+      #   to check for domain availability and get domain status.
+      #   Please consider to contribute implementing missing methods.
+      #
+      # @see Whois::Record::Parser::Example
+      #   The Example parser for the list of all available methods.
       #
       class WhoisRegisterBg < Base
 
         property_supported :status do
           if content_for_scanner =~ /registration status:\s+(.+?)\n/
             case $1.downcase
-              when "registered" then :registered
-              else
-                Whois.bug!(ParserError, "Unknown status `#{$1}'.")
+            when "registered"
+              :registered
+            else
+              Whois.bug!(ParserError, "Unknown status `#{$1}'.")
             end
           else
             :available
@@ -71,9 +70,9 @@ module Whois
           if content_for_scanner =~ /NAME SERVER INFORMATION:\n((.+\n)+)\s+\n/
             $1.split("\n").map do |line|
               if line =~ /(.+) \((.+)\)/
-                Record::Nameserver.new($1, $2)
+                Record::Nameserver.new(:name => $1, :ipv4 => $2)
               else
-                Record::Nameserver.new(line.strip)
+                Record::Nameserver.new(:name => line.strip)
               end
             end
           end

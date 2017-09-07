@@ -1,3 +1,45 @@
+Domain ID:CNIC-DO327026
+Domain Name:CEO.QC.COM
+Created On:2004-10-08T02:12:49.0Z
+Last Updated On:2012-11-23T18:03:55.0Z
+Expiration Date:2014-10-08T23:59:59.0Z
+Status:ok
+Registrant ID:H1062277
+Registrant Name:helene
+Registrant Street1:309 Laurendeau, Magog Qc
+Registrant Postal Code:J1X 3W4
+Registrant Country:CA
+Registrant Phone:+1.8198438380
+Registrant Email:docjgs@videotron.ca
+Admin ID:H114589
+Admin Name:helene viens
+Admin Street1:309 Laurendeau, Magog Qc
+Admin Postal Code:J1X 3W4
+Admin Country:CA
+Admin Phone:+1.8198438380
+Admin Email:docjgs@videotron.ca
+Tech ID:H114590
+Tech Name:helene viens
+Tech Street1:309 Laurendeau, Magog Qc
+Tech Postal Code:J1X 3W4
+Tech Country:CA
+Tech Phone:+1.8198438380
+Tech Email:docjgs@videotron.ca
+Sponsoring Registrar ID:7065-EN
+Sponsoring Registrar IANA ID:48
+Sponsoring Registrar Organization:eNom, Inc.
+Sponsoring Registrar Street1:5808 Lake Washington Boulevard
+Sponsoring Registrar City:Kirkland
+Sponsoring Registrar State/Province:WA
+Sponsoring Registrar Postal Code:98034
+Sponsoring Registrar Country:US
+Sponsoring Registrar Phone:425-274-4500
+Sponsoring Registrar FAX:425-974-4796
+Sponsoring Registrar Website:http://www.enom.com/
+Name Server:NS12.ZONEEDIT.COM
+Name Server:T1.ZONEEDIT.COM
+DNSSEC:Unsigned
+
 This whois service is provided by CentralNic Ltd and only contains
 information pertaining to Internet domain names we have registered for
 our customers. By using this service you are agreeing (1) not to use any
@@ -7,48 +49,4 @@ any way, (3) not to use any high-volume, automated, electronic processes
 to obtain data from this service. Abuse of this service is monitored and
 actions in contravention of these terms will result in being permanently
 blacklisted. All data is (c) CentralNic Ltd https://www.centralnic.com/
-
-Domain ID:CNIC-DO327026
-Domain Name:CEO.QC.COM
-Created On:08-Oct-2004 02:12:49 UTC
-Last Updated On:11-Oct-2010 17:18:17 UTC
-Expiration Date:08-Oct-2012 23:59:59 UTC
-Status:OK
-Registrant ID:H1062277
-Registrant Name:helene
-Registrant Postal Code:J1X 3W4
-Registrant Country:CA
-Registrant Phone:+1.8198438380
-Registrant Email:docjgs@videotron.ca
-Admin ID:H114589
-Admin Name:helene viens
-Admin Postal Code:J1X 3W4
-Admin Country:CA
-Admin Phone:+1.8198438380
-Admin Email:docjgs@videotron.ca
-Tech ID:H114590
-Tech Name:helene viens
-Tech Postal Code:J1X 3W4
-Tech Country:CA
-Tech Phone:+1.8198438380
-Tech Email:docjgs@videotron.ca
-Billing ID:H1062277
-Billing Name:helene
-Billing Postal Code:J1X 3W4
-Billing Country:CA
-Billing Phone:+1.8198438380
-Billing Email:docjgs@videotron.ca
-Sponsoring Registrar ID:H87003
-Sponsoring Registrar Organization:Registerapi
-Sponsoring Registrar Postal Code:98662
-Sponsoring Registrar Country:US
-Sponsoring Registrar Phone:1 (360) 253 2210, ext. Account
-Sponsoring Registrar FAX:1 (360) 253-4234
-Sponsoring Registrar Website:http://www.dotster.com/
-Name Server:NS4.MYDOMAIN.COM
-Name Server:NS3.MYDOMAIN.COM
-Name Server:NS2.MYDOMAIN.COM
-Name Server:NS1.MYDOMAIN.COM
-DNSSEC:Unsigned
-
 

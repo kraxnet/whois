@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -30,9 +30,10 @@ module Whois
         property_supported :status do
           if content_for_scanner =~ /Status: (.+?)\n/
             case $1.downcase
-              when "active" then :registered
-              else
-                Whois.bug!(ParserError, "Unknown status `#{$1}'.")
+            when "active"
+              :registered
+            else
+              Whois.bug!(ParserError, "Unknown status `#{$1}'.")
             end
           else
             :available
@@ -40,7 +41,7 @@ module Whois
         end
 
         property_supported :available? do
-          !!(content_for_scanner =~ /^% No entries found for the selected source/)
+          !!(content_for_scanner =~ /^% No match for/)
         end
 
         property_supported :registered? do
@@ -49,19 +50,19 @@ module Whois
 
 
         property_supported :created_on do
-          if content_for_scanner =~ /^Created Date: (.+?)\n/
+          if content_for_scanner =~ /^Created date: (.+?)\n/
             Time.parse($1)
           end
         end
 
         property_supported :updated_on do
-          if content_for_scanner =~ /^Updated Date: (.+?)\n/
+          if content_for_scanner =~ /^Updated date: (.+?)\n/
             Time.parse($1)
           end
         end
 
         property_supported :expires_on do
-          if content_for_scanner =~ /^Exp Date: (.+?)\n/
+          if content_for_scanner =~ /^Exp date: (.+?)\n/
             Time.parse($1)
           end
         end
@@ -69,7 +70,7 @@ module Whois
 
         property_supported :nameservers do
           content_for_scanner.scan(/Name Server:\s+(.+)\n/).flatten.map do |name|
-            Record::Nameserver.new(name.downcase)
+            Record::Nameserver.new(:name => name.downcase)
           end
         end
 

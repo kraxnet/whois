@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -43,18 +43,20 @@ class SuperStruct < Struct
   def initialize(*args)
     if args.first.is_a? Hash
       initialize_with_hash(args.first)
-    else
+    elsif args.size == 0
       super
+    else
+      raise ArgumentError
     end
     yield(self) if block_given?
   end
 
-  private
+private
 
-    def initialize_with_hash(attributes = {})
-      attributes.each do |key, value|
-        self[key] = value
-      end
+  def initialize_with_hash(attributes = {})
+    attributes.each do |key, value|
+      self[key] = value
     end
+  end
 
 end

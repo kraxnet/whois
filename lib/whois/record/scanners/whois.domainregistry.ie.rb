@@ -3,18 +3,18 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
+
 require 'whois/record/scanners/base'
+
 
 module Whois
   class Record
     module Scanners
 
       # Scanner for the whois.domainregistry.ie server.
-      #
-      # @since  2.5.0
       class WhoisDomainregistryIe < Base
 
         self.tokenizers += [

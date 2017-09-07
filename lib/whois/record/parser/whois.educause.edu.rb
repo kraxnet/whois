@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -40,11 +40,6 @@ module Whois
         end
 
         property_not_supported :domain_id
-
-
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
 
 
         property_supported :status do
@@ -90,7 +85,7 @@ module Whois
         end
 
         property_supported :admin_contacts do
-          build_contact("Administrative Contact", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("Administrative Contact", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -102,7 +97,7 @@ module Whois
           if content_for_scanner =~ /Name Servers: \n((.+\n)+)\n/
             $1.split("\n").map do |line|
               name, ipv4 = line.strip.split(/\s+/)
-              Record::Nameserver.new(name.downcase, ipv4)
+              Record::Nameserver.new(:name => name.downcase, :ipv4 => ipv4)
             end
           end
         end
@@ -133,16 +128,16 @@ module Whois
 
             v9 = items.delete_at(-1)
 
-            v4 = []
-            until items[0] =~ /^\d+/
-              v4 << items.shift
-            end
-            v4 = v4.join("\n")
-
             v6 = items.delete_at(-1)
             if v6 =~ /([^\n,]+),\s([A-Z]{2})(?:\s(\d{5}(?:-\d{4})?))/
               v6, v7, v8 = $1, $2, $3
             end
+
+            v4 = []
+            until items[0] =~ /^\d+/ || items.empty?
+              v4 << items.shift
+            end
+            v4 = v4.join("\n")
 
             v5 = items.empty? ? nil : items.join("\n")
 

@@ -15,126 +15,144 @@ require 'whois/record/parser/whois.enom.com.rb'
 
 describe Whois::Record::Parser::WhoisEnomCom, "status_registered.expected" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "whois.enom.com/status_registered.txt")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
+  describe "#domain" do
+    it do
+      expect(subject.domain).to eq("enom.com")
+    end
+  end
+  describe "#domain_id" do
+    it do
+      expect(subject.domain_id).to eq(nil)
+    end
+  end
   describe "#status" do
     it do
-      lambda { @parser.status }.should raise_error(Whois::PropertyNotSupported)
+      expect(subject.status).to eq(:registered)
     end
   end
   describe "#available?" do
     it do
-      @parser.available?.should == false
+      expect(subject.available?).to eq(false)
     end
   end
   describe "#registered?" do
     it do
-      @parser.registered?.should == true
+      expect(subject.registered?).to eq(true)
     end
   end
   describe "#created_on" do
     it do
-      @parser.created_on.should be_a(Time)
-      @parser.created_on.should == Time.parse("2004-06-16 18:07:25")
+      expect(subject.created_on).to be_a(Time)
+      expect(subject.created_on).to eq(Time.parse("1997-10-24 00:00:00"))
     end
   end
   describe "#updated_on" do
     it do
-      lambda { @parser.updated_on }.should raise_error(Whois::PropertyNotSupported)
+      expect(subject.updated_on).to eq(nil)
     end
   end
   describe "#expires_on" do
     it do
-      @parser.expires_on.should be_a(Time)
-      @parser.expires_on.should == Time.parse("2015-06-16 00:00:00")
+      expect(subject.expires_on).to eq(nil)
     end
   end
   describe "#registrar" do
     it do
-      @parser.registrar.should be_a(Whois::Record::Registrar)
-      @parser.registrar.id.should           == nil
-      @parser.registrar.name.should         == "eNom Inc."
-      @parser.registrar.url.should          == "http://www.enom.com/"
+      expect(subject.registrar).to be_a(Whois::Record::Registrar)
+      expect(subject.registrar.id).to eq(nil)
+      expect(subject.registrar.name).to eq("eNom, Inc.")
+      expect(subject.registrar.organization).to eq("eNom, Inc.")
+      expect(subject.registrar.url).to eq(nil)
     end
   end
   describe "#registrant_contacts" do
     it do
-      @parser.registrant_contacts.should be_a(Array)
-      @parser.registrant_contacts.should have(1).items
-      @parser.registrant_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.registrant_contacts[0].type.should         == Whois::Record::Contact::TYPE_REGISTRANT
-      @parser.registrant_contacts[0].name.should         == "Host Master"
-      @parser.registrant_contacts[0].organization.should == "AdBrite, Inc."
-      @parser.registrant_contacts[0].address.should      == "731 Market Street, Suite 500"
-      @parser.registrant_contacts[0].city.should         == "San Francisco"
-      @parser.registrant_contacts[0].zip.should          == "94103"
-      @parser.registrant_contacts[0].state.should        == "CA"
-      @parser.registrant_contacts[0].country_code.should == "US"
-      @parser.registrant_contacts[0].phone.should        == ""
-      @parser.registrant_contacts[0].fax.should          == ""
-      @parser.registrant_contacts[0].email.should        == ""
+      expect(subject.registrant_contacts).to be_a(Array)
+      expect(subject.registrant_contacts.size).to eq(1)
+      expect(subject.registrant_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.registrant_contacts[0].type).to eq(Whois::Record::Contact::TYPE_REGISTRANT)
+      expect(subject.registrant_contacts[0].id).to eq(nil)
+      expect(subject.registrant_contacts[0].name).to eq("DNS MANAGER")
+      expect(subject.registrant_contacts[0].organization).to eq("ENOM, INC.")
+      expect(subject.registrant_contacts[0].address).to eq("P.O. BOX 7449, 5808 LAKE WASHINGTON BLVD. NE, SUITE 300")
+      expect(subject.registrant_contacts[0].city).to eq("KIRKLAND")
+      expect(subject.registrant_contacts[0].zip).to eq("98033")
+      expect(subject.registrant_contacts[0].state).to eq("WA")
+      expect(subject.registrant_contacts[0].country).to eq(nil)
+      expect(subject.registrant_contacts[0].country_code).to eq("US")
+      expect(subject.registrant_contacts[0].phone).to eq("")
+      expect(subject.registrant_contacts[0].fax).to eq("")
+      expect(subject.registrant_contacts[0].email).to eq("")
+      expect(subject.registrant_contacts[0].created_on).to eq(nil)
+      expect(subject.registrant_contacts[0].updated_on).to eq(nil)
     end
   end
   describe "#admin_contacts" do
     it do
-      @parser.admin_contacts.should be_a(Array)
-      @parser.admin_contacts.should have(1).items
-      @parser.admin_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.admin_contacts[0].type.should         == Whois::Record::Contact::TYPE_ADMIN
-      @parser.admin_contacts[0].name.should         == "Host Master"
-      @parser.admin_contacts[0].organization.should == "AdBrite, Inc."
-      @parser.admin_contacts[0].address.should      == "731 Market Street, Suite 500"
-      @parser.admin_contacts[0].city.should         == "San Francisco"
-      @parser.admin_contacts[0].zip.should          == "94103"
-      @parser.admin_contacts[0].state.should        == "CA"
-      @parser.admin_contacts[0].country_code.should == "US"
-      @parser.admin_contacts[0].phone.should        == "4159750916"
-      @parser.admin_contacts[0].fax.should          == ""
-      @parser.admin_contacts[0].email.should        == "hostmaster@adbrite.com"
+      expect(subject.admin_contacts).to be_a(Array)
+      expect(subject.admin_contacts.size).to eq(1)
+      expect(subject.admin_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.admin_contacts[0].type).to eq(Whois::Record::Contact::TYPE_ADMINISTRATIVE)
+      expect(subject.admin_contacts[0].id).to eq(nil)
+      expect(subject.admin_contacts[0].name).to eq("DNS MANAGER")
+      expect(subject.admin_contacts[0].organization).to eq("ENOM, INC.")
+      expect(subject.admin_contacts[0].address).to eq("P.O. BOX 7449, 5808 LAKE WASHINGTON BLVD. NE, SUITE 300")
+      expect(subject.admin_contacts[0].city).to eq("KIRKLAND")
+      expect(subject.admin_contacts[0].zip).to eq("98033")
+      expect(subject.admin_contacts[0].state).to eq("WA")
+      expect(subject.admin_contacts[0].country).to eq(nil)
+      expect(subject.admin_contacts[0].country_code).to eq("US")
+      expect(subject.admin_contacts[0].phone).to eq("+1.4259744689")
+      expect(subject.admin_contacts[0].fax).to eq("+1.4259744791")
+      expect(subject.admin_contacts[0].email).to eq("DOMAINS@DEMANDMEDIA.COM")
+      expect(subject.admin_contacts[0].created_on).to eq(nil)
+      expect(subject.admin_contacts[0].updated_on).to eq(nil)
     end
   end
   describe "#technical_contacts" do
     it do
-      @parser.technical_contacts.should be_a(Array)
-      @parser.technical_contacts.should have(1).items
-      @parser.technical_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.technical_contacts[0].type.should         == Whois::Record::Contact::TYPE_TECHNICAL
-      @parser.technical_contacts[0].name.should         == "Host Master"
-      @parser.technical_contacts[0].organization.should == "AdBrite, Inc."
-      @parser.technical_contacts[0].address.should      == "731 Market Street, Suite 500"
-      @parser.technical_contacts[0].city.should         == "San Francisco"
-      @parser.technical_contacts[0].zip.should          == "94103"
-      @parser.technical_contacts[0].state.should        == "CA"
-      @parser.technical_contacts[0].country_code.should == "US"
-      @parser.technical_contacts[0].phone.should        == "4159750916"
-      @parser.technical_contacts[0].fax.should          == ""
-      @parser.technical_contacts[0].email.should        == "hostmaster@adbrite.com"
+      expect(subject.technical_contacts).to be_a(Array)
+      expect(subject.technical_contacts.size).to eq(1)
+      expect(subject.technical_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.technical_contacts[0].type).to eq(Whois::Record::Contact::TYPE_TECHNICAL)
+      expect(subject.technical_contacts[0].id).to eq(nil)
+      expect(subject.technical_contacts[0].name).to eq("DNS MANAGER")
+      expect(subject.technical_contacts[0].organization).to eq("ENOM, INC.")
+      expect(subject.technical_contacts[0].address).to eq("P.O. BOX 7449, 5808 LAKE WASHINGTON BLVD. NE, SUITE 300")
+      expect(subject.technical_contacts[0].city).to eq("KIRKLAND")
+      expect(subject.technical_contacts[0].zip).to eq("98033")
+      expect(subject.technical_contacts[0].state).to eq("WA")
+      expect(subject.technical_contacts[0].country).to eq(nil)
+      expect(subject.technical_contacts[0].country_code).to eq("US")
+      expect(subject.technical_contacts[0].phone).to eq("+1.4259744689")
+      expect(subject.technical_contacts[0].fax).to eq("+1.4259744791")
+      expect(subject.technical_contacts[0].email).to eq("DOMAINS@DEMANDMEDIA.COM")
+      expect(subject.technical_contacts[0].created_on).to eq(nil)
+      expect(subject.technical_contacts[0].updated_on).to eq(nil)
     end
   end
   describe "#nameservers" do
     it do
-      @parser.nameservers.should be_a(Array)
-      @parser.nameservers.should have(8).items
-      @parser.nameservers[0].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[0].name.should == "asia3.akam.net"
-      @parser.nameservers[1].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[1].name.should == "aus1.akam.net"
-      @parser.nameservers[2].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[2].name.should == "eur1.akam.net"
-      @parser.nameservers[3].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[3].name.should == "eur2.akam.net"
-      @parser.nameservers[4].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[4].name.should == "ns1-105.akam.net"
-      @parser.nameservers[5].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[5].name.should == "ns1-232.akam.net"
-      @parser.nameservers[6].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[6].name.should == "usc2.akam.net"
-      @parser.nameservers[7].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[7].name.should == "usw6.akam.net"
+      expect(subject.nameservers).to be_a(Array)
+      expect(subject.nameservers.size).to eq(3)
+      expect(subject.nameservers[0]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[0].name).to eq("dns11.enom.com")
+      expect(subject.nameservers[0].ipv4).to eq(nil)
+      expect(subject.nameservers[0].ipv6).to eq(nil)
+      expect(subject.nameservers[1]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[1].name).to eq("dns12.enom.com")
+      expect(subject.nameservers[1].ipv4).to eq(nil)
+      expect(subject.nameservers[1].ipv6).to eq(nil)
+      expect(subject.nameservers[2]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[2].name).to eq("dns13.enom.com")
+      expect(subject.nameservers[2].ipv4).to eq(nil)
+      expect(subject.nameservers[2].ipv6).to eq(nil)
     end
   end
 end

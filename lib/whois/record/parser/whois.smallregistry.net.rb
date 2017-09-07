@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -20,12 +20,15 @@ module Whois
       # @author Mathieu Arnold <m@absolight.fr>
       #
       class WhoisSmallregistryNet < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::WhoisSmallregistryNet
+
 
         property_supported :disclaimer do
-          node("field:disclaimer") do |str|
-            str.scan(/# (.+)\n/).flatten.map do |str|
-              token = str.strip
+          node("field:disclaimer") do |alpha|
+            alpha.scan(/# (.+)\n/).flatten.map do |beta|
+              token = beta.strip
               token.gsub!(/\s+/, " ")
             end.join(" ").gsub!(/(\s{2})/, "\n")
           end
@@ -75,7 +78,15 @@ module Whois
 
 
         property_supported :registrar do
-          node("registrar") { |hash| Registrar.new(*hash.values_at('nil', 'name', 'name', 'web')) }
+          node("registrar") do |hash|
+            v1, v2, v3, v4 = hash.values_at('nil', 'name', 'name', 'web')
+            Registrar.new(
+                :id           => v1,
+                :name         => v2,
+                :organization => v3,
+                :url          => v4
+            )
+          end
         end
 
         property_supported :registrant_contacts do
@@ -83,7 +94,7 @@ module Whois
         end
 
         property_supported :admin_contacts do
-          build_contact("administrative_contact", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("administrative_contact", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -93,18 +104,8 @@ module Whois
 
         property_supported :nameservers do
           Array.wrap(node("name_servers")).map do |hash|
-            Record::Nameserver.new(hash)
+            Record::Nameserver.new(:name => hash)
           end
-        end
-
-
-        # Initializes a new {Scanners::WhoisSmallregistryNet} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::WhoisSmallregistryNet.new(content_for_scanner).parse
         end
 
 

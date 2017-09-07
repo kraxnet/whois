@@ -3,12 +3,12 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
 require 'whois/record/parser/base'
-require 'whois/record/scanners/afilias'
+require 'whois/record/scanners/base_afilias'
 
 
 module Whois
@@ -18,9 +18,10 @@ module Whois
       # Base parser for Afilias servers.
       #
       # @abstract
-      #
       class BaseAfilias < Base
-        include Scanners::Ast
+        include Scanners::Scannable
+
+        self.scanner = Scanners::BaseAfilias
 
 
         property_supported :disclaimer do
@@ -35,11 +36,6 @@ module Whois
         property_supported :domain_id do
           node("Domain ID")
         end
-
-
-        property_not_supported :referral_whois
-
-        property_not_supported :referral_url
 
 
         property_supported :status do
@@ -76,13 +72,12 @@ module Whois
 
         property_supported :registrar do
           node("Sponsoring Registrar") do |value|
-            parts = decompose_registrar(value) ||
+            id, name = decompose_registrar(value) ||
                 Whois.bug!(ParserError, "Unknown registrar format `#{value}'")
 
             Record::Registrar.new(
-                :id =>            parts[0],
-                :name =>          parts[1],
-                :organization =>  parts[1]
+                id:           id,
+                name:         name
             )
           end
         end
@@ -92,7 +87,7 @@ module Whois
         end
 
         property_supported :admin_contacts do
-          build_contact("Admin", Whois::Record::Contact::TYPE_ADMIN)
+          build_contact("Admin", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -102,18 +97,8 @@ module Whois
 
         property_supported :nameservers do
           Array.wrap(node("Name Server")).reject(&:empty?).map do |name|
-            Nameserver.new(name.downcase)
+            Nameserver.new(:name => name.downcase)
           end
-        end
-
-
-        # Initializes a new {Scanners::Afilias} instance
-        # passing the {#content_for_scanner}
-        # and calls +parse+ on it.
-        #
-        # @return [Hash]
-        def parse
-          Scanners::Afilias.new(content_for_scanner).parse
         end
 
 
@@ -121,7 +106,7 @@ module Whois
 
         def build_contact(element, type)
           node("#{element} ID") do
-            address = (1..3).
+            address = ["", "1", "2", "3"].
                 map { |i| node("#{element} Street#{i}") }.
                 delete_if { |i| i.nil? || i.empty? }.
                 join("\n")
@@ -137,7 +122,7 @@ module Whois
                 :state        => node("#{element} State/Province"),
                 :country_code => node("#{element} Country"),
                 :phone        => node("#{element} Phone"),
-                :fax          => node("#{element} FAX"),
+                :fax          => node("#{element} FAX") || node("#{element} Fax"),
                 :email        => node("#{element} Email")
             )
           end

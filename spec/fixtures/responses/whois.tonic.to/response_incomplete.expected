@@ -1,6 +1,0 @@
-#status
-  should: %s == :incomplete
-
-
-#response_incomplete?
-  should: %s == true

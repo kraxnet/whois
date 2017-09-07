@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -79,7 +79,7 @@ module Whois
         end
 
         property_supported :admin_contacts do
-          parse_contact("admin-c", Whois::Record::Contact::TYPE_ADMIN)
+          parse_contact("admin-c", Whois::Record::Contact::TYPE_ADMINISTRATIVE)
         end
 
         property_supported :technical_contacts do
@@ -139,22 +139,19 @@ module Whois
             end
           end
 
+          updated_on = values["changed"] ? Time.utc(*values["changed"].split(" ").first.split("/").reverse) : nil
+
           Record::Contact.new({
             :type         => type,
             :id           => id,
             :name         => name,
             :organization => organization,
             :address      => address,
-            # :city         => nil,
-            # :zip          => nil,
-            # :state        => nil,
-            # :country      => nil,
             :country_code => values["country"],
             :phone        => values["phone"],
             :fax          => values["fax-no"],
             :email        => values["e-mail"],
-            # :created_on   => nil,
-            :updated_on   => Time.utc(*values["changed"].split(" ").first.split("/").reverse),
+            :updated_on   => updated_on,
           })
         end
 

@@ -1,8 +1,0 @@
-#status
-  should: %s == [:out_of_zone, :expired]
-
-#available?
-  should: %s == false
-
-#registered?
-  should: %s == true

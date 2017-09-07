@@ -1,8 +1,0 @@
-#status
-  should: %s == [:server_delete_prohibited, :server_registrant_change_prohibited, :server_blocked]
-
-#available?
-  should: %s == false
-
-#registered?
-  should: %s == true

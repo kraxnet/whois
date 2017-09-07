@@ -1,8 +1,0 @@
-#status
-  should: %s == [:server_update_prohibited, :server_transfer_prohibited]
-
-#available?
-  should: %s == false
-
-#registered?
-  should: %s == true

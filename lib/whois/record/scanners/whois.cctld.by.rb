@@ -3,10 +3,12 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
+
 require 'whois/record/scanners/base'
+
 
 module Whois
   class Record
@@ -15,15 +17,14 @@ module Whois
       # Scanner for the whois.cctld.by server.
       #
       # @author Aliaksei Kliuchnikau <aliaksei.kliuchnikau@gmail.com>
-      # @since  2.5.0
       class WhoisCctldBy < Base
 
         self.tokenizers += [
-          :skip_empty_line,
-          :skip_dash_line,
-          :scan_available,
-          :scan_keyvalue,
-          :skip_provider_signature,
+            :skip_empty_line,
+            :skip_dash_line,
+            :scan_available,
+            :scan_keyvalue,
+            :skip_provider_signature,
         ]
 
         tokenizer :scan_available do

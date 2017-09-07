@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -15,10 +15,23 @@ module Whois
     class Parser
 
       # Parser for the whois.aero server.
+      #
+      # @see Whois::Record::Parser::Example
+      #   The Example parser for the list of all available methods.
+      #
       class WhoisAero < BaseAfilias
 
+        self.scanner = Scanners::BaseAfilias, {
+          pattern_reserved: /^Name is restricted from registration\n/,
+        }
+
+
         property_supported :status do
-          Array.wrap(node("Domain Status"))
+          if reserved?
+            :reserved
+          else
+            Array.wrap(node("Domain Status"))
+          end
         end
 
 
@@ -32,6 +45,11 @@ module Whois
           node("Expires On") do |value|
             Time.parse(value)
           end
+        end
+
+        # NEWPROPERTY
+        def reserved?
+          !!node("status:reserved")
         end
 
       end

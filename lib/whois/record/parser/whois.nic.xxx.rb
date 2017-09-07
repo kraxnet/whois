@@ -3,11 +3,11 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
-require 'whois/record/parser/base_afilias'
+require 'whois/record/parser/base_afilias2'
 
 
 module Whois
@@ -15,7 +15,13 @@ module Whois
     class Parser
 
       # Parser for the whois.nic.xxx server.
-      class WhoisNicXxx < BaseAfilias
+      class WhoisNicXxx < BaseAfilias2
+
+        self.scanner = Scanners::BaseAfilias, {
+            pattern_disclaimer: /^Access to/,
+            pattern_reserved: /^Reserved by ICM Registry\n/,
+        }
+
 
         property_supported :status do
           if reserved?
@@ -25,26 +31,11 @@ module Whois
           end
         end
 
+
         # NEWPROPERTY
         def reserved?
           !!node("status:reserved")
         end
-
-
-        property_supported :updated_on do
-          node("Last Updated On") do |value|
-            Time.parse(value) unless value.empty?
-          end
-        end
-
-
-        private
-
-          def decompose_registrar(value)
-            if value =~ /(.+?) \((.+?)\)/
-              [$1, $2]
-            end
-          end
 
       end
 

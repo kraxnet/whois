@@ -15,28 +15,28 @@ require 'whois/record/parser/whois.nic.fr.rb'
 
 describe Whois::Record::Parser::WhoisNicFr, "property_nameservers_with_ipv4_and_ipv6.expected" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "whois.nic.fr/pm/property_nameservers_with_ipv4_and_ipv6.txt")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
   describe "#nameservers" do
     it do
-      @parser.nameservers.should be_a(Array)
-      @parser.nameservers.should have(3).items
-      @parser.nameservers[0].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[0].name.should == "ns1.nic.fr"
-      @parser.nameservers[0].ipv4.should == "192.93.0.1"
-      @parser.nameservers[0].ipv6.should == "2001:660:3005:1::1:1"
-      @parser.nameservers[1].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[1].name.should == "ns2.nic.fr"
-      @parser.nameservers[1].ipv4.should == "192.93.0.4"
-      @parser.nameservers[1].ipv6.should == "2001:660:3005:1::1:2"
-      @parser.nameservers[2].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[2].name.should == "ns3.nic.fr"
-      @parser.nameservers[2].ipv4.should == "192.134.0.49"
-      @parser.nameservers[2].ipv6.should == "2001:660:3006:1::1:1"
+      expect(subject.nameservers).to be_a(Array)
+      expect(subject.nameservers.size).to eq(3)
+      expect(subject.nameservers[0]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[0].name).to eq("ns1.nic.fr")
+      expect(subject.nameservers[0].ipv4).to eq("192.93.0.1")
+      expect(subject.nameservers[0].ipv6).to eq("2001:660:3005:1::1:1")
+      expect(subject.nameservers[1]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[1].name).to eq("ns2.nic.fr")
+      expect(subject.nameservers[1].ipv4).to eq("192.93.0.4")
+      expect(subject.nameservers[1].ipv6).to eq("2001:660:3005:1::1:2")
+      expect(subject.nameservers[2]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[2].name).to eq("ns3.nic.fr")
+      expect(subject.nameservers[2].ipv4).to eq("192.134.0.49")
+      expect(subject.nameservers[2].ipv6).to eq("2001:660:3006:1::1:1")
     end
   end
 end

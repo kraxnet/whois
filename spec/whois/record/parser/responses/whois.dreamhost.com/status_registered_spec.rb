@@ -15,117 +15,118 @@ require 'whois/record/parser/whois.dreamhost.com.rb'
 
 describe Whois::Record::Parser::WhoisDreamhostCom, "status_registered.expected" do
 
-  before(:each) do
+  subject do
     file = fixture("responses", "whois.dreamhost.com/status_registered.txt")
-    part = Whois::Record::Part.new(:body => File.read(file))
-    @parser = klass.new(part)
+    part = Whois::Record::Part.new(body: File.read(file))
+    described_class.new(part)
   end
 
   describe "#status" do
     it do
-      lambda { @parser.status }.should raise_error(Whois::PropertyNotSupported)
+      expect(subject.status).to eq(:registered)
     end
   end
   describe "#available?" do
     it do
-      @parser.available?.should == false
+      expect(subject.available?).to eq(false)
     end
   end
   describe "#registered?" do
     it do
-      @parser.registered?.should == true
+      expect(subject.registered?).to eq(true)
     end
   end
   describe "#created_on" do
     it do
-      @parser.created_on.should be_a(Time)
-      @parser.created_on.should == Time.parse("1997-09-22 21:00:00")
+      expect(subject.created_on).to be_a(Time)
+      expect(subject.created_on).to eq(Time.parse("1997-09-22 21:00:00 UTC"))
     end
   end
   describe "#updated_on" do
     it do
-      lambda { @parser.updated_on }.should raise_error(Whois::PropertyNotSupported)
+      expect(subject.updated_on).to be_a(Time)
+      expect(subject.updated_on).to eq(Time.parse("2013-12-14 16:53:27 UTC"))
     end
   end
   describe "#expires_on" do
     it do
-      @parser.expires_on.should be_a(Time)
-      @parser.expires_on.should == Time.parse("2013-09-21 21:00:00")
+      expect(subject.expires_on).to be_a(Time)
+      expect(subject.expires_on).to eq(Time.parse("2015-09-22 04:00:00 UTC"))
     end
   end
   describe "#registrar" do
     it do
-      @parser.registrar.should be_a(Whois::Record::Registrar)
-      @parser.registrar.id.should           == nil
-      @parser.registrar.name.should         == "DreamHost"
-      @parser.registrar.organization.should == "New Dream Network, LLC."
-      @parser.registrar.url.should          == "http://www.dreamhost.com/"
+      expect(subject.registrar).to be_a(Whois::Record::Registrar)
+      expect(subject.registrar.id).to eq("431")
+      expect(subject.registrar.name).to eq("DREAMHOST")
+      expect(subject.registrar.organization).to eq("DREAMHOST")
+      expect(subject.registrar.url).to eq("www.dreamhost.com")
     end
   end
   describe "#registrant_contacts" do
     it do
-      @parser.registrant_contacts.should be_a(Array)
-      @parser.registrant_contacts.should have(1).items
-      @parser.registrant_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.registrant_contacts[0].type.should          == Whois::Record::Contact::TYPE_REGISTRANT
-      @parser.registrant_contacts[0].name.should          == "DreamHost Web Hosting"
-      @parser.registrant_contacts[0].organization.should  == "New Dream Network, LLC."
-      @parser.registrant_contacts[0].address.should       == "PMB #257\n417 Associated Rd."
-      @parser.registrant_contacts[0].city.should          == "Brea"
-      @parser.registrant_contacts[0].zip.should           == "92821"
-      @parser.registrant_contacts[0].state.should         == "CA"
-      @parser.registrant_contacts[0].country_code.should  == "US"
-      @parser.registrant_contacts[0].phone.should         == "+1.7147064182"
-      @parser.registrant_contacts[0].fax.should           == nil
-      @parser.registrant_contacts[0].email.should         == "internic@dreamhost.com"
+      expect(subject.registrant_contacts).to be_a(Array)
+      expect(subject.registrant_contacts.size).to eq(1)
+      expect(subject.registrant_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.registrant_contacts[0].type).to eq(Whois::Record::Contact::TYPE_REGISTRANT)
+      expect(subject.registrant_contacts[0].name).to eq("PRIVATE REGISTRANT")
+      expect(subject.registrant_contacts[0].organization).to eq("A HAPPY DREAMHOST CUSTOMER")
+      expect(subject.registrant_contacts[0].address).to eq("417 ASSOCIATED RD #324, C/O DREAMHOST.COM")
+      expect(subject.registrant_contacts[0].city).to eq("BREA")
+      expect(subject.registrant_contacts[0].zip).to eq("92821")
+      expect(subject.registrant_contacts[0].state).to eq("CA")
+      expect(subject.registrant_contacts[0].country_code).to eq("US")
+      expect(subject.registrant_contacts[0].phone).to eq("+1.7147064182")
+      expect(subject.registrant_contacts[0].fax).to eq("")
+      expect(subject.registrant_contacts[0].email).to eq("YW3GAZMC77BTMTF@PROXY.DREAMHOST.COM")
     end
   end
   describe "#admin_contacts" do
     it do
-      @parser.admin_contacts.should be_a(Array)
-      @parser.admin_contacts.should have(1).items
-      @parser.admin_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.admin_contacts[0].type.should          == Whois::Record::Contact::TYPE_ADMIN
-      @parser.admin_contacts[0].name.should          == "DreamHost Web Hosting"
-      @parser.admin_contacts[0].organization.should  == "New Dream Network, LLC."
-      @parser.admin_contacts[0].address.should       == "PMB #257\n417 Associated Rd."
-      @parser.admin_contacts[0].city.should          == "Brea"
-      @parser.admin_contacts[0].zip.should           == "92821"
-      @parser.admin_contacts[0].state.should         == "CA"
-      @parser.admin_contacts[0].country_code.should  == "US"
-      @parser.admin_contacts[0].phone.should         == "+1.7147064182"
-      @parser.admin_contacts[0].fax.should           == nil
-      @parser.admin_contacts[0].email.should         == "internic@dreamhost.com"
+      expect(subject.admin_contacts).to be_a(Array)
+      expect(subject.admin_contacts.size).to eq(1)
+      expect(subject.admin_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.admin_contacts[0].type).to eq(Whois::Record::Contact::TYPE_ADMINISTRATIVE)
+      expect(subject.admin_contacts[0].name).to eq("PRIVATE REGISTRANT")
+      expect(subject.admin_contacts[0].organization).to eq("A HAPPY DREAMHOST CUSTOMER")
+      expect(subject.admin_contacts[0].address).to eq("417 ASSOCIATED RD #324, C/O DREAMHOST.COM")
+      expect(subject.admin_contacts[0].city).to eq("BREA")
+      expect(subject.admin_contacts[0].zip).to eq("92821")
+      expect(subject.admin_contacts[0].state).to eq("CA")
+      expect(subject.admin_contacts[0].country_code).to eq("US")
+      expect(subject.admin_contacts[0].phone).to eq("+1.7147064182")
+      expect(subject.admin_contacts[0].fax).to eq("")
+      expect(subject.admin_contacts[0].email).to eq("YW3GAZMC77BTMTF@PROXY.DREAMHOST.COM")
     end
   end
   describe "#technical_contacts" do
     it do
-      @parser.technical_contacts.should be_a(Array)
-      @parser.technical_contacts.should have(1).items
-      @parser.technical_contacts[0].should be_a(Whois::Record::Contact)
-      @parser.technical_contacts[0].type.should          == Whois::Record::Contact::TYPE_TECHNICAL
-      @parser.technical_contacts[0].name.should          == "DreamHost Web Hosting"
-      @parser.technical_contacts[0].organization.should  == "New Dream Network, LLC."
-      @parser.technical_contacts[0].address.should       == "PMB #257\n417 Associated Rd."
-      @parser.technical_contacts[0].city.should          == "Brea"
-      @parser.technical_contacts[0].zip.should           == "92821"
-      @parser.technical_contacts[0].state.should         == "CA"
-      @parser.technical_contacts[0].country_code.should  == "US"
-      @parser.technical_contacts[0].phone.should         == "+1.7147064182"
-      @parser.technical_contacts[0].fax.should           == nil
-      @parser.technical_contacts[0].email.should         == "internic@dreamhost.com"
+      expect(subject.technical_contacts).to be_a(Array)
+      expect(subject.technical_contacts.size).to eq(1)
+      expect(subject.technical_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.technical_contacts[0].type).to eq(Whois::Record::Contact::TYPE_TECHNICAL)
+      expect(subject.technical_contacts[0].name).to eq("PRIVATE REGISTRANT")
+      expect(subject.technical_contacts[0].organization).to eq("A HAPPY DREAMHOST CUSTOMER")
+      expect(subject.technical_contacts[0].address).to eq("417 ASSOCIATED RD #324, C/O DREAMHOST.COM")
+      expect(subject.technical_contacts[0].city).to eq("BREA")
+      expect(subject.technical_contacts[0].zip).to eq("92821")
+      expect(subject.technical_contacts[0].state).to eq("CA")
+      expect(subject.technical_contacts[0].country_code).to eq("US")
+      expect(subject.technical_contacts[0].phone).to eq("+1.7147064182")
+      expect(subject.technical_contacts[0].fax).to eq("")
+      expect(subject.technical_contacts[0].email).to eq("YW3GAZMC77BTMTF@PROXY.DREAMHOST.COM")
     end
   end
   describe "#nameservers" do
     it do
-      @parser.nameservers.should be_a(Array)
-      @parser.nameservers.should have(3).items
-      @parser.nameservers[0].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[0].name.should == "ns1.dreamhost.com"
-      @parser.nameservers[1].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[1].name.should == "ns2.dreamhost.com"
-      @parser.nameservers[2].should be_a(Whois::Record::Nameserver)
-      @parser.nameservers[2].name.should == "ns3.dreamhost.com"
+      expect(subject.nameservers).to be_a(Array)
+      expect(subject.nameservers.size).to eq(3)
+      expect(subject.nameservers[0]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[0].name).to eq("ns1.dreamhost.com")
+      expect(subject.nameservers[1]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[1].name).to eq("ns2.dreamhost.com")
+      expect(subject.nameservers[2]).to be_a(Whois::Record::Nameserver)
+      expect(subject.nameservers[2].name).to eq("ns3.dreamhost.com")
     end
   end
 end

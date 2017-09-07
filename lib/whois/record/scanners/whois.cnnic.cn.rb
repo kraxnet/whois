@@ -3,7 +3,7 @@
 #
 # An intelligent pure Ruby WHOIS client and parser.
 #
-# Copyright (c) 2009-2012 Simone Carletti <weppos@weppos.net>
+# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
 #++
 
 
@@ -27,20 +27,23 @@ module Whois
 
 
         tokenizer :scan_available do
-          if @input.scan(/^no matching record/)
+          if @input.match?(/^no matching record/)
             @ast["status:available"] = true
+            @input.scan_until(/\n/)
           end
         end
 
         tokenizer :scan_reserved do
-          if @input.scan(/^the domain you want to register is reserved/)
+          if @input.match?(/^The domain you requested is prohibited/)
             @ast["status:reserved"] = true
+            @input.scan_until(/\n/)
           end
         end
 
         tokenizer :scan_reserved_list do
           if @input.scan(/^Sorry, The domain you requested is in the reserved list/)
             @ast["status:reserved"] = true
+            @input.scan_until(/\n/)
           end
         end
 

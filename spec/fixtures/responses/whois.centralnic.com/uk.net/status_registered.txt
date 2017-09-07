@@ -1,3 +1,69 @@
+Domain ID:CNIC-DO393884
+Domain Name:PARAMOUNT.UK.NET
+Created On:2006-02-28T12:17:01.0Z
+Last Updated On:2013-04-03T12:59:45.0Z
+Expiration Date:2014-02-28T23:59:59.0Z
+Status:ok
+Registrant ID:MNT60424953041
+Registrant Name:Identity Protection Service
+Registrant Organization:Identity Protect Limited
+Registrant Street1:PO Box 795
+Registrant City:Godalming
+Registrant State/Province:Surrey
+Registrant Postal Code:GU7 9GA
+Registrant Country:GB
+Registrant Phone:+44.1483307527
+Registrant FAX:+44.1483304031
+Registrant Email:paramount.uk.net@identity-protect.org
+Admin ID:MNT60424953041
+Admin Name:Identity Protection Service
+Admin Organization:Identity Protect Limited
+Admin Street1:PO Box 795
+Admin City:Godalming
+Admin State/Province:Surrey
+Admin Postal Code:GU7 9GA
+Admin Country:GB
+Admin Phone:+44.1483307527
+Admin FAX:+44.1483304031
+Admin Email:paramount.uk.net@identity-protect.org
+Tech ID:MNT60424953041
+Tech Name:Identity Protection Service
+Tech Organization:Identity Protect Limited
+Tech Street1:PO Box 795
+Tech City:Godalming
+Tech State/Province:Surrey
+Tech Postal Code:GU7 9GA
+Tech Country:GB
+Tech Phone:+44.1483307527
+Tech FAX:+44.1483304031
+Tech Email:paramount.uk.net@identity-protect.org
+Billing ID:MNT60424953041
+Billing Name:Identity Protection Service
+Billing Organization:Identity Protect Limited
+Billing Street1:PO Box 795
+Billing City:Godalming
+Billing State/Province:Surrey
+Billing Postal Code:GU7 9GA
+Billing Country:GB
+Billing Phone:+44.1483307527
+Billing FAX:+44.1483304031
+Billing Email:paramount.uk.net@identity-protect.org
+Sponsoring Registrar ID:I6467
+Sponsoring Registrar IANA ID:1515
+Sponsoring Registrar Organization:Webfusion
+Sponsoring Registrar Street1:5 Roundwood Avenue
+Sponsoring Registrar Street2:Stockley Park
+Sponsoring Registrar City:Uxbridge
+Sponsoring Registrar State/Province:Middlesex
+Sponsoring Registrar Postal Code:UB11 1FF
+Sponsoring Registrar Country:GB
+Sponsoring Registrar Phone:0845 859 0018
+Sponsoring Registrar FAX:08701 650437
+Sponsoring Registrar Website:http://www.123-reg.co.uk/domain-names/
+Name Server:NS1.MYHOSTCP.COM
+Name Server:NS2.MYHOSTCP.COM
+DNSSEC:Unsigned
+
 This whois service is provided by CentralNic Ltd and only contains
 information pertaining to Internet domain names we have registered for
 our customers. By using this service you are agreeing (1) not to use any
@@ -7,57 +73,4 @@ any way, (3) not to use any high-volume, automated, electronic processes
 to obtain data from this service. Abuse of this service is monitored and
 actions in contravention of these terms will result in being permanently
 blacklisted. All data is (c) CentralNic Ltd https://www.centralnic.com/
-
-Domain ID:CNIC-DO393884
-Domain Name:PARAMOUNT.UK.NET
-Created On:28-Feb-2006 12:17:01 UTC
-Last Updated On:10-May-2010 10:21:35 UTC
-Expiration Date:28-Feb-2012 23:59:59 UTC
-Status:OK
-Registrant ID:H1056361
-Registrant Name:Century Leisure plc
-Registrant Postal Code:W1D 6LG
-Registrant Country:GB
-Registrant Phone:+44.2075343080
-Registrant Email:pierre@centuryclub.co.uk
-Admin ID:H239313
-Admin Name:Pierre Condou
-Admin Organization:Century Leisure plc
-Admin Postal Code:W1D 6LG
-Admin Country:GB
-Admin Phone:+44.2075343080
-Admin Email:pierre@centuryclub.co.uk
-Tech ID:I6467
-Tech Name:Domain Admin
-Tech Organization:Webfusion
-Tech Street1:5 Roundwood Avenue
-Tech Street2:Stockley Park
-Tech Street3:Uxbridge
-Tech City:Middlesex
-Tech Postal Code:UB11 1FF
-Tech Country:GB
-Tech Phone:+44.8712309525
-Tech FAX:+44.8701650437
-Tech Email:hosting-domains@webfusion.com
-Billing ID:H1056361
-Billing Name:Century Leisure plc
-Billing Postal Code:W1D 6LG
-Billing Country:GB
-Billing Phone:+44.2075343080
-Billing Email:pierre@centuryclub.co.uk
-Sponsoring Registrar ID:I6467
-Sponsoring Registrar Organization:Webfusion
-Sponsoring Registrar Street1:5 Roundwood Avenue
-Sponsoring Registrar Street2:Stockley Park
-Sponsoring Registrar Street3:Uxbridge
-Sponsoring Registrar City:Middlesex
-Sponsoring Registrar Postal Code:UB11 1FF
-Sponsoring Registrar Country:GB
-Sponsoring Registrar Phone:08712 309525
-Sponsoring Registrar FAX:08701 650437
-Sponsoring Registrar Website:http://www.123-reg.co.uk
-Name Server:NS2.MYHOSTCP.COM
-Name Server:NS1.MYHOSTCP.COM
-DNSSEC:Unsigned
-
 

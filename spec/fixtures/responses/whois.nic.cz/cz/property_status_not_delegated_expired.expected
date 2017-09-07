@@ -1,0 +1,8 @@
+#status
+  %s == [:out_of_zone, :expired]
+
+#available?
+  %s == false
+
+#registered?
+  %s == true
