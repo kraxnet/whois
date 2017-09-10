@@ -1,100 +1,114 @@
 #--
-# Ruby Whois
-#
-# An intelligent pure Ruby WHOIS client and parser.
-#
-# Copyright (c) 2009-2015 Simone Carletti <weppos@weppos.net>
-#++
-
 
 require 'whois/record/parser/base'
-
+require 'whois/record/scanners/whois.sk-nic.sk.rb'
 
 module Whois
   class Record
     class Parser
 
-      #
-      # = whois.sk-nic.sk parser
-      #
-      # Parser for the whois.sk-nic.sk server.
-      #
-      # NOTE: This parser is just a stub and provides only a few basic methods
-      # to check for domain availability and get domain status.
-      # Please consider to contribute implementing missing methods.
-      # See WhoisNicIt parser for an explanation of all available methods
-      # and examples.
-      #
       class WhoisSkNicSk < Base
+        include Scanners::Scannable
 
-        # == Values for Status
-        #
-        # @see https://www.sk-nic.sk/documents/stavy_domen.html
-        # @see http://www.inwx.de/en/sk-domain.html
-        #
+        self.scanner = Scanners::WhoisSkNicSk
+
+        property_supported :domain do
+          node("Domain") { |str| str.downcase }
+        end
+
+        property_not_supported :domain_id
+
         property_supported :status do
-          if content_for_scanner =~ /^Domain-status\s+(.+)\n/
-            case $1.downcase
-            # The domain is registered and paid.
-            when  "dom_ok"
-              :registered
-            # The domain is registered and registration fee has to be payed (14 days).
-            # Replacement 14-day period for domain payment.
-            when  "dom_ta"
-              :registered
-            # 28 days before the expiration of one year's notice is sent to the first call for an extension of domains.
-            # The domain is still fully functional (14 days).
-            when  "dom_dakt"
-              :registered
-            # 14 days before the expiration of one year's notice is sent to the second call to the extension of domains.
-            # The domain is still fully functional (14 days).
-            when  "dom_warn"
-              :registered
-            # The domain is expired and has not been renewed (14 days).
-            when  "dom_lnot"
-              :registered
-            when  "dom_exp"
-              :registered
-            # The domain losts its registrar (28 days).
-            when  "dom_held"
-              :redemption
+          if content_for_scanner =~ /^EPP Status:\s+(.+)\n/
+            statuses = $1.downcase.split(",").collect { |s| s.strip }
+            if statuses.include?("ok")
+              return :registered
+            elsif statuses.include?("redemptionperiod")
+              return :expired
             else
               Whois.bug!(ParserError, "Unknown status `#{$1}'.")
             end
           else
-            :available
+            return :available
           end
         end
 
         property_supported :available? do
-          !!(content_for_scanner =~ /^Not found/)
+          !!node("status:available")
         end
 
         property_supported :registered? do
           !available?
         end
 
-
-        property_not_supported :created_on
+        property_supported :created_on do
+          node("Created") { |str| Time.parse(str) }
+        end
 
         property_supported :updated_on do
-          if content_for_scanner =~ /^Last-update\s+(.+)\n/
-            Time.parse($1)
-          end
+          node("Updated") { |str| Time.parse(str) }
         end
 
         property_supported :expires_on do
-          if content_for_scanner =~ /^Valid-date\s+(.+)\n/
-            Time.parse($1)
-          end
+          node("Valid Until") { |str| Time.parse(str) }
         end
-
 
         property_supported :nameservers do
-          content_for_scanner.scan(/dns_name\s+(.+)\n/).flatten.map do |name|
-            Record::Nameserver.new(:name => name)
+          if not node?("Nameserver")
+            return []
+          else
+            node("Nameserver").map do |line|
+              if line =~ /(.+) \((.+)\)/
+                name = $1
+                ipv4, ipv6 = $2.split(', ')
+                Record::Nameserver.new(:name => name, :ipv4 => ipv4, :ipv6 => ipv6)
+              else
+                Record::Nameserver.new(:name => line.strip)
+              end
+            end
           end
         end
+
+        property_supported :registrar do
+          build_contact(node("Registrar"), Whois::Record::Contact::TYPE_REGISTRAR)
+        end
+
+        property_supported :registrant_contacts do
+          build_contact(node("Registrant"), Whois::Record::Contact::TYPE_REGISTRANT)
+        end
+
+        property_supported :admin_contacts do
+          build_contact(node("Admin Contact"), Whois::Record::Contact::TYPE_ADMINISTRATIVE)
+        end
+
+        property_supported :technical_contacts do
+          build_contact(node("Tech Contact"), Whois::Record::Contact::TYPE_TECHNICAL)
+        end
+
+        def response_throttled?
+          !!node("response:throttled")
+        end
+        private
+
+        def build_contact(element, type)
+          node("Contact-#{element}") do |hash|
+            Record::Contact.new(
+              :id           => hash["Contact"] || hash["Registrar"],
+              :type         => type,
+              :name         => hash["Name"],
+              :organization => hash["Organization"],
+              :email        => hash["Email"],
+              :phone        => hash["Phone"],
+              :address      => hash["Street"],
+              :city         => hash["City"],
+              :zip          => hash["Postal Code"],
+              :country_code => hash["Country Code"],
+              :created_on   => hash["Created"] ? Time.parse(hash["Created"]) : nil,
+              :updated_on   => hash["Updated"] ? Time.parse(hash["Updated"]) : nil
+            )
+          end
+        end
+
 
       end
 

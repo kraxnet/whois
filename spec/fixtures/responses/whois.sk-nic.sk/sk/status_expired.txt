@@ -1,0 +1,49 @@
+% For more information on Whois status codes, please visit https://icann.org/epp
+%
+% This WHOIS service is provided by SK-NIC and only contains
+% information pertaining to Internet domain names registered by our
+% our customers. By using this service you are agreeing (1) not to use any
+% information presented here for any purpose other than determining
+% ownership of domain names, (2) not to store or reproduce this data in
+% any way without SK-NIC's approval, (3) not to use any high-volume, automated, electronic processes
+% to obtain data from this service. Abuse of this service is monitored and
+% actions in contravention of these terms will result in being permanently
+% blacklisted.
+%
+% Access to the whois service is rate limited.
+
+Domain:                       pieskovanienatery-kosice.sk
+Registrant:                   MEDI-0096-581
+Admin Contact:                MEDI-0096-581
+Tech Contact:                 MEDI-0096-581
+Registrar:                    1XIN-0004
+Created:                      2014-07-29
+Updated:                      2017-09-01
+Valid Until:                  2017-09-10
+EPP Status:                   pendingDelete, serverHold, serverTransferProhibited, inactive, redemptionPeriod
+
+Registrar:                    1XIN-0004
+Organization:                 1X s.r.o.
+Organization ID:              44632142
+Phone:                        +420.220199201
+Email:                        domeny@1x.sk
+Street:                       Klariská 7
+City:                         Bratislava
+Postal Code:                  81103
+Country Code:                 SK
+Created:                      2017-09-01
+Updated:                      2017-09-04
+
+Contact:                      MEDI-0096-581
+Organization:                 MEDIATEL spol. s r.o.
+Name:                         MEDIATEL spol. s r.o.
+Organization ID:              35859415
+Phone:                        +421.250102888
+Email:                        domain@mediatel.sk
+Street:                       Miletičova 21
+City:                         Bratislava
+Postal Code:                  82108
+Country Code:                 SK
+Registrar:                    1XIN-0004
+Created:                      2017-09-01
+Updated:                      2017-09-01

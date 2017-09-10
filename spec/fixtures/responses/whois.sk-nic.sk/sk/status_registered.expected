@@ -4,30 +4,103 @@
 #available?
   %s == false
 
+#response_throttled?
+  %s == false
+
 #registered?
   %s == true
 
+#domain
+  %s == "face.sk"
+
+#domain_id
+  %s raise_error(Whois::AttributeNotSupported)
 
 #created_on
-  %s %ERROR{AttributeNotSupported}
+  %s %CLASS{time}
+  %s %TIME{2016-02-11}
 
 #updated_on
   %s %CLASS{time}
-  %s %TIME{2010-06-28}
+  %s %TIME{2017-09-07}
 
 #expires_on
   %s %CLASS{time}
-  %s %TIME{2011-07-23}
-
+  %s %TIME{2018-02-11}
 
 #nameservers
   %s %CLASS{array}
-  %s %SIZE{4}
+  %s %SIZE{2}
   %s[0] %CLASS{nameserver}
-  %s[0].name == "ns1.google.com"
+  %s[0].name == "ns1.parkingcrew.net"
   %s[1] %CLASS{nameserver}
-  %s[1].name == "ns2.google.com"
-  %s[2] %CLASS{nameserver}
-  %s[2].name == "ns3.google.com"
-  %s[3] %CLASS{nameserver}
-  %s[3].name == "ns4.google.com"
+  %s[1].name == "ns2.parkingcrew.net"
+
+#registrar
+  %s %CLASS{contact}
+  %s.type         == Whois::Record::Contact::TYPE_REGISTRAR
+  %s.id           == "ELBI-0002"
+  %s.organization == "ELBIA, s. r. o."
+  %s.email        == "sknic@elbiahosting.sk"
+  %s.phone        == "+421.904684143"
+  %s.address      == "Stoličková 870/4"
+  %s.city         == "Banská Bystrica"
+  %s.zip          == "97401"
+  %s.country_code == "SK"
+  %s.created_on   == Time.parse('2017-09-01')
+  %s.updated_on   == Time.parse('2017-09-08')
+
+#registrant_contacts
+  %s %CLASS{array}
+  %s %SIZE{1}
+  %s[0] %CLASS{contact}
+  %s[0].type          == Whois::Record::Contact::TYPE_REGISTRANT
+  %s[0].id            == "MILA-1427-1465"
+  %s[0].name          == "Milan Terem"
+  %s[0].organization  == nil
+  %s[0].address       == nil
+  %s[0].city          == nil
+  %s[0].zip           == nil
+  %s[0].state         == nil
+  %s[0].country_code  == nil
+  %s[0].email         == nil
+  %s[0].created_on    == Time.parse('2017-09-01')
+  %s[0].updated_on    == Time.parse('2017-09-01')
+
+#admin_contacts
+  %s %CLASS{array}
+  %s %SIZE{1}
+  %s[0] %CLASS{contact}
+  %s[0].type          == Whois::Record::Contact::TYPE_ADMINISTRATIVE
+  %s[0].id            == "SK-NIC"
+  %s[0].name          == nil
+  %s[0].organization  == "SK-NIC, a.s."
+  %s[0].address       == "Borská 6"
+  %s[0].city          == "Bratislava"
+  %s[0].zip           == "84104"
+  %s[0].state         == nil
+  %s[0].country_code  == "SK"
+  %s[0].phone         == "+421.235035030"
+  %s[0].fax           == nil
+  %s[0].email         == "hostmaster@sk-nic.sk"
+  %s[0].created_on    == Time.parse("2017-09-01")
+  %s[0].updated_on    == Time.parse("2017-09-08")
+
+#technical_contacts
+  %s %CLASS{array}
+  %s %SIZE{1}
+  %s[0] %CLASS{contact}
+  %s[0].type          == Whois::Record::Contact::TYPE_TECHNICAL
+  %s[0].id            == "ELBIA"
+  %s[0].name          == "Jozef Sudolský"
+  %s[0].organization  == "ELBIA, s. r. o."
+  %s[0].address       == "Stoličková 4"
+  %s[0].city          == "Banská Bystrica"
+  %s[0].zip           == "97401"
+  %s[0].state         == nil
+  %s[0].country_code  == "SK"
+  %s[0].phone         == nil
+  %s[0].fax           == nil
+  %s[0].email         == nil
+  %s[0].created_on    == Time.parse("2017-09-02")
+  %s[0].updated_on    == Time.parse("2017-09-03")

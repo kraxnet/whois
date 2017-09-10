@@ -47,6 +47,7 @@ module Whois
       TYPE_REGISTRANT     = 1
       TYPE_ADMINISTRATIVE = 2
       TYPE_TECHNICAL      = 3
+      TYPE_REGISTRAR      = 9
 
 
       def self.const_missing(name)

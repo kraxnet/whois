@@ -1,0 +1,47 @@
+% IANA WHOIS server
+% for more information on IANA, visit http://www.iana.org
+% This query returned 1 object
+
+refer:        whois.sk-nic.sk
+
+domain:       SK
+
+organisation: SK-NIC, a.s.
+address:      Borska 6
+address:      Bratislava  84104
+address:      Slovakia
+
+contact:      administrative
+name:         GAC delegate
+organisation: Office of Deputy Prime Minister of the Slovak Republic for Investments and Informatization
+address:      Stefanikova 15
+address:      Bratislava  81105
+address:      Slovakia
+phone:        +421/2/209 28 160
+e-mail:       gac@vicepremier.gov.sk
+
+contact:      technical
+name:         Technical Director
+organisation: SK-NIC, a.s.
+address:      Borska 6
+address:      Bratislava  84104
+address:      Slovakia
+phone:        +421 2 350 350 30
+fax-no:       +421 2 350 350 39
+e-mail:       tech-c@sk-nic.sk
+
+nserver:      A.TLD.SK 194.0.45.1 2001:678:70:0:0:0:0:1
+nserver:      B.TLD.SK 2001:678:90:0:0:0:0:1 84.245.96.1
+nserver:      C.TLD.SK 195.12.159.1 2001:678:9c:0:0:0:0:1
+nserver:      SNS-PB.ISC.ORG 192.5.4.1 2001:500:2e:0:0:0:0:1
+
+whois:        whois.sk-nic.sk
+
+status:       ACTIVE
+remarks:      Registration information: http://www.sk-nic.sk
+
+created:      1993-03-29
+changed:      2016-12-21
+source:       IANA
+
+Query rate of 60 queries per hour exceeded for your network (123.456.789.123/24), please try again later.

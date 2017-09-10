@@ -31,40 +31,129 @@ describe Whois::Record::Parser::WhoisSkNicSk, "status_registered.expected" do
       expect(subject.available?).to eq(false)
     end
   end
+  describe "#response_throttled?" do
+    it do
+      expect(subject.response_throttled?).to eq(false)
+    end
+  end
   describe "#registered?" do
     it do
       expect(subject.registered?).to eq(true)
     end
   end
+  describe "#domain" do
+    it do
+      expect(subject.domain).to eq("face.sk")
+    end
+  end
+  describe "#domain_id" do
+    it do
+      expect { subject.domain_id }.to raise_error(Whois::AttributeNotSupported)
+    end
+  end
   describe "#created_on" do
     it do
-      expect { subject.created_on }.to raise_error(Whois::AttributeNotSupported)
+      expect(subject.created_on).to be_a(Time)
+      expect(subject.created_on).to eq(Time.parse("2016-02-11"))
     end
   end
   describe "#updated_on" do
     it do
       expect(subject.updated_on).to be_a(Time)
-      expect(subject.updated_on).to eq(Time.parse("2010-06-28"))
+      expect(subject.updated_on).to eq(Time.parse("2017-09-07"))
     end
   end
   describe "#expires_on" do
     it do
       expect(subject.expires_on).to be_a(Time)
-      expect(subject.expires_on).to eq(Time.parse("2011-07-23"))
+      expect(subject.expires_on).to eq(Time.parse("2018-02-11"))
     end
   end
   describe "#nameservers" do
     it do
       expect(subject.nameservers).to be_a(Array)
-      expect(subject.nameservers.size).to eq(4)
+      expect(subject.nameservers.size).to eq(2)
       expect(subject.nameservers[0]).to be_a(Whois::Record::Nameserver)
-      expect(subject.nameservers[0].name).to eq("ns1.google.com")
+      expect(subject.nameservers[0].name).to eq("ns1.parkingcrew.net")
       expect(subject.nameservers[1]).to be_a(Whois::Record::Nameserver)
-      expect(subject.nameservers[1].name).to eq("ns2.google.com")
-      expect(subject.nameservers[2]).to be_a(Whois::Record::Nameserver)
-      expect(subject.nameservers[2].name).to eq("ns3.google.com")
-      expect(subject.nameservers[3]).to be_a(Whois::Record::Nameserver)
-      expect(subject.nameservers[3].name).to eq("ns4.google.com")
+      expect(subject.nameservers[1].name).to eq("ns2.parkingcrew.net")
+    end
+  end
+  describe "#registrar" do
+    it do
+      expect(subject.registrar).to be_a(Whois::Record::Contact)
+      expect(subject.registrar.type).to eq(Whois::Record::Contact::TYPE_REGISTRAR)
+      expect(subject.registrar.id).to eq("ELBI-0002")
+      expect(subject.registrar.organization).to eq("ELBIA, s. r. o.")
+      expect(subject.registrar.email).to eq("sknic@elbiahosting.sk")
+      expect(subject.registrar.phone).to eq("+421.904684143")
+      expect(subject.registrar.address).to eq("Stoličková 870/4")
+      expect(subject.registrar.city).to eq("Banská Bystrica")
+      expect(subject.registrar.zip).to eq("97401")
+      expect(subject.registrar.country_code).to eq("SK")
+      expect(subject.registrar.created_on).to eq(Time.parse('2017-09-01'))
+      expect(subject.registrar.updated_on).to eq(Time.parse('2017-09-08'))
+    end
+  end
+  describe "#registrant_contacts" do
+    it do
+      expect(subject.registrant_contacts).to be_a(Array)
+      expect(subject.registrant_contacts.size).to eq(1)
+      expect(subject.registrant_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.registrant_contacts[0].type).to eq(Whois::Record::Contact::TYPE_REGISTRANT)
+      expect(subject.registrant_contacts[0].id).to eq("MILA-1427-1465")
+      expect(subject.registrant_contacts[0].name).to eq("Milan Terem")
+      expect(subject.registrant_contacts[0].organization).to eq(nil)
+      expect(subject.registrant_contacts[0].address).to eq(nil)
+      expect(subject.registrant_contacts[0].city).to eq(nil)
+      expect(subject.registrant_contacts[0].zip).to eq(nil)
+      expect(subject.registrant_contacts[0].state).to eq(nil)
+      expect(subject.registrant_contacts[0].country_code).to eq(nil)
+      expect(subject.registrant_contacts[0].email).to eq(nil)
+      expect(subject.registrant_contacts[0].created_on).to eq(Time.parse('2017-09-01'))
+      expect(subject.registrant_contacts[0].updated_on).to eq(Time.parse('2017-09-01'))
+    end
+  end
+  describe "#admin_contacts" do
+    it do
+      expect(subject.admin_contacts).to be_a(Array)
+      expect(subject.admin_contacts.size).to eq(1)
+      expect(subject.admin_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.admin_contacts[0].type).to eq(Whois::Record::Contact::TYPE_ADMINISTRATIVE)
+      expect(subject.admin_contacts[0].id).to eq("SK-NIC")
+      expect(subject.admin_contacts[0].name).to eq(nil)
+      expect(subject.admin_contacts[0].organization).to eq("SK-NIC, a.s.")
+      expect(subject.admin_contacts[0].address).to eq("Borská 6")
+      expect(subject.admin_contacts[0].city).to eq("Bratislava")
+      expect(subject.admin_contacts[0].zip).to eq("84104")
+      expect(subject.admin_contacts[0].state).to eq(nil)
+      expect(subject.admin_contacts[0].country_code).to eq("SK")
+      expect(subject.admin_contacts[0].phone).to eq("+421.235035030")
+      expect(subject.admin_contacts[0].fax).to eq(nil)
+      expect(subject.admin_contacts[0].email).to eq("hostmaster@sk-nic.sk")
+      expect(subject.admin_contacts[0].created_on).to eq(Time.parse("2017-09-01"))
+      expect(subject.admin_contacts[0].updated_on).to eq(Time.parse("2017-09-08"))
+    end
+  end
+  describe "#technical_contacts" do
+    it do
+      expect(subject.technical_contacts).to be_a(Array)
+      expect(subject.technical_contacts.size).to eq(1)
+      expect(subject.technical_contacts[0]).to be_a(Whois::Record::Contact)
+      expect(subject.technical_contacts[0].type).to eq(Whois::Record::Contact::TYPE_TECHNICAL)
+      expect(subject.technical_contacts[0].id).to eq("ELBIA")
+      expect(subject.technical_contacts[0].name).to eq("Jozef Sudolský")
+      expect(subject.technical_contacts[0].organization).to eq("ELBIA, s. r. o.")
+      expect(subject.technical_contacts[0].address).to eq("Stoličková 4")
+      expect(subject.technical_contacts[0].city).to eq("Banská Bystrica")
+      expect(subject.technical_contacts[0].zip).to eq("97401")
+      expect(subject.technical_contacts[0].state).to eq(nil)
+      expect(subject.technical_contacts[0].country_code).to eq("SK")
+      expect(subject.technical_contacts[0].phone).to eq(nil)
+      expect(subject.technical_contacts[0].fax).to eq(nil)
+      expect(subject.technical_contacts[0].email).to eq(nil)
+      expect(subject.technical_contacts[0].created_on).to eq(Time.parse("2017-09-02"))
+      expect(subject.technical_contacts[0].updated_on).to eq(Time.parse("2017-09-03"))
     end
   end
 end
