@@ -106,7 +106,7 @@ module Whois
               :zip          => hash["Postal Code"],
               :country_code => hash["Country Code"],
               :created_on   => hash["Created"] ? Time.parse(hash["Created"]) : nil,
-              :updated_on   => hash["Updated"] ? Time.parse(hash["Updated"]) : nil
+              :updated_on   => (hash["Updated"] && hash["Updated"] != "0000-00-00") ? Time.parse(hash["Updated"]) : nil
             )
           end
         end
