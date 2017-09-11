@@ -1,0 +1,14 @@
+#status
+  %s == :registered
+
+#available?
+  %s == false
+
+#response_throttled?
+  %s == false
+
+#registered?
+  %s == true
+
+#domain
+  %s == "3dmodely.sk"
