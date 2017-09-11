@@ -25,6 +25,8 @@ module Whois
               return :registered
             elsif statuses.include?("redemptionperiod")
               return :expired
+            elsif statuses.include?("inactive")
+              return :registered
             else
               Whois.bug!(ParserError, "Unknown status `#{$1}'.")
             end

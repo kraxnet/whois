@@ -1,0 +1,15 @@
+#status
+  %s == :registered
+
+#available?
+  %s == false
+
+#response_throttled?
+  %s == false
+
+#registered?
+  %s == true
+
+#nameservers
+  %s %CLASS{array}
+  %s %SIZE{0}
