@@ -1,0 +1,37 @@
+% For more information on Whois status codes, please visit https://icann.org/epp
+%
+% This WHOIS service is provided by SK-NIC and only contains
+% information pertaining to Internet domain names registered by our
+% our customers. By using this service you are agreeing (1) not to use any
+% information presented here for any purpose other than determining
+% ownership of domain names, (2) not to store or reproduce this data in
+% any way without SK-NIC's approval, (3) not to use any high-volume, automated, electronic processes
+% to obtain data from this service. Abuse of this service is monitored and
+% actions in contravention of these terms will result in being permanently
+% blacklisted.
+%
+% Access to the whois service is rate limited.
+
+Domain:                       3mtech.sk
+Registrant:                   3MTE-0003
+Admin Contact:                3MTE-0003
+Tech Contact:                 3MTE-0003
+Registrar:                    3MTE-0003
+Created:                      2004-10-27
+Updated:                      2017-09-06
+Valid Until:                  2020-10-27
+Nameserver:                   nsa.3mtech.sk
+Nameserver:                   ns.3mtech.sk
+EPP Status:                   clientTransferProhibited
+
+Registrar:                    3MTE-0003
+Organization:                 3MTECH, s.r.o.
+Organization ID:              36557200
+Phone:                        +421.903139764
+Email:                        bedi@3mtech.sk
+Street:                       Farská 33
+City:                         Nitra
+Postal Code:                  94901
+Country Code:                 SK
+Created:                      2017-09-01
+Updated:                      2017-09-06

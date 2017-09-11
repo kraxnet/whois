@@ -27,6 +27,8 @@ module Whois
               return :expired
             elsif statuses.include?("clientupdateprohibited")
               return :registered
+            elsif statuses.include?("clienttransferprohibited")
+              return :registered
             elsif statuses.include?("inactive")
               return :registered
             else
