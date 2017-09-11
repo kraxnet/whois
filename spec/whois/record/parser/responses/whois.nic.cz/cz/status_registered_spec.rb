@@ -39,7 +39,7 @@ describe Whois::Record::Parser::WhoisNicCz, "status_registered.expected" do
   describe "#status" do
     it do
       expect(subject.status).to be_a(Array)
-      expect(subject.status).to eq([:update_forbidden])
+      expect(subject.status).to eq([:server_transfer_prohibited])
     end
   end
   describe "#available?" do

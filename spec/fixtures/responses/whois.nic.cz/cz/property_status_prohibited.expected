@@ -1,5 +1,5 @@
 #status
-  %s == [:server_delete_prohibited, :server_renew_prohibited, :server_update_prohibited, :server_in_zone_manual, :server_blocked]
+  %s == [:deletion_forbidden, :server_transfer_prohibited, :update_forbidden, :server_blocked, :expired, :out_of_zone, :server_registrant_change_prohibited]
 
 #available?
   %s == false

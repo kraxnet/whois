@@ -39,15 +39,15 @@ module Whois
                 :available
               when "paid and in zone"
                 :registered
-              when "delete prohibited"
+              when "delete prohibited","delete forbidden"
                 :server_delete_prohibited
-              when "registration renewal prohibited"
+              when "registration renewal prohibited","registration renewal forbidden"
                 :server_renew_prohibited
-              when "sponsoring registrar change prohibited"
+              when "sponsoring registrar change prohibited","sponsoring registrar change forbidden"
                 :server_transfer_prohibited
               when "update prohibited"
                 :server_update_prohibited
-              when "registrant change prohibited"
+              when "registrant change prohibited","registrant change forbidden"
                 :server_registrant_change_prohibited
               when "domain blocked"
                 :server_blocked

@@ -31,8 +31,8 @@ module Whois
 
         tokenizer :scan_disclaimer do
           if @input.match?(/^%  \(c\) .+ CZ.NIC, z.s.p.o./)
-            lines = @input.scan_until(/% \n% \n/)
-            lines = lines.split("\n").collect{|s| s.gsub(/^% /,'')}
+            lines = @input.scan_until(/%\s?\n%\s?\n/)
+            lines = lines.split("\n").collect{|s| s.gsub(/^%\s?/,'')}
             @ast["field:disclaimer"] = lines.join("\n")
           end
         end
@@ -59,7 +59,7 @@ module Whois
         end
 
         tokenizer :skip_empty_comment do
-          @input.skip(/^% \n/)
+          @input.skip(/^%\s?\n/)
         end
 
         tokenizer :skip_secondardy_available do

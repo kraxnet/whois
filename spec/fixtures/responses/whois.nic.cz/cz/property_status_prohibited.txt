@@ -1,4 +1,4 @@
-%  (c) 2006-2011 CZ.NIC, z.s.p.o.
+%  (c) 2006-2017 CZ.NIC, z.s.p.o.
 %
 % Intended use of supplied data and information
 %
@@ -13,80 +13,78 @@
 % http://www.nic.cz/page/306/intended-use-of-supplied-data-and-information/
 %
 % See also a search service at http://www.nic.cz/whois/
-% 
-% 
-% Whoisd Server Version: 3.4.0
-% Timestamp: Sat May 26 12:22:45 2012
+%
+%
+% Whoisd Server Version: 3.10.2
+% Timestamp: Mon Sep 11 18:10:32 2017
 
-domain:       tollmi.cz
-registrant:   SB:TOL453-20020311S
-admin-c:      TOL453-20020311P
-nsset:        NSS:CZ.VOL:2
-registrar:    REG-DIAL-TEL
-status:       Delete prohibited
-status:       Registration renewal prohibited
-status:       Update prohibited
-status:       Domain is administratively kept in zone
+domain:       adpe.cz
+registrant:   SB:M4WS-0531C
+admin-c:      M4WA-0531C
+nsset:        CZ-INEXT
+registrar:    REG-ZONER
+status:       Deletion forbidden
+status:       Sponsoring registrar change forbidden
+status:       Update forbidden
 status:       Domain blocked
-registered:   11.03.2002 18:16:00
-changed:      16.03.2006 15:45:00
-expire:       10.03.2009
+status:       Expired
+status:       The domain isn't generated in the zone
+status:       Registrant change forbidden
+registered:   18.08.2005 11:45:00
+changed:      19.07.2010 13:52:00
+expire:       18.08.2016
 
-contact:      SB:TOL453-20020311S
-org:          TOLLMI Milevsko spol. s r.o.
-name:         TOLLMI Milevsko spol. s r.o.
-address:      Hrejkovice 1
-address:      Hrejkovice
-address:      39901
+contact:      SB:M4WS-0531C
+org:          ADPe, s.r.o.
+name:         Antonin Pavelka
+address:      Kvitkovska 291
+address:      Pohorelice u Napajedel
+address:      76361
 address:      CZ
-e-mail:       tollmi@volny.cz
-registrar:    REG-DIAL-TEL
-created:      11.03.2002 18:16:00
-changed:      31.07.2008 10:04:23
+e-mail:       hostmaster@inext.cz
+registrar:    REG-ZONER
+created:      18.08.2005 11:45:00
 
-contact:      TOL453-20020311P
-name:         Jindrich Tollinger
-address:      Hrejkovice 1
-address:      Hrejkovice
-address:      39859
+contact:      M4WA-0531C
+name:         Antonin Pavelka
+address:      Kvitkovska 291
+address:      Pohorelice u Napajedel
+address:      76361
 address:      CZ
-phone:        +420 382525046
-fax-no:       +420 382522914
-e-mail:       tollmi@volny.cz
-registrar:    REG-DIAL-TEL
-created:      11.03.2002 18:16:00
+e-mail:       hostmaster@inext.cz
+registrar:    REG-ZONER
+created:      18.08.2005 11:45:00
 
-nsset:        NSS:CZ.VOL:2
-nserver:      names.dialtelecom.cz
-nserver:      sns.dialtelecom.cz
-tech-c:       RYSLINKD_COL
-tech-c:       SB:DIAL-T
-registrar:    REG-DIAL-TEL
-created:      01.10.2007 02:00:00
-changed:      16.05.2011 16:07:32
+nsset:        CZ-INEXT
+nserver:      inext.inext.cz (212.111.0.10)
+nserver:      ns2.inext.cz (194.213.32.237)
+tech-c:       SB:CZ-INEXT
+tech-c:       RH163-RIPE
+registrar:    REG-ZONER
+created:      03.10.2007 12:41:19
+changed:      13.06.2013 14:46:09
 
-contact:      RYSLINKD_COL
-org:          Dial Telecom, a.s.
-name:         Daniel Ryslink
-address:      Křižíkova 36a/237
-address:      Praha 8
-address:      186 00
+contact:      SB:CZ-INEXT
+org:          INTERNEXT 2000, s.r.o.
+name:         INTERNEXT 2000, s.r.o.
+address:      Palackeho 166
+address:      Vsetin
+address:      75501
 address:      CZ
-phone:        +420.226204400
-fax-no:       +420.246000118
-e-mail:       daniel.ryslink@dialtelecom.cz
-registrar:    REG-DIAL-TEL
-created:      02.01.2002 13:21:00
-changed:      16.11.2011 13:33:20
+e-mail:       hostmaster@inext.cz
+registrar:    REG-ZONER
+created:      10.08.2001 22:13:00
+changed:      04.08.2004 09:35:00
 
-contact:      SB:DIAL-T
-org:          Dial Telecom, a.s.
-name:         Dial Telecom, a.s.
-address:      Krizikova 36a/237
-address:      Praha 8
-address:      186 00
+contact:      RH163-RIPE
+org:          INTERNEXT 2000, s.r.o.
+name:         Radim Hajek
+address:      Palackeho 166
+address:      Vsetin
+address:      755 01
 address:      CZ
-e-mail:       admin@dialtelecom.cz
-registrar:    REG-GENREG
-created:      19.10.2006 22:35:00
-changed:      06.12.2007 15:27:01
+phone:        +420.576510000
+e-mail:       hajek@inext.cz
+registrar:    REG-ZONER
+created:      10.08.2001 22:13:00
+changed:      13.06.2013 15:12:39

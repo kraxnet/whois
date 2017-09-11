@@ -9,7 +9,7 @@
 
 #status
   %s %CLASS{array}
-  %s == [:update_forbidden]
+  %s == [:server_transfer_prohibited]
 
 #available?
   %s == false
