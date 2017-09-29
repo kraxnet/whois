@@ -12,38 +12,27 @@
 %
 % Access to the whois service is rate limited.
 
-Domain:                       pieskovanienatery-kosice.sk
-Registrant:                   MEDI-0096-581
-Admin Contact:                MEDI-0096-581
-Tech Contact:                 MEDI-0096-581
-Registrar:                    1XIN-0004
-Created:                      2014-07-29
-Updated:                      2017-09-01
-Valid Until:                  2017-09-10
-EPP Status:                   pendingDelete, serverHold, serverTransferProhibited, inactive, redemptionPeriod
+Domain:                       i-novinar.sk
+Registrant:                   ZONE-0002
+Admin Contact:                ZONE-0002
+Tech Contact:                 ZONE-0002
+Registrar:                    ZONE-0002
+Created:                      2012-08-08
+Updated:                      2017-09-03
+Valid Until:                  2017-10-13
+Nameserver:                   ns1.regzone.cz
+Nameserver:                   ns1.regzone.info
+Nameserver:                   ns1.regzone.de
+EPP Status:                   pendingDelete, serverHold, redemptionPeriod
 
-Registrar:                    1XIN-0004
-Organization:                 1X s.r.o.
-Organization ID:              44632142
-Phone:                        +420.220199201
-Email:                        domeny@1x.sk
-Street:                       Klariská 7
+Registrar:                    ZONE-0002
+Organization:                 ZONER s.r.o.
+Organization ID:              35770929
+Phone:                        +421.263815272
+Email:                        sk-nic@zoner.sk
+Street:                       Jaskový rad 5
 City:                         Bratislava
-Postal Code:                  81103
+Postal Code:                  831 01
 Country Code:                 SK
 Created:                      2017-09-01
-Updated:                      2017-09-04
-
-Contact:                      MEDI-0096-581
-Organization:                 MEDIATEL spol. s r.o.
-Name:                         MEDIATEL spol. s r.o.
-Organization ID:              35859415
-Phone:                        +421.250102888
-Email:                        domain@mediatel.sk
-Street:                       Miletičova 21
-City:                         Bratislava
-Postal Code:                  82108
-Country Code:                 SK
-Registrar:                    1XIN-0004
-Created:                      2017-09-01
-Updated:                      2017-09-01
+Updated:                      2017-09-29

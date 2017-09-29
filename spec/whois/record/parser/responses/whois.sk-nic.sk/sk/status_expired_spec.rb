@@ -39,25 +39,25 @@ describe Whois::Record::Parser::WhoisSkNicSk, "status_expired.expected" do
   describe "#created_on" do
     it do
       expect(subject.created_on).to be_a(Time)
-      expect(subject.created_on).to eq(Time.parse("2014-07-29"))
+      expect(subject.created_on).to eq(Time.parse("2012-08-08"))
     end
   end
   describe "#updated_on" do
     it do
       expect(subject.updated_on).to be_a(Time)
-      expect(subject.updated_on).to eq(Time.parse("2017-09-01"))
+      expect(subject.updated_on).to eq(Time.parse("2017-09-03"))
     end
   end
   describe "#expires_on" do
     it do
       expect(subject.expires_on).to be_a(Time)
-      expect(subject.expires_on).to eq(Time.parse("2017-09-10"))
+      expect(subject.expires_on).to eq(Time.parse("2017-09-01"))
     end
   end
   describe "#nameservers" do
     it do
       expect(subject.nameservers).to be_a(Array)
-      expect(subject.nameservers.size).to eq(0)
+      expect(subject.nameservers.size).to eq(3)
     end
   end
 end

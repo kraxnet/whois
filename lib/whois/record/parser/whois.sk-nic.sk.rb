@@ -2,6 +2,8 @@
 
 require 'whois/record/parser/base'
 require 'whois/record/scanners/whois.sk-nic.sk.rb'
+require 'active_support'
+require 'active_support/core_ext'
 
 module Whois
   class Record
@@ -25,9 +27,15 @@ module Whois
               return :registered
             elsif statuses.include?("redemptionperiod")
               return :expired
+            elsif statuses.include?("clientrenewprohibited")
+              return :registered
+            elsif statuses.include?("clientdeleteprohibited")
+              return :registered
             elsif statuses.include?("clientupdateprohibited")
               return :registered
             elsif statuses.include?("clienttransferprohibited")
+              return :registered
+            elsif statuses.include?("clienthold")
               return :registered
             elsif statuses.include?("inactive")
               return :registered
@@ -56,7 +64,13 @@ module Whois
         end
 
         property_supported :expires_on do
-          node("Valid Until") { |str| Time.parse(str) }
+          node("Valid Until") { |str|
+            if status != :expired
+              Time.parse(str)
+            else
+              Time.parse(str) - 42.days
+            end
+          }
         end
 
         property_supported :nameservers do
