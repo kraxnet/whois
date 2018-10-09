@@ -1,0 +1,78 @@
+%  (c) 2006-2018 CZ.NIC, z.s.p.o.
+%
+% Intended use of supplied data and information
+%
+% Data contained in the domain name register, as well as information
+% supplied through public information services of CZ.NIC association,
+% are appointed only for purposes connected with Internet network
+% administration and operation, or for the purpose of legal or other
+% similar proceedings, in process as regards a matter connected
+% particularly with holding and using a concrete domain name.
+%
+% Full text available at:
+% http://www.nic.cz/page/306/intended-use-of-supplied-data-and-information/                                                                                                                                  %
+% See also a search service at http://www.nic.cz/whois/
+%
+%
+% Whoisd Server Version: 3.10.2
+% Timestamp: Tue Oct 09 17:07:07 2018
+
+domain:       hrabacek.cz
+registrant:   MUJHOST8229
+nsset:        FORPSI
+keyset:       FORPSI-KS-JRTZ17F0
+registrar:    REG-INTERNET-CZ
+status:       Deletion forbidden
+status:       Administratively blocked
+status:       Registrant change forbidden
+registered:   08.04.2003 13:51:00
+changed:      27.03.2016 08:40:16
+expire:       07.04.2019
+
+contact:      MUJHOST8229
+org:          Zdeněk Hrabáček
+name:         Zdeněk Hrabáček
+address:      Havlíčkova 506
+address:      Lanškroun
+address:      56301
+address:      CZ
+registrar:    REG-INTERNET-CZ
+created:      20.06.2013 19:51:04
+changed:      15.05.2018 21:32:00
+
+nsset:        FORPSI
+nserver:      ns.forpsi.net
+nserver:      ns.forpsi.cz (81.2.209.185, 2001:15e8:201:1::d1b9)
+nserver:      ns.forpsi.it
+tech-c:       FORPSI
+registrar:    REG-INTERNET-CZ
+created:      01.10.2007 10:19:47
+changed:      05.01.2016 11:50:14
+
+contact:      FORPSI
+org:          INTERNET CZ, a.s.
+name:         Stefano Cecconi
+address:      Ktiš 2
+address:      Ktiš
+address:      38403
+address:      CZ
+registrar:    REG-INTERNET-CZ
+created:      04.08.2008 14:42:08
+changed:      15.05.2018 21:32:00
+
+keyset:       FORPSI-KS-JRTZ17F0
+dnskey:       257 3 5 AwEAAdaGzyczxNJK7qg8jq2/yr2HLPJBc3K9RYHfemWOmlLe0v1CH5RJUSqP0TykMtX29UO9KRcKNT8twnpywA7nu9VGECT8Z6XE/WlV5y1hEFPmh1u/BytnYkXB/wBZkdRS+UYMt6mcx0PQ6Aql0ZiRvqWyBvlWJTicMX/Ihxq6WIiAAq94PcUxXPFdTxtnT6PHzFIQv7LIqVM839MMhExhAqmIgXi3hCMeFljevC8+m+/cXZ3POCsRL1/ugKDwPuUUB09+Z2EtZHyRjDslQWkmsoiR46Ixg46KGfWRiDQt9j1JIYLySn7kvC4DcdeBF28uzZnLXxQEv/0twWGvONlfIIs=
+tech-c:       FORPSI-KEYSET
+registrar:    REG-INTERNET-CZ
+created:      27.03.2016 08:40:15
+
+contact:      FORPSI-KEYSET
+org:          INTERNET CZ, a.s.
+name:         Stefano Cecconi
+address:      Ktiš 2
+address:      Ktiš
+address:      38403
+address:      CZ
+registrar:    REG-INTERNET-CZ
+created:      12.12.2011 11:16:39
+changed:      15.05.2018 21:32:00

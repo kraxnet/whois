@@ -75,6 +75,8 @@ module Whois
                 :update_forbidden
               when "sponsoring registrar change forbidden"
                 :update_forbidden
+              when "administratively blocked"
+                :server_administratively_blocked
               else
                 Whois.bug!(ParserError, "Unknown status `#{line}'.")
             end
